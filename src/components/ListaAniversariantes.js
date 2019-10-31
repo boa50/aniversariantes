@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
+import DateUtils from '../utils/DateUtils';
 
 class ListaAniversariantes extends Component {
-    render() {
-        const { aniversariantes } = this.props;
+    imprimeListaVazia = () => <h5> Sem aniversariantes no mês </h5>
 
+    imprimeListaPreenchida = aniversariantes => {
         const linhas = aniversariantes.map((linha, index) => {
             return (
                 <tr key={index}>
                     <td>{linha.pessoa}</td>
-                    <td>{linha.dia}</td>
+                    <td>{DateUtils.getDiaFromString(linha.dia)}</td>
                 </tr>
             );
         });
@@ -22,6 +23,16 @@ class ListaAniversariantes extends Component {
                 {linhas}
             </table>
         );
+    }
+    
+    render() {
+        this._aniversariantes = this.props.aniversariantes;
+
+        if (this._aniversariantes.length === 0) {
+            return this.imprimeListaVazia();
+        } else {
+            return this.imprimeListaPreenchida(this._aniversariantes);
+        }
     }
 }
 

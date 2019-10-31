@@ -30,8 +30,24 @@ const DateUtils = {
         }
     },
 
-    isDataDoMes(data, mesNumero) {
+    getMesAtual() {
+        const data = new Date();
         
+        return data.getMonth() + 1; 
+    },
+
+    isDataDoMes(data, mesNumero) {
+        const mesData = data.substring(3,5);
+        
+        return Number(mesData) === Number(mesNumero);
+    },
+
+    getMesesNumeros() {
+        return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    },
+
+    getDiaFromString(data) {
+        return data.substring(0,2);
     }
 }
 
