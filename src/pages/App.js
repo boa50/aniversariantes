@@ -42,7 +42,7 @@ class App extends Component {
             <Fragment>
                 <Header />
                 <div className="container">
-                    <h2>{DateUtils.getMonthNameFromNumber(this.state.mes)}</h2>
+                    <h2 className="center">{DateUtils.getMonthNameFromNumber(this.state.mes)}</h2>
                     <TrocaMes 
                         listener={this.trocaMesListener} 
                         mes={this.state.mes} />

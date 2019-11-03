@@ -32,7 +32,7 @@ class TrocaMes extends Component {
 
     botaoSeta = (desabilita, executa, icone) => {
         return (
-            <li class={desabilita() ? "disabled" : "waves-effect"}
+            <li className={desabilita() ? "disabled" : "waves-effect"}
                 onClick={executa}>
                 <a href="#!">
                     <i class="material-icons">{icone}</i>
@@ -57,7 +57,7 @@ class TrocaMes extends Component {
         return (
             meses.map((value) => {
                 return (
-                    <li class={this.isMesAtual(value) ? "active" : "waves-effect"}
+                    <li className={this.isMesAtual(value) ? "active" : "waves-effect"}
                         onClick={() => this.trocaMes(value)}>
                         <a href="#!">{value}</a>
                     </li>
@@ -70,8 +70,8 @@ class TrocaMes extends Component {
         this._mes = this.props.mes;
 
         return (
-            <div class="center">
-                <ul class="pagination">
+            <div className="center">
+                <ul className="pagination">
                     {this.botaoMesAnterior()}
                     {this.botoesMeses()}
                     {this.botaoMesPosterior()}
