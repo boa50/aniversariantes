@@ -1,63 +1,81 @@
 const aniversariantes = 
     [
         {
-            pessoa: 'Troxa',
-            dia: '11/02'
+            pessoa: 'Kinka',
+            dia: '29/03'
         },
         {
-            pessoa: 'Troxa2',
-            dia: '11/01'
+            pessoa: 'Ruth',
+            dia: '11/09'
         },
         {
-            pessoa: 'Troxa3',
-            dia: '11/10'
+            pessoa: 'Raquel',
+            dia: '12/11'
         },
         {
-            pessoa: 'Troxa4',
-            dia: '11/01'
-        },
-        {
-            pessoa: 'Troxa4',
-            dia: '11/01'
-        },
-        {
-            pessoa: 'BRUNO',
+            pessoa: 'Bruno',
             dia: '14/10'
         },
         {
-            pessoa: 'FLÁVIA',
+            pessoa: 'Flávia',
             dia: '19/10'
         },
         {
-            pessoa: 'MILLA',
+            pessoa: 'Milla',
             dia: '04/10'
         },
         {
-            pessoa: 'BRUNO',
-            dia: '14/10'
+            pessoa: 'Carmem',
+            dia: '01/10'
         },
+        {
+            pessoa: 'Daisy',
+            dia: '03/10'
+        },
+        {
+            pessoa: 'Lucio Jr.',
+            dia: '08/10'
+        },
+        {
+            pessoa: 'Mamãe Iracy(in memorian)',
+            dia: '08/10'
+        },
+        {
+            pessoa: 'Mirella',
+            dia: '21/10'
+        },
+        {
+            pessoa: 'Lucas Alexandre(Neto de Carlinhos)',
+            dia: '01/11'
+        },
+        {
+            pessoa: 'Pedrinho Filho',
+            dia: '03/11'
+        },
+        {
+            pessoa: 'Melissa(Neta de Carlinhos)',
+            dia: '07/11'
+        },
+        {
+            pessoa: 'Fabiana',
+            dia: '09/11'
+        },
+        {
+            pessoa: 'Rodrigo',
+            dia: '18/11'
+        },
+        {
+            pessoa: 'Vinicius(Neto de Carlinhos)',
+            dia: '24/11'
+        },
+        {
+            pessoa: 'Tarcisio',
+            dia: '25/11'
+        },
+        {
+            pessoa: 'Daniela',
+            dia: '26/11'
+        }
     ]
 
 export default aniversariantes;
-
-
-// novembro
-// LUCAS ALEXANDRE(Neto de Carlinhos) - 01
-// PEDRINHO FILHO - 03
-// MELISSA(neta de Carlinhos) - 07
-// FABIANA - 09
-// RAQUEL - 12
-// RODRIGO - 18
-// VINICIUS(Neto de Carlinhos) - 24
-// TARCISIO - 25
-// DANIELA - 26
-
-// ANIVERSARIANTES DO MÊS DE OUTUBRO:
-// CARMEM - 01
-// DAISY - 03
-// MILLA - 04
-// LUCIO JR. - 08
-// MAMÃE IRACY(in memorian) - 08
-// BRUNO - 14
-// FLÁVIA - 19
-// MIRELLA - 21
