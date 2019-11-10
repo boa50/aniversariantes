@@ -57,7 +57,7 @@ class TrocaMes extends Component {
         return (
             meses.map((value) => {
                 return (
-                    <li className={this.isMesAtual(value) ? "active" : "waves-effect"}
+                    <li className={this.isMesAtual(value) ? "active red lighten-1" : "waves-effect"}
                         onClick={() => this.trocaMes(value)}>
                         <a href="#!">{value}</a>
                     </li>

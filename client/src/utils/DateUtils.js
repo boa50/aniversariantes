@@ -36,6 +36,12 @@ const DateUtils = {
         return data.getMonth() + 1; 
     },
 
+    getDiaAtual() {
+        const data = new Date();
+
+        return data.getDay();
+    },
+
     getMesesNumeros() {
         return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     }

@@ -6,6 +6,7 @@ import AniversariantesService from '../services/Aniversariantes';
 import Header from '../components/Header';
 import ListaAniversariantes from '../components/ListaAniversariantes';
 import TrocaMes from '../components/TrocaMes';
+import AniversariantesDia from '../components/AniversariantesDia';
 
 class App extends Component {
 
@@ -43,6 +44,7 @@ class App extends Component {
                 <Header />
                 <div className="container">
                     <h2 className="center">{DateUtils.getMonthNameFromNumber(this.state.mes)}</h2>
+                    <AniversariantesDia />
                     <TrocaMes 
                         listener={this.trocaMesListener} 
                         mes={this.state.mes} />

@@ -4,7 +4,7 @@ import '../assests/custom-css.css';
 function Header() {
     return (
         <nav>
-            <div className="nav-wrapper">
+            <div className="nav-wrapper red lighten-1">
                 <a href="/" id="logo" className="brand-logo">
                     <i class="material-icons">cake</i>
                     Aniversariantes
