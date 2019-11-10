@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { List } from 'immutable';
-import DateUtils from '../utils/DateUtils';
 
 class ListaAniversariantes extends Component {
     imprimeListaVazia = () => <h5> Sem aniversariantes no mês </h5>
@@ -12,7 +11,7 @@ class ListaAniversariantes extends Component {
             return (
                 <tr key={index}>
                     <td>{linha.pessoa}</td>
-                    <td>{DateUtils.getDiaFromString(linha.dia)}</td>
+                    <td>{linha.dia}</td>
                 </tr>
             );
         });
@@ -32,9 +31,7 @@ class ListaAniversariantes extends Component {
         const listaAniversariantesOrdenada = new List(aniversariantes);
 
         return listaAniversariantesOrdenada._tail.array.sort((a, b) => {
-            const diaA = DateUtils.getDiaFromString(a.dia);
-            const diaB = DateUtils.getDiaFromString(b.dia);
-            return diaA < diaB ? -1 : 1;
+            return a.dia < b.dia ? -1 : 1;
         });
     }
     

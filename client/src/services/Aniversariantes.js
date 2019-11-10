@@ -1,4 +1,3 @@
-import DateUtils from '../utils/DateUtils';
 import aniversariantes from '../assests/aniversariantes';
 
 const AniversariantesService = {
@@ -9,7 +8,7 @@ const AniversariantesService = {
     ListaAniversariantesMes: mesNumero => {
         return AniversariantesService.ListaAniversariantes()
             .filter(aniversariante => {
-                return DateUtils.isDataDoMes(aniversariante.dia, mesNumero);
+                return aniversariante.mes === mesNumero.toString();
             });
     }
 }
