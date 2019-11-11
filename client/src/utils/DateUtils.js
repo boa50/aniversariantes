@@ -39,7 +39,7 @@ const DateUtils = {
     getDiaAtual() {
         const data = new Date();
 
-        return data.getDay();
+        return data.getDate();
     },
 
     getMesesNumeros() {
