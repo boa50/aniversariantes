@@ -20,8 +20,10 @@ function AniversariantesDia() {
             <div className="row">
                 <div className="col s12 m5">
                     <div className="card-panel red lighten-1">
-                        <span className="white-text">
-                            <strong style={{ fontWeight: "bold" }}>Aniversariantes de hoje:</strong> {texto}
+                        <span className="white-text icon-text">
+                            <i className="material-icons icon-padding">notifications_active</i>
+                            <strong style={{ fontWeight: "bold" }}>Hoje a festa é para: </strong>
+                            {texto}
                         </span>
                     </div>
                 </div>

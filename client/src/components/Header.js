@@ -6,7 +6,7 @@ function Header() {
         <nav>
             <div className="nav-wrapper red lighten-1">
                 <a href="/" id="logo" className="brand-logo">
-                    <i class="material-icons">cake</i>
+                    <i className="material-icons">cake</i>
                     Aniversariantes
                 </a>
             </div>

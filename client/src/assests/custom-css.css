@@ -3,6 +3,16 @@
     font-size: 1.7vw;
 }
 
+.icon-text {
+    display: flex;
+    align-items: center;
+    white-space: pre-wrap;
+}
+
+.icon-padding {
+    padding-right: 10px;
+}
+
 @media screen and (max-width: 800px) {
     #logo {
         padding-left: 0;
