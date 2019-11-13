@@ -26,3 +26,9 @@
         font-size: 5.4vw;
     }
 }
+
+@media screen and (max-width: 550px) {
+    .mes-nao-apresentado {
+        display: none !important;
+    }
+}
