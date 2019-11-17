@@ -1,20 +1,9 @@
-import React from 'react';
-import { useMediaQuery } from 'react-responsive';
+import React, { Fragment } from 'react';
+import MediaQuery from 'react-responsive';
 import DateUtils from '../utils/DateUtils';
-import Pagination from './Pagination';
 
-const TrocaMes = (props) => {
-    let _mesAtual = props.mes;
-
-    const isBigScreen = useMediaQuery({
-        query: '(min-device-width: 550px)'
-    });
-
-    const isMesInicial = () => _mesAtual === 1;
-
-    const isMesFinal = () => _mesAtual === 12;
-
-    const isMesAtual = mes => mes === _mesAtual;
+const Pagination = (props) => {
+    let _mes = props.mes;
 
     const trocaMes = mes => {
         props.listener(mes);
@@ -22,15 +11,23 @@ const TrocaMes = (props) => {
 
     const trocaMesAnterior = () => {
         if (!isMesInicial()) {
-            trocaMes(_mesAtual - 1);
+            trocaMes(_mes - 1);
         }
     }
 
     const trocaMesPosterior = () => {
         if (!isMesFinal()) {
-            trocaMes(_mesAtual + 1);
+            trocaMes(_mes + 1);
         }
     }
+
+    const isMesInicial = () => _mes === 1;
+
+    const isMesFinal = () => _mes === 12;
+
+    const isMesAtual = mes => mes === getMesAtual();
+
+    const getMesAtual = () => _mes;
 
     const botaoSeta = (desabilita, executa, icone) => {
         return (
@@ -54,13 +51,14 @@ const TrocaMes = (props) => {
     }
 
     const getMesClasse = mes => {
+        const mesAtual = getMesAtual();
         const condicoesClicabilidade = [
-            _mesAtual === 12 && mes === 9,
-            _mesAtual === 11 && mes === 9,
-            _mesAtual === 1 && mes === 4,
-            _mesAtual === 2 && mes === 4,
-            mes === _mesAtual + 1,
-            mes === _mesAtual - 1
+            mesAtual === 12 && mes === 9,
+            mesAtual === 11 && mes === 9,
+            mesAtual === 1 && mes === 4,
+            mesAtual === 2 && mes === 4,
+            mes === mesAtual + 1,
+            mes === mesAtual - 1
         ];
 
         const reducer = (accumulador, valorAtual) => accumulador || valorAtual;
@@ -68,7 +66,7 @@ const TrocaMes = (props) => {
 
         if (isMesAtual(mes)) {
             return "active red lighten-1";
-        } else if (isMesVisivel(mes) || isBigScreen) {
+        } else if (isMesVisivel(mes)) {
             return "waves-effect";
         } else if (testeClicabilidade) {
             return ""
@@ -77,8 +75,16 @@ const TrocaMes = (props) => {
         return "mes-nao-apresentado";
     }
 
+    const getMesClasseBigScreen = mes => {
+        if (isMesAtual(mes)) {
+            return "active red lighten-1";
+        } else {
+            return "waves-effect";
+        }
+    }
+
     const getMesApresentacao = mes => {
-        if (isMesVisivel(mes) || isBigScreen) {
+        if (isMesVisivel(mes)) {
             return (
                 <li className={getMesClasse(mes)}
                     onClick={() => trocaMes(mes)}>
@@ -95,15 +101,16 @@ const TrocaMes = (props) => {
     }
 
     const isMesVisivel = mes => {
+        const mesAtual = getMesAtual();
         const condicoesVisibilidade = [
             isMesAtual(mes),
             mes === 1 || mes === 12,
-            _mesAtual === 12 && (mes === 11 || mes === 10),
-            _mesAtual === 11 && mes === 10,
-            _mesAtual === 10 && mes === 11,
-            _mesAtual === 1 && (mes === 2 || mes === 3),
-            _mesAtual === 2 && mes === 3,
-            _mesAtual === 3 && mes === 2
+            mesAtual === 12 && (mes === 11 || mes === 10),
+            mesAtual === 11 && mes === 10,
+            mesAtual === 10 && mes === 11,
+            mesAtual === 1 && (mes === 2 || mes === 3),
+            mesAtual === 2 && mes === 3,
+            mesAtual === 3 && mes === 2
         ];
 
         const reducer = (accumulador, valorAtual) => accumulador || valorAtual;
@@ -113,7 +120,23 @@ const TrocaMes = (props) => {
     const botoesMeses = () => {
         const meses = DateUtils.getMesesNumeros();
         
-        return meses.map(mes => getMesApresentacao(mes));
+        return (
+            meses.map(mes => {
+                return (
+                    <Fragment>
+                        <MediaQuery maxDeviceWidth={550}>
+                            {getMesApresentacao(mes)}
+                        </MediaQuery>
+                        <MediaQuery minDeviceWidth={550}>
+                            <li className={getMesClasseBigScreen(mes)}
+                                onClick={() => trocaMes(mes)}>
+                                <a href="#!">{mes}</a>
+                            </li>
+                        </MediaQuery>
+                    </Fragment>
+                );
+            })
+        )
     }
 
     return (
@@ -128,4 +151,4 @@ const TrocaMes = (props) => {
     
 }
 
-export default TrocaMes;
+export default Pagination;

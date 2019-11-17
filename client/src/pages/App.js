@@ -45,7 +45,7 @@ class App extends Component {
                 <div className="container">
                     <h2 className="center">{DateUtils.getMonthNameFromNumber(this.state.mes)}</h2>
                     <AniversariantesDia />
-                    <TrocaMes 
+                    <TrocaMes
                         listener={this.trocaMesListener} 
                         mes={this.state.mes} />
                     <ListaAniversariantes aniversariantes={this.state.aniversariantes} />
