@@ -1,35 +1,36 @@
-import React, { Fragment } from 'react';
-import MediaQuery from 'react-responsive';
-import DateUtils from '../utils/DateUtils';
+import React from 'react';
+import { useMediaQuery } from 'react-responsive';
 
 const Pagination = (props) => {
-    let _mes = props.mes;
+    const isBigScreen = useMediaQuery({
+        query: '(min-device-width: 550px)'
+    });
+    
+    let _currentPage = props.page;
+    const lastPage = props.lastPage;
+    const firstPage = 1;
 
-    const trocaMes = mes => {
-        props.listener(mes);
+    const isFirstPage = (page=_currentPage) => page === firstPage;
+    const isLastPage = (page=_currentPage) => page === lastPage;
+    const isCurrentPage = page => page === _currentPage;
+
+    const changePage = page => {
+        props.listener(page);
     }
 
-    const trocaMesAnterior = () => {
-        if (!isMesInicial()) {
-            trocaMes(_mes - 1);
+    const decreasePage = () => {
+        if (!isFirstPage()) {
+            changePage(_currentPage - 1);
         }
     }
 
-    const trocaMesPosterior = () => {
-        if (!isMesFinal()) {
-            trocaMes(_mes + 1);
+    const increasePage = () => {
+        if (!isLastPage()) {
+            changePage(_currentPage + 1);
         }
     }
 
-    const isMesInicial = () => _mes === 1;
-
-    const isMesFinal = () => _mes === 12;
-
-    const isMesAtual = mes => mes === getMesAtual();
-
-    const getMesAtual = () => _mes;
-
-    const botaoSeta = (desabilita, executa, icone) => {
+    const arrowButton = (desabilita, executa, icone) => {
         return (
             <li className={desabilita() ? "disabled" : "waves-effect"}
                 onClick={executa}>
@@ -40,33 +41,34 @@ const Pagination = (props) => {
         );
     }
 
-    const botaoMesAnterior = () => {
-        return botaoSeta(
-            isMesInicial, trocaMesAnterior, "chevron_left");
+    const previousPageButton = () => {
+        return arrowButton(
+            isFirstPage, decreasePage, "chevron_left");
     }
 
-    const botaoMesPosterior = () => {
-        return botaoSeta(
-            isMesFinal, trocaMesPosterior, "chevron_right");
+    const nextPageButton = () => {
+        return arrowButton(
+            isLastPage, increasePage, "chevron_right");
     }
 
-    const getMesClasse = mes => {
-        const mesAtual = getMesAtual();
-        const condicoesClicabilidade = [
-            mesAtual === 12 && mes === 9,
-            mesAtual === 11 && mes === 9,
-            mesAtual === 1 && mes === 4,
-            mesAtual === 2 && mes === 4,
-            mes === mesAtual + 1,
-            mes === mesAtual - 1
+    const getPageClass = page => {
+
+        
+        const clickConditions = [
+            _currentPage === 12 && page === 9,
+            _currentPage === 11 && page === 9,
+            _currentPage === 1 && page === 4,
+            _currentPage === 2 && page === 4,
+            page === _currentPage + 1,
+            page === _currentPage - 1
         ];
 
         const reducer = (accumulador, valorAtual) => accumulador || valorAtual;
-        const testeClicabilidade = condicoesClicabilidade.reduce(reducer, false);
+        const testeClicabilidade = clickConditions.reduce(reducer, false);
 
-        if (isMesAtual(mes)) {
+        if (isCurrentPage(page)) {
             return "active red lighten-1";
-        } else if (isMesVisivel(mes)) {
+        } else if (isPageVisible(page) || isBigScreen) {
             return "waves-effect";
         } else if (testeClicabilidade) {
             return ""
@@ -75,80 +77,53 @@ const Pagination = (props) => {
         return "mes-nao-apresentado";
     }
 
-    const getMesClasseBigScreen = mes => {
-        if (isMesAtual(mes)) {
-            return "active red lighten-1";
-        } else {
-            return "waves-effect";
-        }
-    }
-
-    const getMesApresentacao = mes => {
-        if (isMesVisivel(mes)) {
+    const getPagePresentation = page => {
+        if (isPageVisible(page) || isBigScreen) {
             return (
-                <li className={getMesClasse(mes)}
-                    onClick={() => trocaMes(mes)}>
-                    <a href="#!">{mes}</a>
+                <li className={getPageClass(page)}
+                    onClick={() => changePage(page)}>
+                    <a href="#!">{page}</a>
                 </li>
             );
         }
 
         return (
-            <li className={getMesClasse(mes)}>
+            <li className={getPageClass(page)}>
                 <a href="#!">...</a>
             </li>
         );
     }
 
-    const isMesVisivel = mes => {
-        const mesAtual = getMesAtual();
-        const condicoesVisibilidade = [
-            isMesAtual(mes),
-            mes === 1 || mes === 12,
-            mesAtual === 12 && (mes === 11 || mes === 10),
-            mesAtual === 11 && mes === 10,
-            mesAtual === 10 && mes === 11,
-            mesAtual === 1 && (mes === 2 || mes === 3),
-            mesAtual === 2 && mes === 3,
-            mesAtual === 3 && mes === 2
+    const isPageVisible = page => {
+        const visibilityConditions = [
+            isCurrentPage(page),
+            isFirstPage(page),
+            isLastPage(page),
+            _currentPage === 12 && (page === 11 || page === 10),
+            _currentPage === 11 && page === 10,
+            _currentPage === 10 && page === 11,
+            _currentPage === 1 && (page === 2 || page === 3),
+            _currentPage === 2 && page === 3,
+            _currentPage === 3 && page === 2
         ];
 
         const reducer = (accumulador, valorAtual) => accumulador || valorAtual;
-        return condicoesVisibilidade.reduce(reducer, false);
+        return visibilityConditions.reduce(reducer, false);
     }
 
-    const botoesMeses = () => {
-        const meses = DateUtils.getMesesNumeros();
+    const pagesButtons = () => {
+        const pages = [...Array(lastPage).keys()].map(x => x+1);
         
-        return (
-            meses.map(mes => {
-                return (
-                    <Fragment>
-                        <MediaQuery maxDeviceWidth={550}>
-                            {getMesApresentacao(mes)}
-                        </MediaQuery>
-                        <MediaQuery minDeviceWidth={550}>
-                            <li className={getMesClasseBigScreen(mes)}
-                                onClick={() => trocaMes(mes)}>
-                                <a href="#!">{mes}</a>
-                            </li>
-                        </MediaQuery>
-                    </Fragment>
-                );
-            })
-        )
+        return pages.map(page => getPagePresentation(page));
     }
 
     return (
-        <div className="center">
-            <ul className="pagination">
-                {botaoMesAnterior()}
-                {botoesMeses()}
-                {botaoMesPosterior()}
-            </ul>
-        </div>
+        <ul className="pagination">
+            {previousPageButton()}
+            {pagesButtons()}
+            {nextPageButton()}
+        </ul>
     );
-    
 }
 
 export default Pagination;
