@@ -11,7 +11,9 @@ const Pagination = (props) => {
     const firstPage = 1;
 
     const isFirstPage = (page=_currentPage) => page === firstPage;
+    const isFirstPageMoved = (move, page=_currentPage) => page === firstPage + move;
     const isLastPage = (page=_currentPage) => page === lastPage;
+    const isLastPageMoved = (move, page=_currentPage) => page === lastPage + move;
     const isCurrentPage = page => page === _currentPage;
 
     const changePage = page => {
@@ -52,13 +54,12 @@ const Pagination = (props) => {
     }
 
     const getPageClass = page => {
+        const lastPagePrevious = lastPage - 3;
+        const firstPageNext = firstPage + 3;
 
-        
         const clickConditions = [
-            _currentPage === 12 && page === 9,
-            _currentPage === 11 && page === 9,
-            _currentPage === 1 && page === 4,
-            _currentPage === 2 && page === 4,
+            page === lastPagePrevious && (isLastPage() || isLastPageMoved(-1)),
+            page === firstPageNext && (isFirstPage() || isFirstPageMoved(1)),
             page === _currentPage + 1,
             page === _currentPage - 1
         ];
@@ -95,16 +96,19 @@ const Pagination = (props) => {
     }
 
     const isPageVisible = page => {
+        const lastPagePrevious = lastPage - 2;
+        const firstPageNext = firstPage + 2;
+        
         const visibilityConditions = [
             isCurrentPage(page),
             isFirstPage(page),
             isLastPage(page),
-            _currentPage === 12 && (page === 11 || page === 10),
-            _currentPage === 11 && page === 10,
-            _currentPage === 10 && page === 11,
-            _currentPage === 1 && (page === 2 || page === 3),
-            _currentPage === 2 && page === 3,
-            _currentPage === 3 && page === 2
+            isLastPage() && page >= lastPagePrevious,
+            isLastPageMoved(-1) && page === lastPagePrevious,
+            isLastPageMoved(-2) && page > lastPagePrevious,
+            isFirstPage() && page <= firstPageNext,
+            isFirstPageMoved(1) && page === firstPageNext,
+            isFirstPageMoved(2) && page < firstPageNext
         ];
 
         const reducer = (accumulador, valorAtual) => accumulador || valorAtual;
