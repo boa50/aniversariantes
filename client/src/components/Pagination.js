@@ -9,6 +9,8 @@ const Pagination = (props) => {
     let _currentPage = props.page;
     const lastPage = props.lastPage;
     const firstPage = 1;
+    const paginationSize = 5;
+    const paginationHalf = (paginationSize + 1)/2;
 
     const isFirstPage = (page=_currentPage) => page === firstPage;
     const isFirstPageMoved = (move, page=_currentPage) => page === firstPage + move;
@@ -54,24 +56,24 @@ const Pagination = (props) => {
     }
 
     const getPageClass = page => {
-        const lastPagePrevious = lastPage - 3;
-        const firstPageNext = firstPage + 3;
+        const lastPagePrevious = lastPage - paginationHalf;
+        const firstPageNext = firstPage + paginationHalf;
 
-        const clickConditions = [
-            page === lastPagePrevious && (isLastPage() || isLastPageMoved(-1)),
-            page === firstPageNext && (isFirstPage() || isFirstPageMoved(1)),
+        const dotsConditions = [
+            page === lastPagePrevious && _currentPage > lastPagePrevious,
+            page === firstPageNext && _currentPage < firstPageNext,
             page === _currentPage + 1,
             page === _currentPage - 1
         ];
 
         const reducer = (accumulador, valorAtual) => accumulador || valorAtual;
-        const testeClicabilidade = clickConditions.reduce(reducer, false);
+        const dotsTest = dotsConditions.reduce(reducer, false);
 
         if (isCurrentPage(page)) {
             return "active red lighten-1";
         } else if (isPageVisible(page) || isBigScreen) {
             return "waves-effect";
-        } else if (testeClicabilidade) {
+        } else if (dotsTest) {
             return ""
         }
 
@@ -96,8 +98,8 @@ const Pagination = (props) => {
     }
 
     const isPageVisible = page => {
-        const lastPagePrevious = lastPage - 2;
-        const firstPageNext = firstPage + 2;
+        const lastPagePrevious = lastPage - (paginationHalf - 1);
+        const firstPageNext = firstPage + (paginationHalf - 1);
         
         const visibilityConditions = [
             isCurrentPage(page),
