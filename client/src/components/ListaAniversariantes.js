@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { List } from 'immutable';
 
-class ListaAniversariantes extends Component {
-    imprimeListaVazia = () => <h5> Sem aniversariantes no mês </h5>
+const ListaAniversariantes = (props) => {
+    const _aniversariantes = props.aniversariantes;
 
-    imprimeListaPreenchida = aniversariantes => {
-        const aniversariantesOrdenados = this.ordenarPorDia(aniversariantes);
+    const imprimeListaVazia = () => <h5> Sem aniversariantes no mês </h5>
+
+    const imprimeListaPreenchida = aniversariantes => {
+        const aniversariantesOrdenados = ordenarPorDia(aniversariantes);
         
         const linhas = aniversariantesOrdenados.map((linha, index) => {
             return (
@@ -27,22 +29,18 @@ class ListaAniversariantes extends Component {
         );
     }
 
-    ordenarPorDia = aniversariantes => {
+    const ordenarPorDia = aniversariantes => {
         const listaAniversariantesOrdenada = new List(aniversariantes);
 
         return listaAniversariantesOrdenada._tail.array.sort((a, b) => {
             return a.dia < b.dia ? -1 : 1;
         });
-    }
-    
-    render() {
-        this._aniversariantes = this.props.aniversariantes;
+    }  
 
-        if (this._aniversariantes.length === 0) {
-            return this.imprimeListaVazia();
-        } else {
-            return this.imprimeListaPreenchida(this._aniversariantes);
-        }
+    if (_aniversariantes.length === 0) {
+        return imprimeListaVazia();
+    } else {
+        return imprimeListaPreenchida(_aniversariantes);
     }
 }
 
