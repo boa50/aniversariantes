@@ -2,9 +2,7 @@ import React from 'react';
 import { useMediaQuery } from 'react-responsive';
 
 const Pagination = (props) => {
-    const isBigScreen = useMediaQuery({
-        query: '(min-device-width: 550px)'
-    });
+    const isBigScreen = useMediaQuery({ minWidth: 550 });
     
     let _currentPage = props.page;
     const _lastPage = props.lastPage;
@@ -12,11 +10,11 @@ const Pagination = (props) => {
     const _paginationSize = 5;
     const _paginationBorders = _paginationSize - 2;
 
-    const _paginationClass = 'pagination';
-    const _disabledClass = 'disabled';
-    const _enabledClass = 'waves-effect';
-    const _activeClass = 'active red lighten-1';
-    const _hideClass = 'mes-nao-apresentado';
+    const _paginationClass = "pagination";
+    const _disabledClass = "disabled";
+    const _enabledClass = "waves-effect";
+    const _activeClass = "active red lighten-1";
+    const _hideClass = "mes-nao-apresentado";
 
     const isFirstPage = (page=_currentPage) => page === _firstPage;
     const isLastPage = (page=_currentPage) => page === _lastPage;

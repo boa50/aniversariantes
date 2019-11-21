@@ -3,9 +3,7 @@ import '../assests/custom-css.css';
 import { useMediaQuery } from 'react-responsive';
 
 function Header() {
-    const isBigScreen = useMediaQuery({
-        query: '(min-device-width: 550px)'
-    });
+    const isBigScreen = useMediaQuery({ minWidth: 550 });
 
     return (
         <div className={isBigScreen ? "" : "navbar-fixed"}>
