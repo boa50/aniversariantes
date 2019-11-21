@@ -2,7 +2,7 @@ import React from 'react';
 import '../assests/custom-css.css';
 import { useMediaQuery } from 'react-responsive';
 
-function Header() {
+const Header = () => {
     const isBigScreen = useMediaQuery({ minWidth: 550 });
 
     return (
