@@ -19,7 +19,7 @@ class ListaAniversariantes extends Component {
         return (
             <table className="centered hightlight">
                 <tr>
-                    <th>Pessoa</th>
+                    <th>Aniversariante</th>
                     <th>Dia</th>
                 </tr>
                 {linhas}
