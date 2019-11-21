@@ -3,14 +3,12 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import App from './pages/App';
-// import Cadastro from './cadastro/pages/Cadastro';
 import NotFound from './pages/NotFound';
 
 ReactDOM.render(
     <BrowserRouter>
         <Switch>
             <Route path='/' exact={true} component={App} />
-            {/* <Route path='/cadastro' component={Cadastro} /> */}
             <Route component={NotFound} />
         </Switch>
     </BrowserRouter>
