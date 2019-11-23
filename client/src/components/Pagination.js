@@ -41,7 +41,7 @@ const Pagination = (props) => {
             <li className={disable() ? _disabledClass : _enabledClass}
                 onClick={run}>
                 <a href="#!">
-                    <i class="material-icons">{icon}</i>
+                    <i className="material-icons">{icon}</i>
                 </a>
             </li>
         );
@@ -78,7 +78,8 @@ const Pagination = (props) => {
     const getPagePresentation = page => {
         if (isPageVisible(page) || isBigScreen) {
             return (
-                <li className={getPageClass(page)}
+                <li key={page}
+                    className={getPageClass(page)}
                     onClick={() => changePage(page)}>
                     <a href="#!">{page}</a>
                 </li>

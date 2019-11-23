@@ -20,11 +20,13 @@ const ListaAniversariantes = (props) => {
 
         return (
             <table className="centered hightlight">
-                <tr>
-                    <th>Aniversariante</th>
-                    <th>Dia</th>
-                </tr>
-                {linhas}
+                <tbody>
+                    <tr>
+                        <th>Aniversariante</th>
+                        <th>Dia</th>
+                    </tr>
+                    {linhas}
+                </tbody>
             </table>
         );
     }
