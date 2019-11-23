@@ -6,6 +6,7 @@ const TrocaMes = (props) => {
     return (
         <div className="center">
             <Pagination 
+                mediaQueries={props.mediaQueries}
                 listener={props.listener}
                 page={props.mes}
                 lastPage={12}/>

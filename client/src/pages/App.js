@@ -7,8 +7,13 @@ import Header from '../components/Header';
 import ListaAniversariantes from '../components/ListaAniversariantes';
 import TrocaMes from '../components/TrocaMes';
 import AniversariantesDia from '../components/AniversariantesDia';
+import { useMediaQuery } from 'react-responsive';
 
 const App = () => {
+    const mediaQueries = {
+        isBigScreen: useMediaQuery({ minWidth: 550 }),
+    };
+    
     const [aniversariantes, setAniversariantes] = useState([]);
     const [mes, setMes] = useState(0);
 
@@ -33,11 +38,12 @@ const App = () => {
 
     return (
         <Fragment>
-            <Header />
+            <Header mediaQueries={mediaQueries}/>
             <div className="container">
                 <h2 className="center">{DateUtils.getMonthNameFromNumber(mes)}</h2>
                 <AniversariantesDia />
                 <TrocaMes
+                    mediaQueries={mediaQueries}
                     listener={trocaMesListener}
                     mes={mes} />
                 <ListaAniversariantes aniversariantes={aniversariantes} />

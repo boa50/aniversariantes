@@ -1,8 +1,7 @@
 import React from 'react';
-import { useMediaQuery } from 'react-responsive';
 
 const Pagination = (props) => {
-    const isBigScreen = useMediaQuery({ minWidth: 550 });
+    const isBigScreen = props.mediaQueries.isBigScreen;
     
     let _currentPage = props.page;
     const _lastPage = props.lastPage;
@@ -87,7 +86,8 @@ const Pagination = (props) => {
         }
 
         return (
-            <li className={getPageClass(page)}>
+            <li key={page}
+                className={getPageClass(page)}>
                 <a href="#!">...</a>
             </li>
         );
