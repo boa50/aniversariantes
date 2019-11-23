@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import 'materialize-css/dist/css/materialize.min.css';
 import 'materialize-css/dist/js/materialize.min.js';
 import DateUtils from '../utils/DateUtils';
@@ -8,51 +8,42 @@ import ListaAniversariantes from '../components/ListaAniversariantes';
 import TrocaMes from '../components/TrocaMes';
 import AniversariantesDia from '../components/AniversariantesDia';
 
-class App extends Component {
+const App = () => {
+    const [aniversariantes, setAniversariantes] = useState([]);
+    const [mes, setMes] = useState(0);
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            aniversariantes: [],
-            mes: 0
-        }
+    const atualizaInformacoes = mes => {
+        setMes(mes);
+        autlizaListaAniversariantes(mes);
     }
 
-    componentDidMount() {
-        const mes = DateUtils.getMesAtual();
-        this.atualizaInformacoes(mes);
+    const trocaMesListener = mesNovo => {
+        atualizaInformacoes(mesNovo);
     }
 
-    trocaMesListener = mesNovo => {
-        this.atualizaInformacoes(mesNovo);
-    }
-
-    atualizaInformacoes = mes => {
-        this.setState({ mes });
-        this.autlizaListaAniversariantes(mes);
-    }
-
-    autlizaListaAniversariantes = mes => {
+    const autlizaListaAniversariantes = mes => {
         const aniversariantes = AniversariantesService.ListaAniversariantesMes(mes);
-        this.setState({ aniversariantes });
+        setAniversariantes(aniversariantes);
     }
 
-    render() {
-        return (
-            <Fragment>
-                <Header />
-                <div className="container">
-                    <h2 className="center">{DateUtils.getMonthNameFromNumber(this.state.mes)}</h2>
-                    <AniversariantesDia />
-                    <TrocaMes
-                        listener={this.trocaMesListener} 
-                        mes={this.state.mes} />
-                    <ListaAniversariantes aniversariantes={this.state.aniversariantes} />
-                </div>
-            </Fragment>
-        );
-    }
+    useEffect(() => {
+        const mes = DateUtils.getMesAtual();
+        atualizaInformacoes(mes);
+    }, [])
+
+    return (
+        <Fragment>
+            <Header />
+            <div className="container">
+                <h2 className="center">{DateUtils.getMonthNameFromNumber(mes)}</h2>
+                <AniversariantesDia />
+                <TrocaMes
+                    listener={trocaMesListener}
+                    mes={mes} />
+                <ListaAniversariantes aniversariantes={aniversariantes} />
+            </div>
+        </Fragment>
+    );
 }
 
 export default App;
