@@ -13,6 +13,10 @@
     padding-right: 10px;
 }
 
+table.centered tbody tr td {
+    text-align: left;
+}
+
 @media screen and (max-width: 800px) {
     #logo {
         padding-left: 0;
