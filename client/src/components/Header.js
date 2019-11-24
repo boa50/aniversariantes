@@ -1,8 +1,9 @@
 import React from 'react';
 import '../assests/custom-css.scss';
+import { useMediaQuery } from 'react-responsive';
 
-const Header = (props) => {
-    const isBigScreen = props.mediaQueries.isBigScreen;
+const Header = () => {
+    const isBigScreen = useMediaQuery({ minWidth: 550 });
 
     return (
         <div className={isBigScreen ? "" : "navbar-fixed"}>

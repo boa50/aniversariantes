@@ -15,14 +15,12 @@ afterEach(() => {
 
 describe("Header component", () => {
     test("verifica se a renderização foi feita de maneira correta", () => {
-        const mediaQueries = {
-            isBigScreen: false,
-        };
-
         act(() => {
-            ReactDOM.render(<Header mediaQueries={mediaQueries} />, container);
+            ReactDOM.render(<Header/>, container);
         });
         const header = container.getElementsByTagName('a')[0];
+        const header2 = container.getElementsByTagName('div')[0];
+        console.info(header2.className);
 
         expect(header.id).toBe('logo');
         expect(header.childNodes[0].tagName).toBe('I');
