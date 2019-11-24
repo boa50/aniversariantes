@@ -22,8 +22,7 @@ const AniversariantesDia = () => {
                     <div className="card-panel red lighten-1">
                         <span className="white-text icon-text">
                             <i className="material-icons icon-padding">notifications_active</i>
-                            <strong style={{ fontWeight: "bold" }}>Hoje a festa é para: </strong>
-                            {texto}
+                            <span><strong style={{ fontWeight: "bold" }}>Hoje a festa é para: </strong> {texto}</span>
                         </span>
                     </div>
                 </div>
