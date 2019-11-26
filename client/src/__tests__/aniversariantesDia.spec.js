@@ -27,10 +27,10 @@ describe("TrocaMes component", () => {
             ReactDOM.render(<AniversariantesDia/>, container);
         });
         const aniversariantes_texto = container.getElementsByTagName('span')[1];
-        const imagem_alerta = container.getElementsByTagName('i')[0];
+        const imagemAlerta = container.getElementsByTagName('i')[0];
 
         expect(aniversariantes_texto.textContent).toMatch('aniversariante_teste');
-        expect(imagem_alerta.className).toMatch(/material-icons/);
-        expect(imagem_alerta.textContent).toBe('notifications_active');
+        expect(imagemAlerta.className).toMatch(/material-icons/);
+        expect(imagemAlerta.textContent).toBe('notifications_active');
     });
 });
