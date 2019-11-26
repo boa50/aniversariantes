@@ -4,7 +4,7 @@ import { List } from 'immutable';
 const ListaAniversariantes = (props) => {
     const _aniversariantes = props.aniversariantes;
 
-    const imprimeListaVazia = () => <h5> Sem aniversariantes no mês </h5>
+    const imprimeListaVazia = () => <h5>Sem aniversariantes no mês</h5>
 
     const imprimeListaPreenchida = aniversariantes => {
         const aniversariantesOrdenados = ordenarPorDia(aniversariantes);
