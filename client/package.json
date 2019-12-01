@@ -17,7 +17,7 @@
     "prestart": "npm install -g serve",
     "local": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --coverage --watchAll=false",
+    "test": "react-scripts test --coverage --watchAll=false --collectCoverageFrom=src/**/*.js --collectCoverageFrom=!src/*",
     "test-watch": "react-scripts test",
     "eject": "react-scripts eject",
     "gcloud": "npm run build && gcloud app deploy"
