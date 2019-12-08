@@ -9,12 +9,16 @@ let props;
 const larguraMobile = 549;
 const larguraDesktop = 550;
 
+let elementosClicaveis;
+let setaEsquerda;
+let setaDireita;
+
 beforeEach(() => {
     container = document.createElement("div");
     document.body.appendChild(container);
 
     props = {
-        listener: {},
+        listener: function(page) {props.page = page},
         page: 5,
         lastPage: 10
     }
@@ -24,117 +28,125 @@ afterEach(() => {
     container = null;
 });
 
+const renderizar = (largura=larguraDesktop) => {
+    act(() => {
+        ReactDOM.render(
+            <ResponsiveContext.Provider value={{ width: largura }}>
+                <Pagination 
+                    listener={props.listener}
+                    page={props.page}
+                    lastPage={props.lastPage} />
+            </ResponsiveContext.Provider>
+            , container);
+    });
+
+    elementosClicaveis = container.getElementsByTagName('li');
+    setaEsquerda = elementosClicaveis[0];
+    setaDireita = elementosClicaveis[elementosClicaveis.length - 1];
+}
+
+const checaPaginaAtiva = pagina => {
+    expect(pagina.className).toMatch('active');
+}
+
 describe("Pagination component", () => {
     test("verifica a renderização do está correta", () => {
-        act(() => {
-            ReactDOM.render(
-                <ResponsiveContext.Provider value={{ width: larguraMobile }}>
-                    <Pagination page={props.page}
-                        lastPage={props.lastPage} />
-                </ResponsiveContext.Provider>
-                , container);
-        });
+        renderizar(larguraMobile);
 
         const paginas = container.getElementsByTagName('ul')[0];
-        const paginasElementos = container.getElementsByTagName('li');
-        const setaEsquerda = paginasElementos[0];
-        const setaDireita = paginasElementos[paginasElementos.length - 1];
-        const paginaSelecionada = paginasElementos[props.page];
-        const paginaSelecionadaEsquerda = paginasElementos[props.page - 1];
-        const paginaSelecionadaDireita = paginasElementos[props.page + 1];
+        const paginaSelecionada = elementosClicaveis[props.page];
+        const paginaSelecionadaEsquerda = elementosClicaveis[props.page - 1];
+        const paginaSelecionadaDireita = elementosClicaveis[props.page + 1];
 
         expect(paginas.className).toBe('pagination');
         expect(setaEsquerda.textContent).toBe('chevron_left');
         expect(setaDireita.textContent).toBe('chevron_right');
         expect(setaEsquerda.className).toBe('waves-effect');
         expect(setaDireita.className).toBe('waves-effect');
-        expect(paginasElementos.length).toBe(12);
+        expect(elementosClicaveis.length).toBe(12);
         expect(paginaSelecionada.className).toMatch('active');
         expect(paginaSelecionadaEsquerda.textContent).toBe('...');
         expect(paginaSelecionadaDireita.textContent).toBe('...');
         expect(paginaSelecionadaEsquerda.className).toBe('');
         expect(paginaSelecionadaDireita.className).toBe('');
 
-        act(() => {
-            ReactDOM.render(
-                <ResponsiveContext.Provider value={{ width: larguraDesktop }}>
-                    <Pagination page={props.page}
-                        lastPage={props.lastPage} />
-                </ResponsiveContext.Provider>
-                , container);
-        });
+        renderizar();
 
         expect(paginas.className).toBe('pagination');
         expect(setaEsquerda.textContent).toBe('chevron_left');
         expect(setaDireita.textContent).toBe('chevron_right');
         expect(setaEsquerda.className).toBe('waves-effect');
         expect(setaDireita.className).toBe('waves-effect');
-        expect(paginasElementos.length).toBe(12);
-        expect(paginaSelecionada.className).toMatch('active');
+        expect(elementosClicaveis.length).toBe(12);
+        checaPaginaAtiva(paginaSelecionada);
 
         for (let i = 1; i<=props.lastPage; i++) {
-            expect(paginasElementos[i].textContent).toBe((i).toString());
+            expect(elementosClicaveis[i].textContent).toBe((i).toString());
             if (i !== props.page) {
-                expect(paginasElementos[i].className).toBe('waves-effect');
+                expect(elementosClicaveis[i].className).toBe('waves-effect');
             }
         }
     });
 
     test("verifica a troca de página ativa", () => {
-        props.listener = function(page) {props.page = page};
-        act(() => {
-            ReactDOM.render(
-                <ResponsiveContext.Provider value={{ width: larguraDesktop }}>
-                    <Pagination listener={props.listener}
-                        page={props.page}
-                        lastPage={props.lastPage} />
-                </ResponsiveContext.Provider>
-                , container);
-        });
-
-        const paginasElementos = container.getElementsByTagName('li');
-        const setaEsquerda = paginasElementos[0];
-        const setaDireita = paginasElementos[paginasElementos.length - 1];
+        renderizar();
         
         let numeroPaginaAntiga = props.page;
         setaEsquerda.click();
         let numeroPaginaNova = props.page;
 
-        act(() => {
-            ReactDOM.render(
-                <ResponsiveContext.Provider value={{ width: larguraDesktop }}>
-                    <Pagination listener={props.listener}
-                        page={props.page}
-                        lastPage={props.lastPage} />
-                </ResponsiveContext.Provider>
-                , container);
-        });
+        renderizar();
 
-        let antigaPaginaSelecionada = paginasElementos[numeroPaginaAntiga];
-        let novaPaginaSelecionada = paginasElementos[numeroPaginaNova];
+        let antigaPaginaSelecionada = elementosClicaveis[numeroPaginaAntiga];
+        let novaPaginaSelecionada = elementosClicaveis[numeroPaginaNova];
         
         expect(antigaPaginaSelecionada.className).toBe('waves-effect');
-        expect(novaPaginaSelecionada.className).toMatch('active');
+        checaPaginaAtiva(novaPaginaSelecionada);
 
         numeroPaginaAntiga = props.page;
         setaDireita.click();
         setaDireita.click();
         numeroPaginaNova = props.page;
 
-        act(() => {
-            ReactDOM.render(
-                <ResponsiveContext.Provider value={{ width: larguraDesktop }}>
-                    <Pagination listener={props.listener}
-                        page={props.page}
-                        lastPage={props.lastPage} />
-                </ResponsiveContext.Provider>
-                , container);
-        });
+        renderizar();
 
-        antigaPaginaSelecionada = paginasElementos[numeroPaginaAntiga];
-        novaPaginaSelecionada = paginasElementos[numeroPaginaNova];
+        antigaPaginaSelecionada = elementosClicaveis[numeroPaginaAntiga];
+        novaPaginaSelecionada = elementosClicaveis[numeroPaginaNova];
         
         expect(antigaPaginaSelecionada.className).toBe('waves-effect');
-        expect(novaPaginaSelecionada.className).toMatch('active');
+        checaPaginaAtiva(novaPaginaSelecionada);
+    });
+
+    test("altera para página específica", () => {
+        renderizar();
+
+        let novaPagina;
+        do {
+            novaPagina = Math.floor(Math.random() * props.lastPage) + 1;
+        } while (novaPagina == props.page);
+
+        const numeroPaginaAntiga = props.page;
+        const paginaFutura = elementosClicaveis[novaPagina];
+
+        paginaFutura.click();
+        renderizar();
+
+        const paginaAntiga = elementosClicaveis[numeroPaginaAntiga];
+        
+        expect(paginaAntiga.className).toBe('waves-effect');
+        checaPaginaAtiva(paginaFutura);
+    });
+
+    test("verifica limite inferior", () => {
+        props.page = 1;
+        renderizar();
+
+        const pagina = elementosClicaveis[props.page];
+
+        setaEsquerda.click();
+        renderizar();
+
+        checaPaginaAtiva(pagina);
+        //TODO verifica se a seta está disabled
     });
 });
