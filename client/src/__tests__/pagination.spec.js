@@ -28,7 +28,7 @@ afterEach(() => {
     container = null;
 });
 
-const renderizar = (largura=larguraDesktop) => {
+const renderizar = (largura=larguraDesktop, inicializar=false) => {
     act(() => {
         ReactDOM.render(
             <ResponsiveContext.Provider value={{ width: largura }}>
@@ -40,9 +40,11 @@ const renderizar = (largura=larguraDesktop) => {
             , container);
     });
 
-    elementosClicaveis = container.getElementsByTagName('li');
-    setaEsquerda = elementosClicaveis[0];
-    setaDireita = elementosClicaveis[elementosClicaveis.length - 1];
+    if (inicializar) {
+        elementosClicaveis = container.getElementsByTagName('li');
+        setaEsquerda = elementosClicaveis[0];
+        setaDireita = elementosClicaveis[elementosClicaveis.length - 1];
+    }
 }
 
 const checaPaginaAtiva = pagina => {
@@ -51,7 +53,7 @@ const checaPaginaAtiva = pagina => {
 
 describe("Pagination component", () => {
     test("verifica a renderização do está correta", () => {
-        renderizar(larguraMobile);
+        renderizar(larguraMobile, true);
 
         const paginas = container.getElementsByTagName('ul')[0];
         const paginaSelecionada = elementosClicaveis[props.page];
@@ -89,7 +91,7 @@ describe("Pagination component", () => {
     });
 
     test("verifica a troca de página ativa", () => {
-        renderizar();
+        renderizar(larguraDesktop, true);
         
         let numeroPaginaAntiga = props.page;
         setaEsquerda.click();
@@ -118,7 +120,7 @@ describe("Pagination component", () => {
     });
 
     test("altera para página específica", () => {
-        renderizar();
+        renderizar(larguraDesktop, true);
 
         let novaPagina;
         do {
@@ -139,7 +141,7 @@ describe("Pagination component", () => {
 
     test("verifica limite inferior", () => {
         props.page = 1;
-        renderizar();
+        renderizar(larguraDesktop, true);
 
         const pagina = elementosClicaveis[props.page];
 
@@ -147,6 +149,19 @@ describe("Pagination component", () => {
         renderizar();
 
         checaPaginaAtiva(pagina);
-        //TODO verifica se a seta está disabled
+        expect(setaEsquerda.className).toBe("disabled");
+    });
+
+    test("verifica limite superior", () => {
+        props.page = props.lastPage;
+        renderizar(larguraDesktop, true);
+
+        const pagina = elementosClicaveis[props.page];
+
+        setaDireita.click();
+        renderizar();
+
+        checaPaginaAtiva(pagina);
+        expect(setaDireita.className).toBe("disabled");
     });
 });
