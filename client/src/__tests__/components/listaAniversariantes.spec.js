@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { act } from "react-dom/test-utils";
-import ListaAniversariantes from '../components/ListaAniversariantes'
+import ListaAniversariantes from '../../components/ListaAniversariantes'
 
 let container;
 beforeEach(() => {

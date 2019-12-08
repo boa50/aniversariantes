@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { act } from "react-dom/test-utils";
-import Header from '../components/Header';
+import Header from '../../components/Header';
 import { Context as ResponsiveContext } from 'react-responsive';
 
 let container;

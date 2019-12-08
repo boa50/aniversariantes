@@ -1,8 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { act } from "react-dom/test-utils";
-import AniversariantesDia from '../components/AniversariantesDia'
-import aniversariantes from "../assests/aniversariantes";
+import AniversariantesDia from '../../components/AniversariantesDia';
 
 let container;
 beforeEach(() => {
@@ -14,8 +13,8 @@ afterEach(() => {
     container = null;
 });
 
-let mockAniversariantesDia = []
-jest.mock('../services/Aniversariantes', () => {
+let mockAniversariantesDia = [];
+jest.mock('../../services/Aniversariantes', () => {
     return {ListaAniversariantesDia: () => mockAniversariantesDia};
 });
 

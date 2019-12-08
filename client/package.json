@@ -27,7 +27,9 @@
       "src/**/*.js",
       "!src/index.js",
       "!src/serviceWorker.js",
-      "!src/pages/NotFound.js"
+      "!src/pages/NotFound.js",
+      "!src/utils/DateUtils.js",
+      "!src/assets/aniversariantes.js"
     ]
   },
   "eslintConfig": {

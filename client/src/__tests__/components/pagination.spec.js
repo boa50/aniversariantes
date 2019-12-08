@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { act } from "react-dom/test-utils";
-import Pagination from '../components/Pagination';
+import Pagination from '../../components/Pagination';
 import { Context as ResponsiveContext } from 'react-responsive';
 
 let container;

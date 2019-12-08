@@ -1,5 +1,5 @@
 import React from 'react';
-import '../assests/custom-css.scss';
+import '../assets/custom-css.scss';
 import { useMediaQuery } from 'react-responsive';
 
 const Header = () => {

@@ -1,4 +1,4 @@
-import aniversariantes from '../assests/aniversariantes';
+import aniversariantes from '../assets/aniversariantes';
 import DateUtils from '../utils/DateUtils';
 
 const AniversariantesService = {
