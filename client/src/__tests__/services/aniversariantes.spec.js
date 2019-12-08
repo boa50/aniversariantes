@@ -22,7 +22,7 @@ jest.mock('../../assets/aniversariantes.js', () => {
         {pessoa:'joãozinho',mes:'10',dia:'22'},
         {pessoa:'pedinho',mes:'10',dia:'25'},
         {pessoa:'mariazinha',mes:'10',dia:'22'},
-        {pessoa:'testinho',mes:'11',dia:'22'},
+        {pessoa:'testinho',mes:'11',dia:'22'}
     ];
 });
 
