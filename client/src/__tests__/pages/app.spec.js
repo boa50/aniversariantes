@@ -34,25 +34,83 @@ jest.mock('../../services/Aniversariantes', () => {
     };
 });
 
+const mockMesInicial = 10;
+const mockMesAlterado = 11;
+const mockMesInicialTexto = 'Outubro';
+const mockMesAlteradoTexto = 'Novembro';
 jest.mock('../../utils/DateUtils.js', () => {
     return {
-        getMesAtual: () => 10,
+        getMesAtual: () => mockMesInicial,
         getDiaAtual: () => 22,
-        getMonthNameFromNumber: () => 'Outubro'
+        getMonthNameFromNumber: (mesNumero) => {
+            switch (mesNumero) {
+                case mockMesInicial:
+                    return mockMesInicialTexto;
+                case mockMesAlterado:
+                    return mockMesAlteradoTexto;
+            }
+        }
     };
+});
+
+jest.mock('../../components/Header.js', () => {
+    return () => <div className='HeaderMock'></div>
+});
+
+jest.mock('../../components/AniversariantesDia.js', () => {
+    return () => <div className='AniversariantesDiaMock'></div>
+});
+
+jest.mock('../../components/TrocaMes.js', () => {
+    return (props) => {
+        const mockChamaListener = () => props.listener(mockMesAlterado);
+
+        return (
+            <div className='TrocaMesMock'>
+                <button onClick={mockChamaListener}></button>
+            </div>
+        )
+    }
+});
+
+jest.mock('../../components/ListaAniversariantes.js', () => {
+    return () => <div className='ListaAniversariantesMock'></div>
 });
 
 describe("TrocaMes component", () => {
     test("verifica se a renderização foi feita de maneira correta", () => {
-        // mockAniversariantesDia = [{ pessoa: 'joãozinho', mes: '11', dia: '24' }];
         act(() => {
             ReactDOM.render(<App />, container);
         });
-        // const aniversariantesTexto = container.getElementsByTagName('span')[1];
-        // const imagemAlerta = container.getElementsByTagName('i')[0];
+        const headerMock = container.getElementsByClassName('HeaderMock');
+        const aniversariantesDiaMock = container.getElementsByClassName('AniversariantesDiaMock');
+        const trocaMesMock = container.getElementsByClassName('TrocaMesMock');
+        const listaAniversariantesMock = container.getElementsByClassName('ListaAniversariantesMock');
+        const mesNome = container.getElementsByTagName('h2')[0];
 
-        // expect(aniversariantesTexto.textContent).toMatch('joãozinho');
-        // expect(imagemAlerta.className).toMatch(/material-icons/);
-        // expect(imagemAlerta.textContent).toBe('notifications_active');
+        expect(mesNome.textContent).toBe(mockMesInicialTexto);
+
+        expect(headerMock.length).toBe(1);
+        expect(aniversariantesDiaMock.length).toBe(1);
+        expect(trocaMesMock.length).toBe(1);
+        expect(listaAniversariantesMock.length).toBe(1);
+
+        expect(headerMock[0]).toBeDefined();
+        expect(aniversariantesDiaMock[0]).toBeDefined();
+        expect(trocaMesMock[0]).toBeDefined();
+        expect(listaAniversariantesMock[0]).toBeDefined();
+    });
+
+    test("verifica a troca dos meses", () => {
+        act(() => {
+            ReactDOM.render(<App />, container);
+        });
+
+        const trocaMesMock = container.getElementsByClassName('TrocaMesMock')[0];
+        const mesNome = container.getElementsByTagName('h2')[0];
+
+        expect(mesNome.textContent).toBe(mockMesInicialTexto);
+        trocaMesMock.getElementsByTagName('button')[0].click()
+        expect(mesNome.textContent).toBe(mockMesAlteradoTexto);
     });
 });
