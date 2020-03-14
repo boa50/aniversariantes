@@ -1,5 +1,5 @@
 import React from 'react';
-import AniversariantesService from '../services/Aniversariantes';
+import AniversariantesService from '../services/aniversariantes';
 
 const AniversariantesDia = () => {
 

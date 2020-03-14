@@ -1,5 +1,5 @@
 import aniversariantes from '../assets/aniversariantes';
-import DateUtils from '../utils/DateUtils';
+import DateUtils from '../utils/dateUtils';
 
 const AniversariantesService = {
     ListaAniversariantes: () => {
