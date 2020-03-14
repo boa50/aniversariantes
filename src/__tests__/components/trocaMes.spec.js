@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { act } from "react-dom/test-utils";
-import TrocaMes from '../../components/TrocaMes';
+
+import TrocaMes from '../../components/trocaMes';
 
 let container;
 beforeEach(() => {
@@ -13,7 +14,7 @@ afterEach(() => {
     container = null;
 });
 
-jest.mock('../../components/Pagination', () => {
+jest.mock('../../components/pagination', () => {
     return () => <ul className='pagination'></ul>;
 });
 

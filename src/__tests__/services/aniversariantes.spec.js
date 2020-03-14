@@ -1,4 +1,4 @@
-import AniversariantesService from '../../services/Aniversariantes';
+import AniversariantesService from '../../services/aniversariantes';
 
 let container;
 beforeEach(() => {
@@ -10,7 +10,7 @@ afterEach(() => {
     container = null;
 });
 
-jest.mock('../../utils/DateUtils.js', () => {
+jest.mock('../../utils/dateUtils.js', () => {
     return {
         getMesAtual: () => 10,
         getDiaAtual: () => 22
