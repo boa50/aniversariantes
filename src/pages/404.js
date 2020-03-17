@@ -1,18 +1,15 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
-import Header from '../components/header';
-import SEO from "../components/seo";
+import Layout from '../components/layout';
 
 const NotFound = () => {
-  return (
-      <Fragment>
-          <SEO title="Not Found" />
-          <Header />
-          <div className="container">
-              <h1>404 - Página Não Encontrada</h1>
-          </div>
-      </Fragment>
-  )
-}
+    return (
+        <Layout title="Not Found">
+            <div className="container">
+                <h1>404 - Página Não Encontrada</h1>
+            </div>
+        </Layout>
+    );
+};
 
 export default NotFound;

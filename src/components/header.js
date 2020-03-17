@@ -1,22 +1,65 @@
 import React from 'react';
+import { Link } from 'gatsby';
+
 import '../assets/custom-css.scss';
-import { useMediaQuery } from 'react-responsive';
+
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        flexGrow: 1,
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+    },
+    title: {
+        flexGrow: 1,
+    },
+    offset: theme.mixins.toolbar,
+}));
 
 const Header = () => {
-    const isBigScreen = useMediaQuery({ minWidth: 550 });
+    const classes = useStyles();
 
     return (
-        <div className={isBigScreen ? "" : "navbar-fixed"}>
-            <nav>
-                <div className="nav-wrapper red lighten-1">
-                    <a href="/" id="logo" className="brand-logo">
-                        <i className="material-icons">cake</i>
+        <div className={classes.root}>
+            <AppBar>
+                <Toolbar>
+                    <Link to="/" style={{ color: 'inherit' }}>
+                        <IconButton
+                            edge="start"
+                            className={classes.menuButton}
+                            color="inherit"
+                            aria-label="menu"
+                        >
+                            <i className="material-icons">cake</i>
+                        </IconButton>
+                    </Link>
+                    <Typography variant="h6" className={classes.title}>
                         Aniversariantes
-                    </a>
-                </div>
-            </nav>
+                    </Typography>
+                </Toolbar>
+            </AppBar>
+            <div className={classes.offset} />
         </div>
     );
-}
+
+    // return (
+    //     <div className={isBigScreen ? '' : 'navbar-fixed'}>
+    //         <nav>
+    //             <div className="nav-wrapper red lighten-1">
+    //                 <a href="/" id="logo" className="brand-logo">
+    //                     <i className="material-icons">cake</i>
+    //                     Aniversariantes
+    //                 </a>
+    //             </div>
+    //         </nav>
+    //     </div>
+    // );
+};
 
 export default Header;

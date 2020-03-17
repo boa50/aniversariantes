@@ -1,15 +1,14 @@
-import React, { Fragment, useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import 'materialize-css/dist/css/materialize.min.css';
 import 'materialize-css/dist/js/materialize.min.js';
 
 import DateUtils from '../utils/dateUtils';
 import AniversariantesService from '../services/aniversariantes';
-import Header from '../components/header';
 import ListaAniversariantes from '../components/listaAniversariantes';
 import TrocaMes from '../components/trocaMes';
 import AniversariantesDia from '../components/aniversariantesDia';
-import SEO from "../components/seo";
+import Layout from '../components/layout';
 
 const App = () => {
     const [aniversariantes, setAniversariantes] = useState([]);
@@ -22,32 +21,32 @@ const App = () => {
 
     const trocaMesListener = mesNovo => {
         atualizaInformacoes(mesNovo);
-    }
+    };
 
     const autlizaListaAniversariantes = mes => {
-        const aniversariantes = AniversariantesService.ListaAniversariantesMes(mes);
+        const aniversariantes = AniversariantesService.ListaAniversariantesMes(
+            mes,
+        );
         setAniversariantes(aniversariantes);
-    }
+    };
 
     useEffect(() => {
         const mes = DateUtils.getMesAtual();
         atualizaInformacoes(mes);
-    }, [atualizaInformacoes])
+    }, [atualizaInformacoes]);
 
     return (
-        <Fragment>
-            <SEO title="Aniversariantes" />
-            <Header/>
+        <Layout title="Aniversariantes">
             <div className="container">
-                <h2 className="center">{DateUtils.getMonthNameFromNumber(mes)}</h2>
+                <h2 className="center">
+                    {DateUtils.getMonthNameFromNumber(mes)}
+                </h2>
                 <AniversariantesDia />
-                <TrocaMes
-                    listener={trocaMesListener}
-                    mes={mes} />
+                <TrocaMes listener={trocaMesListener} mes={mes} />
                 <ListaAniversariantes aniversariantes={aniversariantes} />
             </div>
-        </Fragment>
+        </Layout>
     );
-}
+};
 
 export default App;
