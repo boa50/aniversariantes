@@ -3,6 +3,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import 'materialize-css/dist/css/materialize.min.css';
 import 'materialize-css/dist/js/materialize.min.js';
 
+import Box from '@material-ui/core/Box';
+
 import DateUtils from '../utils/dateUtils';
 import AniversariantesService from '../services/aniversariantes';
 import ListaAniversariantes from '../components/listaAniversariantes';
@@ -37,14 +39,12 @@ const App = () => {
 
     return (
         <Layout title="Aniversariantes">
-            <div className="container">
-                <h2 className="center">
-                    {DateUtils.getMonthNameFromNumber(mes)}
-                </h2>
-                <AniversariantesDia />
-                <TrocaMes listener={trocaMesListener} mes={mes} />
-                <ListaAniversariantes aniversariantes={aniversariantes} />
-            </div>
+            <Box textAlign="center" fontSize="h2.fontSize">
+                {DateUtils.getMonthNameFromNumber(mes)}
+            </Box>
+            <AniversariantesDia />
+            <TrocaMes listener={trocaMesListener} mes={mes} />
+            <ListaAniversariantes aniversariantes={aniversariantes} />
         </Layout>
     );
 };
