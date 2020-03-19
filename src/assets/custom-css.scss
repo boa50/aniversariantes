@@ -1,24 +1,5 @@
-#logo {
-    padding-left: 10px;
-    font-size: 1.7vw;
-}
-
 table.centered tbody tr td {
     text-align: left !important;
-}
-
-@media screen and (max-width: 800px) {
-    #logo {
-        padding-left: 0;
-        font-size: 3.5vw;
-    }
-}
-
-@media screen and (max-width: 600px) {
-    #logo {
-        padding-left: 0;
-        font-size: 5.4vw;
-    }
 }
 
 @media screen and (max-width: 550px) {
