@@ -46,7 +46,7 @@ const AniversariantesDia = () => {
                             <NotificationsActiveIcon
                                 className={classes.alertIcon}
                             />
-                            <Typography component="span">
+                            <Typography component="span" variant="body2">
                                 <strong>Hoje a festa é para: </strong>
                                 {texto}
                             </Typography>

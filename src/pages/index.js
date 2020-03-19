@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import 'materialize-css/dist/css/materialize.min.css';
-import 'materialize-css/dist/js/materialize.min.js';
-
 import Box from '@material-ui/core/Box';
 
 import DateUtils from '../utils/dateUtils';
@@ -21,7 +18,7 @@ const App = () => {
         autlizaListaAniversariantes(mes);
     }, []);
 
-    const trocaMesListener = mesNovo => {
+    const trocaMesHandler = (event, mesNovo) => {
         atualizaInformacoes(mesNovo);
     };
 
@@ -39,11 +36,11 @@ const App = () => {
 
     return (
         <Layout title="Aniversariantes">
-            <Box textAlign="center" fontSize="h2.fontSize">
+            <Box display="flex" justifyContent="center" fontSize="h3.fontSize">
                 {DateUtils.getMonthNameFromNumber(mes)}
             </Box>
             <AniversariantesDia />
-            <TrocaMes listener={trocaMesListener} mes={mes} />
+            <TrocaMes changeHandler={trocaMesHandler} mes={mes} />
             <ListaAniversariantes aniversariantes={aniversariantes} />
         </Layout>
     );
