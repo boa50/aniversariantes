@@ -36,7 +36,12 @@ const App = () => {
 
     return (
         <Layout title="Aniversariantes">
-            <Box display="flex" justifyContent="center" fontSize="h3.fontSize">
+            <Box
+                display="flex"
+                justifyContent="center"
+                fontSize="h3.fontSize"
+                data-testid="mes-nome"
+            >
                 {DateUtils.getMonthNameFromNumber(mes)}
             </Box>
             <AniversariantesDia />

@@ -17,6 +17,7 @@ const TrocaMes = props => {
     return (
         <Box display="flex" justifyContent="center">
             <Pagination
+                data-testid="pagination-material-component"
                 count={12}
                 shape="rounded"
                 color="primary"

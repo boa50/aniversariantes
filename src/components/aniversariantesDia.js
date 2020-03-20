@@ -39,14 +39,19 @@ const AniversariantesDia = () => {
 
     if (quantidadeAniversariantes > 0) {
         return (
-            <Grid sm={12} md={8} lg={5}>
+            <Grid item sm={12} md={8} lg={5}>
                 <Card className={classes.card}>
                     <CardContent>
                         <Box display="flex" alignItems="center">
                             <NotificationsActiveIcon
+                                data-testid="aniversariante-icone"
                                 className={classes.alertIcon}
                             />
-                            <Typography component="span" variant="body2">
+                            <Typography
+                                component="span"
+                                variant="body2"
+                                data-testid="aniversariante-texto"
+                            >
                                 <strong>Hoje a festa é para: </strong>
                                 {texto}
                             </Typography>
