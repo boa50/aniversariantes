@@ -23,7 +23,9 @@ const ListaAniversariantes = props => {
     const _aniversariantes = props.aniversariantes;
 
     const imprimeListaVazia = () => (
-        <Typography variant="h5">Sem aniversariantes no mês</Typography>
+        <Typography variant="h5" data-testid="sem-aniversariantes-mensagem">
+            Sem aniversariantes no mês
+        </Typography>
     );
 
     const imprimeListaPreenchida = aniversariantes => {
@@ -31,20 +33,32 @@ const ListaAniversariantes = props => {
 
         const linhas = aniversariantesOrdenados.map((linha, index) => {
             return (
-                <TableRow key={index}>
-                    <TableCell>{linha.pessoa}</TableCell>
-                    <TableCell>{linha.dia}</TableCell>
+                <TableRow key={index} data-testid="aniversariantes-linha">
+                    <TableCell data-testid="aniversariante-nome">
+                        {linha.pessoa}
+                    </TableCell>
+                    <TableCell data-testid="aniversariante-dia">
+                        {linha.dia}
+                    </TableCell>
                 </TableRow>
             );
         });
 
         return (
-            <TableContainer className={classes.root} component={Paper}>
+            <TableContainer
+                className={classes.root}
+                component={Paper}
+                data-testid="aniversariantes-tabela"
+            >
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Aniversariante</TableCell>
-                            <TableCell>Dia</TableCell>
+                            <TableCell data-testid="aniversariantes-nome-header">
+                                Aniversariante
+                            </TableCell>
+                            <TableCell data-testid="aniversariantes-dia-header">
+                                Dia
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>{linhas}</TableBody>
