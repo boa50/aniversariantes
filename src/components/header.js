@@ -6,6 +6,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
+import CakeIcon from '@material-ui/icons/Cake';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -25,7 +26,7 @@ const Header = () => {
 
     return (
         <div className={classes.root}>
-            <AppBar>
+            <AppBar position="fixed">
                 <Toolbar>
                     <Link to="/" style={{ color: 'inherit' }}>
                         <IconButton
@@ -35,7 +36,7 @@ const Header = () => {
                             aria-label="menu"
                             data-testid="header-logo"
                         >
-                            <i className="material-icons">cake</i>
+                            <CakeIcon />
                         </IconButton>
                     </Link>
                     <Typography

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import Box from '@material-ui/core/Box';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 import DateUtils from '../utils/dateUtils';
 import AniversariantesService from '../services/aniversariantes';
@@ -9,7 +10,15 @@ import TrocaMes from '../components/trocaMes';
 import AniversariantesDia from '../components/aniversariantesDia';
 import Layout from '../components/layout';
 
+const useStyles = makeStyles(() => ({
+    mesTexto: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
+}));
+
 const App = () => {
+    const classes = useStyles();
     const [aniversariantes, setAniversariantes] = useState([]);
     const [mes, setMes] = useState(0);
 
@@ -36,14 +45,13 @@ const App = () => {
 
     return (
         <Layout title="Aniversariantes">
-            <Box
-                display="flex"
-                justifyContent="center"
-                fontSize="h3.fontSize"
+            <Typography
+                variant="h3"
+                className={classes.mesTexto}
                 data-testid="mes-nome"
             >
                 {DateUtils.getMonthNameFromNumber(mes)}
-            </Box>
+            </Typography>
             <AniversariantesDia />
             <TrocaMes changeHandler={trocaMesHandler} mes={mes} />
             <ListaAniversariantes aniversariantes={aniversariantes} />

@@ -1,33 +1,36 @@
 import React from 'react';
 import { useMediaQuery } from 'react-responsive';
 
-import Box from '@material-ui/core/Box';
+import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 
+const useStyles = makeStyles(() => ({
+    root: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
+}));
+
 const TrocaMes = props => {
+    const classes = useStyles();
     const isBigScreen = useMediaQuery({ minWidth: 550 });
-    let showFirstLastButton = false;
     let siblingCount = 0;
 
     if (isBigScreen) {
-        showFirstLastButton = true;
         siblingCount = 6;
     }
 
     return (
-        <Box display="flex" justifyContent="center">
-            <Pagination
-                data-testid="pagination-material-component"
-                count={12}
-                shape="rounded"
-                color="primary"
-                showFirstButton={showFirstLastButton}
-                showLastButton={showFirstLastButton}
-                onChange={props.changeHandler}
-                page={props.mes}
-                siblingCount={siblingCount}
-            />
-        </Box>
+        <Pagination
+            className={classes.root}
+            data-testid="pagination-material-component"
+            count={12}
+            shape="rounded"
+            color="primary"
+            onChange={props.changeHandler}
+            page={props.mes}
+            siblingCount={siblingCount}
+        />
     );
 };
 
