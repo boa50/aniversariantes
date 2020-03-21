@@ -4,7 +4,6 @@ import { render } from '@testing-library/react';
 
 import App from '../../pages/index';
 
-let container;
 beforeEach(() => {
     useStaticQuery.mockImplementation(() => ({
         site: {
@@ -13,13 +12,6 @@ beforeEach(() => {
             },
         },
     }));
-
-    container = document.createElement('div');
-    document.body.appendChild(container);
-});
-afterEach(() => {
-    document.body.removeChild(container);
-    container = null;
 });
 
 let mockAniversariantes = [
@@ -52,8 +44,6 @@ jest.mock('../../utils/dateUtils.js', () => {
         getMesAtual: () => mockMesInicial,
         getDiaAtual: () => 22,
         getMonthNameFromNumber: mesNumero => {
-            console.log(mesNumero);
-
             switch (mesNumero) {
                 case mockMesInicial:
                     return mockMesInicialTexto;
@@ -74,7 +64,8 @@ jest.mock('../../components/aniversariantesDia.js', () => {
 
 jest.mock('../../components/trocaMes.js', () => {
     return props => {
-        const mockChamaListener = () => props.changeHandler(mockMesAlterado);
+        const mockChamaListener = () =>
+            props.changeHandler(null, mockMesAlterado);
 
         return (
             <div className="TrocaMesMock">
