@@ -27,6 +27,13 @@ module.exports = {
                 fonts: ['roboto:300,400,500,700'],
             },
         },
+        {
+            resolve: `gatsby-plugin-typescript`,
+            options: {
+                isTSX: true,
+                allExtensions: true,
+            },
+        },
         `gatsby-transformer-sharp`,
         `gatsby-plugin-sharp`,
         `gatsby-plugin-sass`,
