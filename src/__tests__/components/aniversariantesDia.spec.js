@@ -1,62 +1,51 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { act } from "react-dom/test-utils";
-import AniversariantesDia from '../../components/aniversariantesDia';
+import React from 'react';
+import { render } from '@testing-library/react';
 
-let container;
-beforeEach(() => {
-    container = document.createElement("div");
-    document.body.appendChild(container);
-});
-afterEach(() => {
-    document.body.removeChild(container);
-    container = null;
-});
+import AniversariantesDia from '../../components/aniversariantesDia';
 
 let mockAniversariantesDia = [];
 jest.mock('../../services/aniversariantes', () => {
-    return {ListaAniversariantesDia: () => mockAniversariantesDia};
+    return { ListaAniversariantesDia: () => mockAniversariantesDia };
 });
 
-describe("TrocaMes component", () => {
-    test("verifica se a renderização foi feita de maneira correta para 1 aniversariante", () => {
-        mockAniversariantesDia = [{pessoa:'joãozinho',mes:'11',dia:'24'}];
-        act(() => {
-            ReactDOM.render(<AniversariantesDia/>, container);
-        });
-        const aniversariantesTexto = container.getElementsByTagName('span')[1];
-        const imagemAlerta = container.getElementsByTagName('i')[0];
+describe('AniversariantesDia component', () => {
+    test('verifica se a renderização foi feita de maneira correta para 1 aniversariante', () => {
+        mockAniversariantesDia = [
+            { pessoa: 'joãozinho', mes: '11', dia: '24' },
+        ];
+        const { getByTestId } = render(<AniversariantesDia />);
+        const aniversariantesTexto = getByTestId('aniversariante-texto');
+        const imagemAlerta = getByTestId('aniversariante-icone');
 
         expect(aniversariantesTexto.textContent).toMatch('joãozinho');
-        expect(imagemAlerta.className).toMatch(/material-icons/);
-        expect(imagemAlerta.textContent).toBe('notifications_active');
+        expect(imagemAlerta).toBeDefined();
     });
 
-    test("verifica se a renderização foi feita de maneira correta para 0 aniversariantes", () => {
+    test('verifica se a renderização foi feita de maneira correta para 0 aniversariantes', () => {
         mockAniversariantesDia = [];
-        act(() => {
-            ReactDOM.render(<AniversariantesDia/>, container);
-        });
-        const aniversariantesTexto = container.getElementsByTagName('span')[1];
+        const { getByTestId } = render(<AniversariantesDia />);
+        let erro = '';
+        try {
+            getByTestId('aniversariante-texto');
+        } catch (error) {
+            erro = error;
+        }
 
-        expect(aniversariantesTexto).toBe(undefined);
+        expect(erro).toBeTruthy();
     });
 
-    test("verifica se a renderização foi feita de maneira correta para vários aniversariante", () => {
+    test('verifica se a renderização foi feita de maneira correta para vários aniversariante', () => {
         mockAniversariantesDia = [
-            {pessoa:'pedinho',mes:'11',dia:'24'},
-            {pessoa:'jumentinho',mes:'11',dia:'25'}
+            { pessoa: 'pedinho', mes: '11', dia: '24' },
+            { pessoa: 'jumentinho', mes: '11', dia: '25' },
         ];
-        act(() => {
-            ReactDOM.render(<AniversariantesDia/>, container);
-        });
-        const aniversariantesTexto = container.getElementsByTagName('span')[1];
-        const imagemAlerta = container.getElementsByTagName('i')[0];
+        const { getByTestId } = render(<AniversariantesDia />);
+        const aniversariantesTexto = getByTestId('aniversariante-texto');
+        const imagemAlerta = getByTestId('aniversariante-icone');
 
         expect(aniversariantesTexto.textContent).toMatch('pedinho');
         expect(aniversariantesTexto.textContent).toMatch(',');
         expect(aniversariantesTexto.textContent).toMatch('jumentinho');
-        expect(imagemAlerta.className).toMatch(/material-icons/);
-        expect(imagemAlerta.textContent).toBe('notifications_active');
+        expect(imagemAlerta).toBeDefined();
     });
 });

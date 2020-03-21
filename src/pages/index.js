@@ -1,17 +1,24 @@
-import React, { Fragment, useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
-import 'materialize-css/dist/css/materialize.min.css';
-import 'materialize-css/dist/js/materialize.min.js';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 import DateUtils from '../utils/dateUtils';
 import AniversariantesService from '../services/aniversariantes';
-import Header from '../components/header';
 import ListaAniversariantes from '../components/listaAniversariantes';
 import TrocaMes from '../components/trocaMes';
 import AniversariantesDia from '../components/aniversariantesDia';
-import SEO from "../components/seo";
+import Layout from '../components/layout';
+
+const useStyles = makeStyles(() => ({
+    mesTexto: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
+}));
 
 const App = () => {
+    const classes = useStyles();
     const [aniversariantes, setAniversariantes] = useState([]);
     const [mes, setMes] = useState(0);
 
@@ -20,34 +27,36 @@ const App = () => {
         autlizaListaAniversariantes(mes);
     }, []);
 
-    const trocaMesListener = mesNovo => {
+    const trocaMesHandler = (event, mesNovo) => {
         atualizaInformacoes(mesNovo);
-    }
+    };
 
     const autlizaListaAniversariantes = mes => {
-        const aniversariantes = AniversariantesService.ListaAniversariantesMes(mes);
+        const aniversariantes = AniversariantesService.ListaAniversariantesMes(
+            mes,
+        );
         setAniversariantes(aniversariantes);
-    }
+    };
 
     useEffect(() => {
         const mes = DateUtils.getMesAtual();
         atualizaInformacoes(mes);
-    }, [atualizaInformacoes])
+    }, [atualizaInformacoes]);
 
     return (
-        <Fragment>
-            <SEO title="Aniversariantes" />
-            <Header/>
-            <div className="container">
-                <h2 className="center">{DateUtils.getMonthNameFromNumber(mes)}</h2>
-                <AniversariantesDia />
-                <TrocaMes
-                    listener={trocaMesListener}
-                    mes={mes} />
-                <ListaAniversariantes aniversariantes={aniversariantes} />
-            </div>
-        </Fragment>
+        <Layout title="Aniversariantes">
+            <Typography
+                variant="h3"
+                className={classes.mesTexto}
+                data-testid="mes-nome"
+            >
+                {DateUtils.getMonthNameFromNumber(mes)}
+            </Typography>
+            <AniversariantesDia />
+            <TrocaMes changeHandler={trocaMesHandler} mes={mes} />
+            <ListaAniversariantes aniversariantes={aniversariantes} />
+        </Layout>
     );
-}
+};
 
 export default App;

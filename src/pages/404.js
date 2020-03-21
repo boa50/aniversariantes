@@ -1,18 +1,21 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
-import Header from '../components/header';
-import SEO from "../components/seo";
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+
+import Layout from '../components/layout';
 
 const NotFound = () => {
-  return (
-      <Fragment>
-          <SEO title="Not Found" />
-          <Header />
-          <div className="container">
-              <h1>404 - Página Não Encontrada</h1>
-          </div>
-      </Fragment>
-  )
-}
+    return (
+        <Layout title="Not Found">
+            <Typography component="div">
+                <Box textAlign="center" fontSize="h2.fontSize">
+                    404 - Página Não Encontrada ;(
+                </Box>
+            </Typography>
+            <div className="container"></div>
+        </Layout>
+    );
+};
 
 export default NotFound;

@@ -1,68 +1,62 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { act } from "react-dom/test-utils";
-import ListaAniversariantes from '../../components/listaAniversariantes'
+import React from 'react';
+import { render } from '@testing-library/react';
 
-let container;
-beforeEach(() => {
-    container = document.createElement("div");
-    document.body.appendChild(container);
-});
-afterEach(() => {
-    document.body.removeChild(container);
-    container = null;
-});
+import ListaAniversariantes from '../../components/listaAniversariantes';
 
-describe("ListaAniversariantes component", () => {
-    test("verifica se a renderização de uma lista vazia", () => {
-        const aniversariantes = []
+describe('ListaAniversariantes component', () => {
+    test('verifica se a renderização de uma lista vazia', () => {
+        const aniversariantes = [];
+        const { getByTestId } = render(
+            <ListaAniversariantes aniversariantes={aniversariantes} />,
+        );
 
-        act(() => {
-            ReactDOM.render(<ListaAniversariantes aniversariantes={aniversariantes}/>, container);
-        });
+        let erro = '';
+        try {
+            getByTestId('aniversariantes-tabela');
+        } catch (error) {
+            erro = error;
+        }
+        const mensagem = getByTestId('sem-aniversariantes-mensagem');
 
-        const tabela = container.getElementsByTagName('table')[0];
-        const mensagem = container.getElementsByTagName('h5')[0];
-
-        expect(tabela).toBe(undefined);
+        expect(erro).toBeTruthy();
         expect(mensagem.textContent).toBe('Sem aniversariantes no mês');
     });
 
-    test("verifica se a renderização de uma lista preenchida", () => {
+    test('verifica se a renderização de uma lista preenchida', () => {
         const aniversariantes = [
-            {pessoa:'aniversariante_teste',mes:'11',dia:'24'},
-            {pessoa:'aniversariante_teste2',mes:'11',dia:'25'}
-        ]
+            { pessoa: 'aniversariante_teste', mes: '11', dia: '24' },
+            { pessoa: 'aniversariante_teste2', mes: '11', dia: '25' },
+        ];
+        const { getByTestId, getAllByTestId } = render(
+            <ListaAniversariantes aniversariantes={aniversariantes} />,
+        );
 
-        act(() => {
-            ReactDOM.render(<ListaAniversariantes aniversariantes={aniversariantes}/>, container);
-        });
+        const tabela = getByTestId('aniversariantes-tabela');
+        const aniversariantesHeader = getByTestId(
+            'aniversariantes-nome-header',
+        );
+        const diaHeader = getByTestId('aniversariantes-dia-header');
+        const linhasQuantidade = getAllByTestId('aniversariantes-linha').length;
 
-        const tabela = container.getElementsByTagName('table')[0];
-        const aniversariantesHeader = container.getElementsByTagName('th')[0];
-        const diaHeader = container.getElementsByTagName('th')[1];
-        const linhasQuantidade = container.getElementsByTagName('tr').length;
-
-        expect(tabela.className).toMatch(/centered hightlight/);
+        expect(tabela.className).toMatch(/MuiTableContainer-root/);
         expect(aniversariantesHeader.textContent).toBe('Aniversariante');
         expect(diaHeader.textContent).toBe('Dia');
-        expect(linhasQuantidade).toBe(3);
+        expect(linhasQuantidade).toBe(2);
     });
 
-    test("verifica se os aniversariantes estão ordenados", () => {
+    test('verifica se os aniversariantes estão ordenados', () => {
         const aniversariantes = [
-            {pessoa:'aniversariante_teste',mes:'11',dia:'25'},
-            {pessoa:'aniversariante_teste2',mes:'11',dia:'24'}
-        ]
+            { pessoa: 'aniversariante_teste', mes: '11', dia: '25' },
+            { pessoa: 'aniversariante_teste2', mes: '11', dia: '24' },
+        ];
+        const { getAllByTestId } = render(
+            <ListaAniversariantes aniversariantes={aniversariantes} />,
+        );
 
-        act(() => {
-            ReactDOM.render(<ListaAniversariantes aniversariantes={aniversariantes}/>, container);
-        });
-
-        const aniversariante1 = container.getElementsByTagName('td')[0];
-        const aniversariante1Dia = container.getElementsByTagName('td')[1];
-        const aniversariante2 = container.getElementsByTagName('td')[2];
-        const aniversariante2Dia = container.getElementsByTagName('td')[3];
+        const aniversariante1 = getAllByTestId('aniversariante-nome')[0];
+        const aniversariante1Dia = getAllByTestId('aniversariante-dia')[0];
+        const aniversariante2 = getAllByTestId('aniversariante-nome')[1];
+        const aniversariante2Dia = getAllByTestId('aniversariante-dia')[1];
 
         expect(aniversariante1.textContent).toBe(aniversariantes[1].pessoa);
         expect(aniversariante1Dia.textContent).toBe(aniversariantes[1].dia);
