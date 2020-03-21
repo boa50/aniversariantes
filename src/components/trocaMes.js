@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { useMediaQuery } from 'react-responsive';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,8 +15,27 @@ const useStyles = makeStyles(() => ({
 const TrocaMes = props => {
     const classes = useStyles();
     const isBigScreen = useMediaQuery({ minWidth: 550 });
-    let siblingCount = 0;
 
+    useHotkeys(
+        'left',
+        () => {
+            if (props.mes > 1) {
+                props.changeHandler(null, props.mes - 1);
+            }
+        },
+        [props.mes],
+    );
+    useHotkeys(
+        'right',
+        () => {
+            if (props.mes < 12) {
+                props.changeHandler(null, props.mes + 1);
+            }
+        },
+        [props.mes],
+    );
+
+    let siblingCount = 0;
     if (isBigScreen) {
         siblingCount = 6;
     }
