@@ -33,11 +33,16 @@ const Header = () => {
                             className={classes.menuButton}
                             color="inherit"
                             aria-label="menu"
+                            data-testid="header-logo"
                         >
                             <i className="material-icons">cake</i>
                         </IconButton>
                     </Link>
-                    <Typography variant="h6" className={classes.title}>
+                    <Typography
+                        variant="h6"
+                        className={classes.title}
+                        data-testid="header-texto"
+                    >
                         Aniversariantes
                     </Typography>
                 </Toolbar>
