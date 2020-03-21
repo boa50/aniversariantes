@@ -10,10 +10,11 @@ import TrocaMes from '../components/trocaMes';
 import AniversariantesDia from '../components/aniversariantesDia';
 import Layout from '../components/layout';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
     mesTexto: {
         display: 'flex',
         justifyContent: 'center',
+        marginTop: theme.spacing(2),
     },
 }));
 

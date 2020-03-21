@@ -5,10 +5,11 @@ import { useMediaQuery } from 'react-responsive';
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
         justifyContent: 'center',
+        marginTop: theme.spacing(2),
     },
 }));
 

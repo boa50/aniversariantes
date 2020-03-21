@@ -32,15 +32,15 @@ const DateUtils = {
 
     getMesAtual() {
         const data = new Date();
-        
-        return data.getMonth() + 1; 
+
+        return data.getMonth() + 1;
     },
 
     getDiaAtual() {
         const data = new Date();
 
         return data.getDate();
-    }
-}
+    },
+};
 
 export default DateUtils;
