@@ -1,5 +1,5 @@
 const DateUtils = {
-    getMonthNameFromNumber(mesNumero) {
+    getMonthNameFromNumber(mesNumero: number): string | undefined {
         switch (mesNumero) {
             case 1:
                 return 'Janeiro';
@@ -30,13 +30,13 @@ const DateUtils = {
         }
     },
 
-    getMesAtual() {
+    getMesAtual(): number {
         const data = new Date();
 
         return data.getMonth() + 1;
     },
 
-    getDiaAtual() {
+    getDiaAtual(): number {
         const data = new Date();
 
         return data.getDate();

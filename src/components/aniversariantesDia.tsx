@@ -23,13 +23,13 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const AniversariantesDia = () => {
+const AniversariantesDia: React.FC = () => {
     const classes = useStyles();
 
-    const aniversariantes = AniversariantesService.ListaAniversariantesDia();
+    const aniversariantes = AniversariantesService.getListaAniversariantesDia();
     const quantidadeAniversariantes = aniversariantes.length;
 
-    const texto = aniversariantes.map((linha, index) => {
+    const texto = aniversariantes.map((linha, index): string => {
         if (index < quantidadeAniversariantes - 1) {
             return linha.pessoa + ', ';
         } else {
@@ -61,7 +61,7 @@ const AniversariantesDia = () => {
             </Grid>
         );
     } else {
-        return '';
+        return <div />;
     }
 };
 

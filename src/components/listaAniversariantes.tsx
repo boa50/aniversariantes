@@ -11,6 +11,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { Aniversariante } from '../models/Aniversariante';
+
 const useStyles = makeStyles(theme => ({
     root: {
         marginTop: theme.spacing(3),
@@ -18,17 +20,22 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ListaAniversariantes = props => {
-    const classes = useStyles();
-    const _aniversariantes = props.aniversariantes;
+type Props = {
+    aniversariantes: Aniversariante[];
+};
 
-    const imprimeListaVazia = () => (
+const ListaAniversariantes: React.FC<Props> = ({ aniversariantes }) => {
+    const classes = useStyles();
+
+    const imprimeListaVazia = (): JSX.Element => (
         <Typography variant="h5" data-testid="sem-aniversariantes-mensagem">
             Sem aniversariantes no mês
         </Typography>
     );
 
-    const imprimeListaPreenchida = aniversariantes => {
+    const imprimeListaPreenchida = (
+        aniversariantes: Aniversariante[],
+    ): JSX.Element => {
         const aniversariantesOrdenados = ordenarPorDia(aniversariantes);
 
         const linhas = aniversariantesOrdenados.map((linha, index) => {
@@ -67,18 +74,22 @@ const ListaAniversariantes = props => {
         );
     };
 
-    const ordenarPorDia = aniversariantes => {
-        const listaAniversariantesOrdenada = new List(aniversariantes);
+    const ordenarPorDia = (
+        aniversariantes: Aniversariante[],
+    ): List<Aniversariante> => {
+        const listaAniversariantesOrdenada = List(aniversariantes);
 
-        return listaAniversariantesOrdenada._tail.array.sort((a, b) => {
-            return a.dia < b.dia ? -1 : 1;
-        });
+        return listaAniversariantesOrdenada.sort(
+            (a: Aniversariante, b: Aniversariante) => {
+                return a.dia < b.dia ? -1 : 1;
+            },
+        );
     };
 
-    if (_aniversariantes.length === 0) {
+    if (aniversariantes.length === 0) {
         return imprimeListaVazia();
     } else {
-        return imprimeListaPreenchida(_aniversariantes);
+        return imprimeListaPreenchida(aniversariantes);
     }
 };
 
