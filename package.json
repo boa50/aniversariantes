@@ -53,6 +53,8 @@
   ],
   "license": "MIT",
   "scripts": {
+    "predeploy": "npm test",
+    "deploy": "npm run build",
     "build": "gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
