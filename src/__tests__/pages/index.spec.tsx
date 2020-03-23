@@ -1,10 +1,11 @@
 import React from 'react';
-import { useStaticQuery } from 'gatsby';
+import * as Gatsby from 'gatsby';
 import { render } from '@testing-library/react';
 
 import App from '../../pages/index';
 
 beforeEach(() => {
+    const useStaticQuery = jest.spyOn(Gatsby, 'useStaticQuery');
     useStaticQuery.mockImplementation(() => ({
         site: {
             siteMetadata: {
@@ -22,13 +23,13 @@ let mockAniversariantes = [
 ];
 jest.mock('../../services/aniversariantes', () => {
     return {
-        ListaAniversariantes: () => mockAniversariantes,
-        ListaAniversariantesMes: () => [
+        getListaAniversariantes: () => mockAniversariantes,
+        getListaAniversariantesMes: () => [
             mockAniversariantes[0],
             mockAniversariantes[1],
             mockAniversariantes[2],
         ],
-        ListaAniversariantesDia: () => [
+        getListaAniversariantesDia: () => [
             mockAniversariantes[0],
             mockAniversariantes[2],
         ],
@@ -39,11 +40,11 @@ const mockMesInicial = 10;
 const mockMesAlterado = 11;
 const mockMesInicialTexto = 'Outubro';
 const mockMesAlteradoTexto = 'Novembro';
-jest.mock('../../utils/dateUtils.js', () => {
+jest.mock('../../utils/dateUtils', () => {
     return {
         getMesAtual: () => mockMesInicial,
         getDiaAtual: () => 22,
-        getMonthNameFromNumber: mesNumero => {
+        getMonthNameFromNumber: (mesNumero: number) => {
             switch (mesNumero) {
                 case mockMesInicial:
                     return mockMesInicialTexto;
@@ -54,18 +55,25 @@ jest.mock('../../utils/dateUtils.js', () => {
     };
 });
 
-jest.mock('../../components/header.js', () => {
+jest.mock('../../components/header', () => {
     return () => <div className="HeaderMock"></div>;
 });
 
-jest.mock('../../components/aniversariantesDia.js', () => {
+jest.mock('../../components/aniversariantesDia', () => {
     return () => <div className="AniversariantesDiaMock"></div>;
 });
 
-jest.mock('../../components/trocaMes.js', () => {
-    return props => {
+type Props = {
+    mes: number;
+    changeHandler: (event: React.ChangeEvent<unknown>, page: number) => void;
+};
+
+jest.mock('../../components/trocaMes', () => {
+    return ({ mes, changeHandler }: Props) => {
+        let eventNulo: React.ChangeEvent<unknown>;
+
         const mockChamaListener = () =>
-            props.changeHandler(null, mockMesAlterado);
+            changeHandler(eventNulo, mockMesAlterado);
 
         return (
             <div className="TrocaMesMock">
@@ -75,7 +83,7 @@ jest.mock('../../components/trocaMes.js', () => {
     };
 });
 
-jest.mock('../../components/listaAniversariantes.js', () => {
+jest.mock('../../components/listaAniversariantes', () => {
     return () => <div className="ListaAniversariantesMock"></div>;
 });
 

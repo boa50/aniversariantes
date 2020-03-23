@@ -13,27 +13,29 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TrocaMes = props => {
+type Props = {
+    mes: number;
+    changeHandler: (event: React.ChangeEvent<unknown>, page: number) => void;
+};
+
+const TrocaMes: React.FC<Props> = ({ mes, changeHandler }) => {
     const classes = useStyles();
     const isBigScreen = useMediaQuery({ minWidth: 550 });
+    let eventNulo: React.ChangeEvent<unknown>;
 
     useHotkeys(
         'left',
         () => {
-            if (props.mes > 1) {
-                props.changeHandler(null, props.mes - 1);
-            }
+            if (mes > 1) changeHandler(eventNulo, mes - 1);
         },
-        [props.mes],
+        [mes],
     );
     useHotkeys(
         'right',
         () => {
-            if (props.mes < 12) {
-                props.changeHandler(null, props.mes + 1);
-            }
+            if (mes < 12) changeHandler(eventNulo, mes + 1);
         },
-        [props.mes],
+        [mes],
     );
 
     let siblingCount = 0;
@@ -48,8 +50,8 @@ const TrocaMes = props => {
             count={12}
             shape="rounded"
             color="primary"
-            onChange={props.changeHandler}
-            page={props.mes}
+            onChange={changeHandler}
+            page={mes}
             siblingCount={siblingCount}
         />
     );

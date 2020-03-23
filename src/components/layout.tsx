@@ -16,13 +16,17 @@ const theme = createMuiTheme({
     },
 });
 
-const Layout = props => {
+type Props = {
+    title: string;
+};
+
+const Layout: React.FC<Props> = ({ title, children }) => {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Header />
-            <SEO title={props.title} />
-            <Container maxWidth="md">{props.children}</Container>
+            <SEO title={title} />
+            <Container maxWidth="md">{children}</Container>
         </ThemeProvider>
     );
 };

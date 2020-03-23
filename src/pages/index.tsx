@@ -3,6 +3,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
+import { Aniversariante } from '../models/Aniversariante';
+
 import DateUtils from '../utils/dateUtils';
 import AniversariantesService from '../services/aniversariantes';
 import ListaAniversariantes from '../components/listaAniversariantes';
@@ -18,22 +20,27 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const App = () => {
+const App: React.FC = () => {
     const classes = useStyles();
-    const [aniversariantes, setAniversariantes] = useState([]);
+    const [aniversariantes, setAniversariantes] = useState<Aniversariante[]>(
+        [],
+    );
     const [mes, setMes] = useState(0);
 
-    const atualizaInformacoes = useCallback(mes => {
+    const atualizaInformacoes = useCallback((mes: number) => {
         setMes(mes);
         autlizaListaAniversariantes(mes);
     }, []);
 
-    const trocaMesHandler = (event, mesNovo) => {
+    const trocaMesHandler = (
+        event: React.ChangeEvent<unknown>,
+        mesNovo: number,
+    ) => {
         atualizaInformacoes(mesNovo);
     };
 
-    const autlizaListaAniversariantes = mes => {
-        const aniversariantes = AniversariantesService.ListaAniversariantesMes(
+    const autlizaListaAniversariantes = (mes: number) => {
+        const aniversariantes = AniversariantesService.getListaAniversariantesMes(
             mes,
         );
         setAniversariantes(aniversariantes);

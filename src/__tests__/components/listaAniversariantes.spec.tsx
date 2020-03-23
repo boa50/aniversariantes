@@ -1,11 +1,12 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
+import { Aniversariante } from '../../models/Aniversariante';
 import ListaAniversariantes from '../../components/listaAniversariantes';
 
 describe('ListaAniversariantes component', () => {
     test('verifica se a renderização de uma lista vazia', () => {
-        const aniversariantes = [];
+        const aniversariantes: Aniversariante[] = [];
         const { getByTestId } = render(
             <ListaAniversariantes aniversariantes={aniversariantes} />,
         );

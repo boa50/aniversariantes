@@ -1,11 +1,12 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
+import { Aniversariante } from '../../models/Aniversariante';
 import AniversariantesDia from '../../components/aniversariantesDia';
 
-let mockAniversariantesDia = [];
+let mockAniversariantesDia: Aniversariante[] = [];
 jest.mock('../../services/aniversariantes', () => {
-    return { ListaAniversariantesDia: () => mockAniversariantesDia };
+    return { getListaAniversariantesDia: () => mockAniversariantesDia };
 });
 
 describe('AniversariantesDia component', () => {
