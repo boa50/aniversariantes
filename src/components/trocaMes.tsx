@@ -26,18 +26,14 @@ const TrocaMes: React.FC<Props> = ({ mes, changeHandler }) => {
     useHotkeys(
         'left',
         () => {
-            if (mes > 1) {
-                changeHandler(eventNulo, mes - 1);
-            }
+            if (mes > 1) changeHandler(eventNulo, mes - 1);
         },
         [mes],
     );
     useHotkeys(
         'right',
         () => {
-            if (mes < 12) {
-                changeHandler(eventNulo, mes + 1);
-            }
+            if (mes < 12) changeHandler(eventNulo, mes + 1);
         },
         [mes],
     );

@@ -1,23 +1,13 @@
 import AniversariantesService from '../../services/aniversariantes';
 
-let container;
-beforeEach(() => {
-    container = document.createElement('div');
-    document.body.appendChild(container);
-});
-afterEach(() => {
-    document.body.removeChild(container);
-    container = null;
-});
-
-jest.mock('../../utils/dateUtils.js', () => {
+jest.mock('../../utils/dateUtils', () => {
     return {
         getMesAtual: () => 10,
         getDiaAtual: () => 22,
     };
 });
 
-jest.mock('../../assets/aniversariantes.js', () => {
+jest.mock('../../assets/aniversariantes', () => {
     return [
         { pessoa: 'joãozinho', mes: '10', dia: '22' },
         { pessoa: 'pedinho', mes: '10', dia: '25' },

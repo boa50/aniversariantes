@@ -1,15 +1,28 @@
+const path = require('path');
+
 module.exports = {
+    setupFilesAfterEnv: [
+        path.resolve(__dirname, './jest-configs/setup-test-env.js'),
+    ],
     transform: {
-      "^.+\\.jsx?$": `<rootDir>/jest-preprocess.js`,
+        // "^.+\\.(tsx?|jsx?)$": "ts-jest",
+        '\\.svg': '<rootDir>/jest-configs/svgTransform.js',
+        '^.+\\.(tsx?|jsx?)$': `<rootDir>/jest-configs/jest-preprocess.js`,
     },
     moduleNameMapper: {
-      ".+\\.(css|styl|less|sass|scss)$": `identity-obj-proxy`,
-      ".+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": `<rootDir>/__mocks__/file-mock.js`,
+        // "\\.svg": `./jest-configs/__mocks__/file-mocks.js`,
+        '\\.svg': `<rootDir>/jest-configs/svgTransform.js`,
+        'typeface-*': 'identity-obj-proxy',
+        '.+\\.(css|styl|less|sass|scss)$': `identity-obj-proxy`,
+        '.+\\.(jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': `<rootDir>/jest-configs/__mocks__/file-mocks.js`,
     },
-    testPathIgnorePatterns: [`node_modules`, `\\.cache`, `<rootDir>.*/public`],
-    transformIgnorePatterns: [`node_modules/(?!(gatsby)/)`],
+    testPathIgnorePatterns: [`node_modules`, `.cache`, `public`],
+    transformIgnorePatterns: [`node_modules/(?!(gatsby)/)`, `\\.svg`],
     globals: {
-      __PATH_PREFIX__: ``,
+        __PATH_PREFIX__: ``,
     },
-    setupFiles: [`<rootDir>/loadershim.js`],
-  }
+    testRegex: '(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$',
+    moduleFileExtensions: ['ts', 'tsx', 'js'],
+    collectCoverage: false,
+    coverageReporters: ['lcov', 'text', 'html'],
+};
