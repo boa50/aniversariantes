@@ -25,7 +25,7 @@ const App: React.FC = () => {
     const [aniversariantes, setAniversariantes] = useState<Aniversariante[]>(
         [],
     );
-    const [mes, setMes] = useState(0);
+    const [mes, setMes] = useState(DateUtils.getMesAtual());
 
     const atualizaInformacoes = useCallback((mes: number) => {
         setMes(mes);
@@ -40,14 +40,14 @@ const App: React.FC = () => {
     };
 
     const autlizaListaAniversariantes = (mes: number) => {
-        const aniversariantes = AniversariantesService.getListaAniversariantesMes(
-            mes,
+        AniversariantesService.getListaAniversariantesMes(mes).then(
+            aniversariantes => {
+                setAniversariantes(aniversariantes);
+            },
         );
-        setAniversariantes(aniversariantes);
     };
 
     useEffect(() => {
-        const mes = DateUtils.getMesAtual();
         atualizaInformacoes(mes);
     }, [atualizaInformacoes]);
 

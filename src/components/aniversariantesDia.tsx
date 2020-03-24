@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -9,6 +9,7 @@ import Box from '@material-ui/core/Box';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 
 import AniversariantesService from '../services/aniversariantes';
+import { Aniversariante } from '../models/Aniversariante';
 
 const useStyles = makeStyles(theme => ({
     alertIcon: {
@@ -25,8 +26,18 @@ const useStyles = makeStyles(theme => ({
 
 const AniversariantesDia: React.FC = () => {
     const classes = useStyles();
+    const [aniversariantes, setAniversariantes] = useState<Aniversariante[]>(
+        [],
+    );
 
-    const aniversariantes = AniversariantesService.getListaAniversariantesDia();
+    useEffect(() => {
+        AniversariantesService.getListaAniversariantesDia().then(
+            aniversariantes => {
+                setAniversariantes(aniversariantes);
+            },
+        );
+    }, []);
+
     const quantidadeAniversariantes = aniversariantes.length;
 
     const texto = aniversariantes.map((linha, index): string => {
