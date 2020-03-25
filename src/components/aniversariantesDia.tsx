@@ -8,8 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 
-import AniversariantesService from '../services/aniversariantes';
 import { Aniversariante } from '../models/Aniversariante';
+import AniversariantesUtils from '../utils/aniversariantesUtils';
 
 const useStyles = makeStyles(theme => ({
     alertIcon: {
@@ -24,23 +24,27 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const AniversariantesDia: React.FC = () => {
+type Props = {
+    aniversariantes: Aniversariante[];
+};
+
+const AniversariantesDia: React.FC<Props> = ({ aniversariantes }) => {
     const classes = useStyles();
-    const [aniversariantes, setAniversariantes] = useState<Aniversariante[]>(
-        [],
-    );
+    const [aniversariantesDia, setAniversariantesDia] = useState<
+        Aniversariante[]
+    >([]);
 
     useEffect(() => {
-        AniversariantesService.getListaAniversariantesDia().then(
-            aniversariantes => {
-                setAniversariantes(aniversariantes);
-            },
+        const pessoasDia = AniversariantesUtils.getAniversariantesDia(
+            aniversariantes,
         );
-    }, []);
 
-    const quantidadeAniversariantes = aniversariantes.length;
+        setAniversariantesDia(pessoasDia);
+    }, [aniversariantes]);
 
-    const texto = aniversariantes.map((linha, index): string => {
+    const quantidadeAniversariantes = aniversariantesDia.length;
+
+    const texto = aniversariantesDia.map((linha, index): string => {
         if (index < quantidadeAniversariantes - 1) {
             return linha.pessoa + ', ';
         } else {

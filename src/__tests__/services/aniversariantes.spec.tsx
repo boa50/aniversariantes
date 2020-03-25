@@ -18,7 +18,7 @@ jest.mock('../../assets/aniversariantes', () => {
 
 describe('Aniversariantes services', () => {
     test('retorna a lista corretamente', () => {
-        const aniversariantes = AniversariantesService.getListaAniversariantes();
+        const aniversariantes = AniversariantesService.getAniversariantes();
 
         expect(aniversariantes.length).toBe(4);
         expect(aniversariantes[0].pessoa).toBe('joãozinho');
@@ -28,7 +28,7 @@ describe('Aniversariantes services', () => {
     });
 
     test('retorna a lista do mes', () => {
-        const aniversariantes = AniversariantesService.getListaAniversariantesMes(
+        const aniversariantes = AniversariantesService.getAniversariantesMes(
             10,
         );
 
@@ -39,7 +39,7 @@ describe('Aniversariantes services', () => {
     });
 
     test('retorna a lista do dia', () => {
-        const aniversariantes = AniversariantesService.getListaAniversariantesDia();
+        const aniversariantes = AniversariantesService.getAniversariantesDia();
 
         expect(aniversariantes.length).toBe(2);
         expect(aniversariantes[0].pessoa).toBe('joãozinho');

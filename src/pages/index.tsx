@@ -6,6 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import { Aniversariante } from '../models/Aniversariante';
 
 import DateUtils from '../utils/dateUtils';
+import AniversariantesUtils from '../utils/aniversariantesUtils';
+
 import AniversariantesService from '../services/aniversariantes';
 import ListaAniversariantes from '../components/listaAniversariantes';
 import TrocaMes from '../components/trocaMes';
@@ -25,31 +27,38 @@ const App: React.FC = () => {
     const [aniversariantes, setAniversariantes] = useState<Aniversariante[]>(
         [],
     );
+    const [aniversariantesMes, setAniversariantesMes] = useState<
+        Aniversariante[]
+    >([]);
     const [mes, setMes] = useState(DateUtils.getMesAtual());
-
-    const atualizaInformacoes = useCallback((mes: number) => {
-        setMes(mes);
-        autlizaListaAniversariantes(mes);
-    }, []);
 
     const trocaMesHandler = (
         event: React.ChangeEvent<unknown>,
         mesNovo: number,
     ) => {
-        atualizaInformacoes(mesNovo);
+        setMes(mesNovo);
     };
 
     const autlizaListaAniversariantes = (mes: number) => {
-        AniversariantesService.getListaAniversariantesMes(mes).then(
-            aniversariantes => {
-                setAniversariantes(aniversariantes);
-            },
+        const pessoasMes = AniversariantesUtils.getAniversariantesMes(
+            aniversariantes,
+            mes,
         );
+
+        setAniversariantesMes(pessoasMes);
     };
 
     useEffect(() => {
-        atualizaInformacoes(mes);
-    }, [atualizaInformacoes]);
+        AniversariantesService.getAniversariantes().then(
+            aniversariantesResponse => {
+                setAniversariantes(aniversariantesResponse);
+            },
+        );
+    }, []);
+
+    useEffect(() => {
+        autlizaListaAniversariantes(mes);
+    }, [mes, aniversariantes]);
 
     return (
         <Layout title="Aniversariantes">
@@ -60,9 +69,9 @@ const App: React.FC = () => {
             >
                 {DateUtils.getMonthNameFromNumber(mes)}
             </Typography>
-            <AniversariantesDia />
+            <AniversariantesDia aniversariantes={aniversariantes} />
             <TrocaMes changeHandler={trocaMesHandler} mes={mes} />
-            <ListaAniversariantes aniversariantes={aniversariantes} />
+            <ListaAniversariantes aniversariantes={aniversariantesMes} />
         </Layout>
     );
 };
