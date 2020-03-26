@@ -21,7 +21,7 @@ const AniversariantesService = {
     getAniversariantesServer: async (): Promise<Aniversariante[]> => {
         return axios
             .get(
-                'https://firestore.googleapis.com/v1/projects/aniversariantes-a287d/databases/(default)/documents/aniversariantes',
+                'https://firestore.googleapis.com/v1/projects/aniversariantes-a287d/databases/(default)/documents/aniversariantes?pageSize=200',
             )
             .then(response => {
                 const aniversariantes = response.data.documents.map(
