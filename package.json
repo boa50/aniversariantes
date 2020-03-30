@@ -63,7 +63,7 @@
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "jest --coverage --watchAll=false",
-    "test-watch": "jest --watch",
+    "test-watch": "jest --watch --silent",
     "type-check": "tsc --noEmit"
   },
   "repository": {

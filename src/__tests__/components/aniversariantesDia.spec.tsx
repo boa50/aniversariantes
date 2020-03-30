@@ -5,8 +5,8 @@ import { Aniversariante } from '../../models/Aniversariante';
 import AniversariantesDia from '../../components/aniversariantesDia';
 
 let mockAniversariantesDia: Aniversariante[] = [];
-jest.mock('../../services/aniversariantes', () => {
-    return { getListaAniversariantesDia: () => mockAniversariantesDia };
+jest.mock('../../utils/aniversariantesUtils', () => {
+    return { getAniversariantesDia: () => mockAniversariantesDia };
 });
 
 describe('AniversariantesDia component', () => {
@@ -14,7 +14,10 @@ describe('AniversariantesDia component', () => {
         mockAniversariantesDia = [
             { pessoa: 'joãozinho', mes: '11', dia: '24' },
         ];
-        const { getByTestId } = render(<AniversariantesDia />);
+
+        const { getByTestId } = render(
+            <AniversariantesDia aniversariantes={mockAniversariantesDia} />,
+        );
         const aniversariantesTexto = getByTestId('aniversariante-texto');
         const imagemAlerta = getByTestId('aniversariante-icone');
 
@@ -24,7 +27,9 @@ describe('AniversariantesDia component', () => {
 
     test('verifica se a renderização foi feita de maneira correta para 0 aniversariantes', () => {
         mockAniversariantesDia = [];
-        const { getByTestId } = render(<AniversariantesDia />);
+        const { getByTestId } = render(
+            <AniversariantesDia aniversariantes={mockAniversariantesDia} />,
+        );
         let erro = '';
         try {
             getByTestId('aniversariante-texto');
@@ -40,7 +45,9 @@ describe('AniversariantesDia component', () => {
             { pessoa: 'pedinho', mes: '11', dia: '24' },
             { pessoa: 'jumentinho', mes: '11', dia: '25' },
         ];
-        const { getByTestId } = render(<AniversariantesDia />);
+        const { getByTestId } = render(
+            <AniversariantesDia aniversariantes={mockAniversariantesDia} />,
+        );
         const aniversariantesTexto = getByTestId('aniversariante-texto');
         const imagemAlerta = getByTestId('aniversariante-icone');
 
