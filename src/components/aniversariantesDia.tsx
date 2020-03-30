@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -8,7 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 
-import AniversariantesService from '../services/aniversariantes';
+import { Aniversariante } from '../models/Aniversariante';
+import AniversariantesUtils from '../utils/aniversariantesUtils';
 
 const useStyles = makeStyles(theme => ({
     alertIcon: {
@@ -23,13 +24,27 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const AniversariantesDia: React.FC = () => {
+type Props = {
+    aniversariantes: Aniversariante[];
+};
+
+const AniversariantesDia: React.FC<Props> = ({ aniversariantes }) => {
     const classes = useStyles();
+    const [aniversariantesDia, setAniversariantesDia] = useState<
+        Aniversariante[]
+    >([]);
 
-    const aniversariantes = AniversariantesService.getListaAniversariantesDia();
-    const quantidadeAniversariantes = aniversariantes.length;
+    useEffect(() => {
+        const pessoasDia = AniversariantesUtils.getAniversariantesDia(
+            aniversariantes,
+        );
 
-    const texto = aniversariantes.map((linha, index): string => {
+        setAniversariantesDia(pessoasDia);
+    }, [aniversariantes]);
+
+    const quantidadeAniversariantes = aniversariantesDia.length;
+
+    const texto = aniversariantesDia.map((linha, index): string => {
         if (index < quantidadeAniversariantes - 1) {
             return linha.pessoa + ', ';
         } else {

@@ -1,22 +1,32 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { Aniversariante } from '../models/Aniversariante';
 
 import DateUtils from '../utils/dateUtils';
+import AniversariantesUtils from '../utils/aniversariantesUtils';
+
 import AniversariantesService from '../services/aniversariantes';
 import ListaAniversariantes from '../components/listaAniversariantes';
 import TrocaMes from '../components/trocaMes';
 import AniversariantesDia from '../components/aniversariantesDia';
 import Layout from '../components/layout';
+import { Box } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     mesTexto: {
         display: 'flex',
         justifyContent: 'center',
         marginTop: theme.spacing(2),
+    },
+    circularProgress: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '85vh',
     },
 }));
 
@@ -25,46 +35,64 @@ const App: React.FC = () => {
     const [aniversariantes, setAniversariantes] = useState<Aniversariante[]>(
         [],
     );
-    const [mes, setMes] = useState(0);
-
-    const atualizaInformacoes = useCallback((mes: number) => {
-        setMes(mes);
-        autlizaListaAniversariantes(mes);
-    }, []);
+    const [aniversariantesMes, setAniversariantesMes] = useState<
+        Aniversariante[]
+    >([]);
+    const [mes, setMes] = useState(DateUtils.getMesAtual());
+    const [loading, setLoading] = useState(true);
 
     const trocaMesHandler = (
         event: React.ChangeEvent<unknown>,
         mesNovo: number,
     ) => {
-        atualizaInformacoes(mesNovo);
+        setMes(mesNovo);
     };
 
     const autlizaListaAniversariantes = (mes: number) => {
-        const aniversariantes = AniversariantesService.getListaAniversariantesMes(
+        const pessoasMes = AniversariantesUtils.getAniversariantesMes(
+            aniversariantes,
             mes,
         );
-        setAniversariantes(aniversariantes);
+
+        setAniversariantesMes(pessoasMes);
     };
 
     useEffect(() => {
-        const mes = DateUtils.getMesAtual();
-        atualizaInformacoes(mes);
-    }, [atualizaInformacoes]);
+        AniversariantesService.getAniversariantes().then(
+            aniversariantesResponse => {
+                setAniversariantes(aniversariantesResponse);
+                setLoading(false);
+            },
+        );
+    }, []);
 
-    return (
-        <Layout title="Aniversariantes">
-            <Typography
-                variant="h3"
-                className={classes.mesTexto}
-                data-testid="mes-nome"
-            >
-                {DateUtils.getMonthNameFromNumber(mes)}
-            </Typography>
-            <AniversariantesDia />
-            <TrocaMes changeHandler={trocaMesHandler} mes={mes} />
-            <ListaAniversariantes aniversariantes={aniversariantes} />
-        </Layout>
+    useEffect(() => {
+        autlizaListaAniversariantes(mes);
+    }, [mes, aniversariantes]);
+
+    let conteudo = (
+        <Box className={classes.circularProgress}>
+            <CircularProgress />
+        </Box>
     );
+    if (!loading) {
+        conteudo = (
+            <Box>
+                <Typography
+                    variant="h3"
+                    className={classes.mesTexto}
+                    data-testid="mes-nome"
+                >
+                    {DateUtils.getMonthNameFromNumber(mes)}
+                </Typography>
+                <AniversariantesDia aniversariantes={aniversariantes} />
+                <TrocaMes changeHandler={trocaMesHandler} mes={mes} />
+                <ListaAniversariantes aniversariantes={aniversariantesMes} />
+            </Box>
+        );
+    }
+
+    return <Layout title="Aniversariantes">{conteudo}</Layout>;
 };
 
 export default App;

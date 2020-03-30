@@ -1,7 +1,9 @@
 import React from 'react';
 import * as Gatsby from 'gatsby';
-import { render } from '@testing-library/react';
+import { render, wait } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
 
+import { Aniversariante } from '../../models/Aniversariante';
 import App from '../../pages/index';
 
 beforeEach(() => {
@@ -23,13 +25,20 @@ let mockAniversariantes = [
 ];
 jest.mock('../../services/aniversariantes', () => {
     return {
-        getListaAniversariantes: () => mockAniversariantes,
-        getListaAniversariantesMes: () => [
+        getAniversariantes: () =>
+            new Promise<Aniversariante[]>((resolve, reject) => {
+                resolve(mockAniversariantes);
+            }),
+    };
+});
+jest.mock('../../utils/aniversariantesUtils', () => {
+    return {
+        getAniversariantesMes: () => [
             mockAniversariantes[0],
             mockAniversariantes[1],
             mockAniversariantes[2],
         ],
-        getListaAniversariantesDia: () => [
+        getAniversariantesDia: () => [
             mockAniversariantes[0],
             mockAniversariantes[2],
         ],
@@ -87,9 +96,13 @@ jest.mock('../../components/listaAniversariantes', () => {
     return () => <div className="ListaAniversariantesMock"></div>;
 });
 
+const sleep = (ms: number) => new Promise(res => setTimeout(res, ms));
+
 describe('App page', () => {
-    test('verifica se a renderização foi feita de maneira correta', () => {
+    test('verifica se a renderização foi feita de maneira correta', async () => {
         const { container, getByTestId } = render(<App />);
+        await sleep(10);
+
         const headerMock = container.getElementsByClassName('HeaderMock');
         const aniversariantesDiaMock = container.getElementsByClassName(
             'AniversariantesDiaMock',
@@ -113,8 +126,9 @@ describe('App page', () => {
         expect(listaAniversariantesMock[0]).toBeDefined();
     });
 
-    test('verifica a troca dos meses', () => {
+    test('verifica a troca dos meses', async () => {
         const { container, getByTestId } = render(<App />);
+        await sleep(10);
 
         const trocaMesMock = container.getElementsByClassName(
             'TrocaMesMock',

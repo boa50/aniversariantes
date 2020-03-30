@@ -1,32 +1,46 @@
-import aniversariantes from '../assets/aniversariantes';
-import DateUtils from '../utils/dateUtils';
+import axios from 'axios';
+
 import { Aniversariante } from '../models/Aniversariante';
 
+let aniversariantesCache: Aniversariante[] = [];
+
 const AniversariantesService = {
-    getListaAniversariantes: (): Aniversariante[] => {
-        return aniversariantes;
+    getAniversariantes: async (): Promise<Aniversariante[]> => {
+        if (aniversariantesCache.length > 0) {
+            return AniversariantesService.getAniversariantesCache();
+        }
+        return AniversariantesService.getAniversariantesServer();
     },
 
-    getListaAniversariantesMes: (mes: number): Aniversariante[] => {
-        return AniversariantesService.getListaAniversariantes().filter(
-            aniversariante => {
-                return Number(aniversariante.mes) === mes;
-            },
-        );
+    getAniversariantesCache: async (): Promise<Aniversariante[]> => {
+        return new Promise<Aniversariante[]>((resolve, reject) => {
+            resolve(aniversariantesCache);
+        });
     },
 
-    getListaAniversariantesDia: (): Aniversariante[] => {
-        const mesAtual = DateUtils.getMesAtual();
-        const diaAtual = DateUtils.getDiaAtual();
-
-        return AniversariantesService.getListaAniversariantes().filter(
-            aniversariante => {
-                return (
-                    Number(aniversariante.mes) === mesAtual &&
-                    Number(aniversariante.dia) === diaAtual
+    getAniversariantesServer: async (): Promise<Aniversariante[]> => {
+        return axios
+            .get(
+                'https://firestore.googleapis.com/v1/projects/aniversariantes-a287d/databases/(default)/documents/aniversariantes?pageSize=200',
+            )
+            .then(response => {
+                const aniversariantes = response.data.documents.map(
+                    (aniversariante: any) => {
+                        return {
+                            pessoa: aniversariante.fields.pessoa.stringValue,
+                            mes: aniversariante.fields.mes.stringValue,
+                            dia: aniversariante.fields.dia.stringValue,
+                        };
+                    },
                 );
-            },
-        );
+
+                aniversariantesCache = aniversariantes;
+                return aniversariantes;
+            })
+            .catch(error => {
+                console.log(error);
+                return [];
+            });
     },
 };
 export default AniversariantesService;
