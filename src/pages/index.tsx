@@ -15,7 +15,6 @@ import ListaAniversariantes from '../components/listaAniversariantes';
 import TrocaMes from '../components/trocaMes';
 import AniversariantesDia from '../components/aniversariantesDia';
 import Layout from '../components/layout';
-import ShareButton from '../components/shareButton';
 
 const useStyles = makeStyles(theme => ({
     mesTexto: {
@@ -97,16 +96,15 @@ const App: React.FC = () => {
                 <AniversariantesDia aniversariantes={aniversariantes} />
                 <TrocaMes changeHandler={trocaMesHandler} mes={mes} />
                 <ListaAniversariantes aniversariantes={aniversariantesMes} />
-                <ShareButton
-                    config={{
-                        params: shareParams,
-                    }}
-                />
             </Box>
         );
     }
 
-    return <Layout title="Aniversariantes">{conteudo}</Layout>;
+    return (
+        <Layout title="Aniversariantes" shareParams={shareParams}>
+            {conteudo}
+        </Layout>
+    );
 };
 
 export default App;

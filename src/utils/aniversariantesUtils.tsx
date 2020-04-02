@@ -1,4 +1,7 @@
+import { List } from 'immutable';
+
 import DateUtils from './dateUtils';
+
 import { Aniversariante } from '../models/Aniversariante';
 
 const AniversariantesUtils = {
@@ -33,13 +36,23 @@ const AniversariantesUtils = {
             'Aniversariantes do Mês de ' +
             DateUtils.getMonthNameFromNumber(mes) +
             ':\n';
-        const corpo = aniversariantes
+        const corpo = AniversariantesUtils.ordenaPorDia(aniversariantes)
             .map(aniversariante => {
                 return aniversariante.pessoa + ' - ' + aniversariante.dia;
             })
             .join('\n');
 
         return titulo + corpo;
+    },
+
+    ordenaPorDia: (aniversariantes: Aniversariante[]): List<Aniversariante> => {
+        const listaAniversariantesOrdenada = List(aniversariantes);
+
+        return listaAniversariantesOrdenada.sort(
+            (a: Aniversariante, b: Aniversariante) => {
+                return a.dia < b.dia ? -1 : 1;
+            },
+        );
     },
 };
 

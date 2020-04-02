@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'gatsby';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -7,6 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CakeIcon from '@material-ui/icons/Cake';
+import ShareButton from '../components/shareButton';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -21,7 +22,11 @@ const useStyles = makeStyles(theme => ({
     offset: theme.mixins.toolbar,
 }));
 
-const Header: React.FC = () => {
+type Props = {
+    shareParams: { text: String };
+};
+
+const Header: React.FC<Props> = ({ shareParams }) => {
     const classes = useStyles();
 
     return (
@@ -46,6 +51,11 @@ const Header: React.FC = () => {
                     >
                         Aniversariantes
                     </Typography>
+                    <ShareButton
+                        config={{
+                            params: shareParams,
+                        }}
+                    />
                 </Toolbar>
             </AppBar>
             <div className={classes.offset} />

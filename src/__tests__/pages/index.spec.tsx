@@ -42,6 +42,11 @@ jest.mock('../../utils/aniversariantesUtils', () => {
             mockAniversariantes[0],
             mockAniversariantes[2],
         ],
+        getAniversariantesShare: () => [
+            mockAniversariantes[0],
+            mockAniversariantes[1],
+            mockAniversariantes[2],
+        ],
     };
 });
 
