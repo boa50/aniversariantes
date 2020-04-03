@@ -73,10 +73,5 @@
   },
   "bugs": {
     "url": "https://github.com/gatsbyjs/gatsby/issues"
-  },
-  "jest": {
-    "coveragePathIgnorePatterns" : [
-      "<rootDir>/src/utils/dateUtils.tsx" 
-    ]
   }
 }
