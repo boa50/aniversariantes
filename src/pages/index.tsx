@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Box } from '@material-ui/core';
 
 import { Aniversariante } from '../models/Aniversariante';
 
@@ -14,7 +15,6 @@ import ListaAniversariantes from '../components/listaAniversariantes';
 import TrocaMes from '../components/trocaMes';
 import AniversariantesDia from '../components/aniversariantesDia';
 import Layout from '../components/layout';
-import { Box } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     mesTexto: {
@@ -75,6 +75,14 @@ const App: React.FC = () => {
             <CircularProgress />
         </Box>
     );
+
+    const shareParams = {
+        text: AniversariantesUtils.getAniversariantesShare(
+            aniversariantesMes,
+            mes,
+        ),
+    };
+
     if (!loading) {
         conteudo = (
             <Box>
@@ -92,7 +100,11 @@ const App: React.FC = () => {
         );
     }
 
-    return <Layout title="Aniversariantes">{conteudo}</Layout>;
+    return (
+        <Layout title="Aniversariantes" shareParams={shareParams}>
+            {conteudo}
+        </Layout>
+    );
 };
 
 export default App;

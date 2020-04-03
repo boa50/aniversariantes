@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Link } from 'gatsby';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -7,6 +7,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CakeIcon from '@material-ui/icons/Cake';
+
+const ShareButton = React.lazy(() => {
+    return import('../components/shareButton');
+});
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -21,8 +25,13 @@ const useStyles = makeStyles(theme => ({
     offset: theme.mixins.toolbar,
 }));
 
-const Header: React.FC = () => {
+type Props = {
+    shareParams: { text: String };
+};
+
+const Header: React.FC<Props> = ({ shareParams }) => {
     const classes = useStyles();
+    const isSSR = typeof window === 'undefined';
 
     return (
         <div className={classes.root}>
@@ -46,6 +55,15 @@ const Header: React.FC = () => {
                     >
                         Aniversariantes
                     </Typography>
+                    {!isSSR && (
+                        <Suspense fallback={<div />}>
+                            <ShareButton
+                                config={{
+                                    params: shareParams,
+                                }}
+                            />
+                        </Suspense>
+                    )}
                 </Toolbar>
             </AppBar>
             <div className={classes.offset} />

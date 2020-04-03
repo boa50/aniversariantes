@@ -25,4 +25,12 @@ module.exports = {
     moduleFileExtensions: ['ts', 'tsx', 'js'],
     collectCoverage: false,
     coverageReporters: ['lcov', 'text', 'html'],
+    collectCoverageFrom: [
+        '**/*tsx',
+        '!<rootDir>/src/utils/dateUtils.tsx',
+        '!<rootDir>/src/services/*',
+        '!<rootDir>/src/models/*',
+        '!<rootDir>/src/pages/404.tsx',
+        '!<rootDir>/src/components/shareButton.tsx',
+    ],
 };

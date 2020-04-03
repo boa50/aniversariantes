@@ -1,5 +1,4 @@
 import React from 'react';
-import { List } from 'immutable';
 
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
@@ -12,6 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { Aniversariante } from '../models/Aniversariante';
+import AniversariantesUtils from '../utils/aniversariantesUtils';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -36,7 +36,9 @@ const ListaAniversariantes: React.FC<Props> = ({ aniversariantes }) => {
     const imprimeListaPreenchida = (
         aniversariantes: Aniversariante[],
     ): JSX.Element => {
-        const aniversariantesOrdenados = ordenarPorDia(aniversariantes);
+        const aniversariantesOrdenados = AniversariantesUtils.ordenaPorDia(
+            aniversariantes,
+        );
 
         const linhas = aniversariantesOrdenados.map((linha, index) => {
             return (
@@ -71,18 +73,6 @@ const ListaAniversariantes: React.FC<Props> = ({ aniversariantes }) => {
                     <TableBody>{linhas}</TableBody>
                 </Table>
             </TableContainer>
-        );
-    };
-
-    const ordenarPorDia = (
-        aniversariantes: Aniversariante[],
-    ): List<Aniversariante> => {
-        const listaAniversariantesOrdenada = List(aniversariantes);
-
-        return listaAniversariantesOrdenada.sort(
-            (a: Aniversariante, b: Aniversariante) => {
-                return a.dia < b.dia ? -1 : 1;
-            },
         );
     };
 

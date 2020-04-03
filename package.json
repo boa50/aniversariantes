@@ -29,7 +29,8 @@
     "react-dom": "^16.13.1",
     "react-helmet": "^5.2.1",
     "react-hotkeys-hook": "^1.6.1",
-    "react-responsive": "^8.0.3"
+    "react-responsive": "^8.0.3",
+    "react-web-share-api": "0.0.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.3.0",
