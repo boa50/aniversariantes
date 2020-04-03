@@ -36,7 +36,7 @@ const ListaAniversariantes: React.FC<Props> = ({ aniversariantes }) => {
     const imprimeListaPreenchida = (
         aniversariantes: Aniversariante[],
     ): JSX.Element => {
-        const aniversariantesOrdenados = AniversariantesUtils.ordenaPorDia(
+        const aniversariantesOrdenados = AniversariantesUtils.ordenaPorDiaNome(
             aniversariantes,
         );
 

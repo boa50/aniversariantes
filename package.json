@@ -55,7 +55,7 @@
   ],
   "license": "MIT",
   "scripts": {
-    "predeploy": "npm test",
+    "predeploy": "npm run test-prod",
     "deploy": "npm run build",
     "build": "gatsby build",
     "develop": "gatsby develop",
@@ -64,6 +64,7 @@
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "jest --coverage --watchAll=false",
+    "test-prod": "jest --watchAll=false --silent",
     "test-watch": "jest --watch --silent",
     "type-check": "tsc --noEmit"
   },

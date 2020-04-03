@@ -9,9 +9,9 @@ jest.mock('../../utils/dateUtils', () => {
 });
 
 const aniversariantesLista = [
-    { pessoa: 'joãozinho', mes: '10', dia: '22' },
-    { pessoa: 'pedinho', mes: '10', dia: '25' },
     { pessoa: 'mariazinha', mes: '10', dia: '22' },
+    { pessoa: 'pedinho', mes: '10', dia: '25' },
+    { pessoa: 'joãozinho', mes: '10', dia: '22' },
     { pessoa: 'testinho', mes: '11', dia: '26' },
 ];
 
@@ -24,8 +24,8 @@ describe('Aniversariantes utils', () => {
 
         expect(aniversariantes.length).toBe(3);
         expect(aniversariantes[0].pessoa).toBe('joãozinho');
-        expect(aniversariantes[1].pessoa).toBe('pedinho');
-        expect(aniversariantes[2].pessoa).toBe('mariazinha');
+        expect(aniversariantes[1].pessoa).toBe('mariazinha');
+        expect(aniversariantes[2].pessoa).toBe('pedinho');
     });
 
     test('retorna a lista do dia', () => {
@@ -39,7 +39,7 @@ describe('Aniversariantes utils', () => {
     });
 
     test('retorna a lista ordenada', () => {
-        const aniversariantes = AniversariantesUtils.ordenaPorDia(
+        const aniversariantes = AniversariantesUtils.ordenaPorDiaNome(
             aniversariantesLista,
         ).toArray();
 

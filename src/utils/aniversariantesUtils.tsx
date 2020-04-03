@@ -9,9 +9,11 @@ const AniversariantesUtils = {
         aniversariantes: Aniversariante[],
         mes: number,
     ): Aniversariante[] => {
-        return aniversariantes.filter(aniversariante => {
-            return Number(aniversariante.mes) === mes;
-        });
+        return AniversariantesUtils.ordenaPorDiaNome(aniversariantes)
+            .toArray()
+            .filter(aniversariante => {
+                return Number(aniversariante.mes) === mes;
+            });
     },
 
     getAniversariantesDia: (
@@ -20,12 +22,14 @@ const AniversariantesUtils = {
         const mesAtual = DateUtils.getMesAtual();
         const diaAtual = DateUtils.getDiaAtual();
 
-        return aniversariantes.filter(aniversariante => {
-            return (
-                Number(aniversariante.mes) === mesAtual &&
-                Number(aniversariante.dia) === diaAtual
-            );
-        });
+        return AniversariantesUtils.ordenaPorDiaNome(aniversariantes)
+            .toArray()
+            .filter(aniversariante => {
+                return (
+                    Number(aniversariante.mes) === mesAtual &&
+                    Number(aniversariante.dia) === diaAtual
+                );
+            });
     },
 
     getAniversariantesShare: (
@@ -36,7 +40,7 @@ const AniversariantesUtils = {
             'Aniversariantes do Mês de ' +
             DateUtils.getMonthNameFromNumber(mes) +
             ':\n';
-        const corpo = AniversariantesUtils.ordenaPorDia(aniversariantes)
+        const corpo = AniversariantesUtils.ordenaPorDiaNome(aniversariantes)
             .map(aniversariante => {
                 return aniversariante.pessoa + ' - ' + aniversariante.dia;
             })
@@ -45,12 +49,20 @@ const AniversariantesUtils = {
         return titulo + corpo;
     },
 
-    ordenaPorDia: (aniversariantes: Aniversariante[]): List<Aniversariante> => {
+    ordenaPorDiaNome: (
+        aniversariantes: Aniversariante[],
+    ): List<Aniversariante> => {
         const listaAniversariantesOrdenada = List(aniversariantes);
 
         return listaAniversariantesOrdenada.sort(
             (a: Aniversariante, b: Aniversariante) => {
-                return a.dia < b.dia ? -1 : 1;
+                if (a.dia < b.dia) {
+                    return -1;
+                } else if (a.dia === b.dia) {
+                    return a.pessoa.localeCompare(b.pessoa);
+                } else {
+                    return 1;
+                }
             },
         );
     },
