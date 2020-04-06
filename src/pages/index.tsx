@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -6,15 +7,17 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { Box } from '@material-ui/core';
 
 import { Aniversariante } from '../models/Aniversariante';
+import { AniversariantesState } from '../models/AniversariantesState';
 
 import DateUtils from '../utils/dateUtils';
 import AniversariantesUtils from '../utils/aniversariantesUtils';
 
-import AniversariantesService from '../services/aniversariantes';
 import ListaAniversariantes from '../components/listaAniversariantes';
 import TrocaMes from '../components/trocaMes';
 import AniversariantesDia from '../components/aniversariantesDia';
 import Layout from '../components/layout';
+
+import { initAniversariantes } from '../store/actions/aniversariantes';
 
 const useStyles = makeStyles(theme => ({
     mesTexto: {
@@ -32,14 +35,22 @@ const useStyles = makeStyles(theme => ({
 
 const App: React.FC = () => {
     const classes = useStyles();
-    const [aniversariantes, setAniversariantes] = useState<Aniversariante[]>(
-        [],
-    );
     const [aniversariantesMes, setAniversariantesMes] = useState<
         Aniversariante[]
     >([]);
     const [mes, setMes] = useState(DateUtils.getMesAtual());
-    const [loading, setLoading] = useState(true);
+
+    const dispatch = useDispatch();
+
+    const aniversariantes = useSelector(
+        (state: AniversariantesState) => state.aniversariantes,
+    );
+    const loading = useSelector((state: AniversariantesState) => state.loading);
+
+    const onInitAniversariantes = useCallback(
+        () => dispatch(initAniversariantes()),
+        [],
+    );
 
     const trocaMesHandler = (
         event: React.ChangeEvent<unknown>,
@@ -58,13 +69,8 @@ const App: React.FC = () => {
     };
 
     useEffect(() => {
-        AniversariantesService.getAniversariantes().then(
-            aniversariantesResponse => {
-                setAniversariantes(aniversariantesResponse);
-                setLoading(false);
-            },
-        );
-    }, []);
+        onInitAniversariantes();
+    }, [onInitAniversariantes]);
 
     useEffect(() => {
         autlizaListaAniversariantes(mes);

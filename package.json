@@ -9,6 +9,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.47",
     "@material-ui/styles": "^4.9.6",
+    "@types/react-redux": "^7.1.7",
     "axios": "^0.19.2",
     "gatsby": "^2.20.9",
     "gatsby-image": "^2.3.1",

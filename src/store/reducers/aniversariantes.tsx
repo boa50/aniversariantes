@@ -1,5 +1,6 @@
 import * as actionTypes from '../actions/actionsTypes';
 import { Aniversariante } from '../../models/Aniversariante';
+import { AniversariantesState } from '../../models/AniversariantesState';
 
 type Action = {
     type: string;
@@ -7,47 +8,44 @@ type Action = {
     mes: number;
 };
 
-type State = {
-    aniversariantes: Aniversariante[];
-    aniversariantesMes: Aniversariante[];
-    aniversariantesDia: Aniversariante[];
-};
-
-const initState: State = {
+const initState: AniversariantesState = {
     aniversariantes: [],
     aniversariantesMes: [],
     aniversariantesDia: [],
+    mes: 0,
+    loading: true,
 };
 
-const getAniversariantes = (state: State, action: Action) => {
+const setAniversariantes = (state: AniversariantesState, action: Action) => {
     return {
         ...state,
         aniversariantes: action.aniversariantes,
+        loading: false,
     };
 };
 
-const getAniversariantesMes = (state: State, action: Action) => {
+const setAniversariantesMes = (state: AniversariantesState, action: Action) => {
     return {
         ...state,
-        aniversariantes: action.aniversariantes,
+        aniversariantesMes: action.aniversariantes,
     };
 };
 
-const getAniversariantesDia = (state: State, action: Action) => {
+const setAniversariantesDia = (state: AniversariantesState, action: Action) => {
     return {
         ...state,
-        aniversariantes: action.aniversariantes,
+        aniversariantesDia: action.aniversariantes,
     };
 };
 
 const reducer = (state = initState, action: Action) => {
     switch (action.type) {
-        case actionTypes.GET_ANIVERSARIANTES:
-            return getAniversariantes(state, action);
-        case actionTypes.GET_ANIVERSARIANTES_MES:
-            return getAniversariantesMes(state, action);
-        case actionTypes.GET_ANIVERSARIANTES_DIA:
-            return getAniversariantesDia(state, action);
+        case actionTypes.SET_ANIVERSARIANTES:
+            return setAniversariantes(state, action);
+        case actionTypes.SET_ANIVERSARIANTES_MES:
+            return setAniversariantesMes(state, action);
+        case actionTypes.SET_ANIVERSARIANTES_DIA:
+            return setAniversariantesDia(state, action);
         default:
             return state;
     }

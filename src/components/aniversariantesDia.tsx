@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -8,8 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 
-import { Aniversariante } from '../models/Aniversariante';
-import AniversariantesUtils from '../utils/aniversariantesUtils';
+import { AniversariantesState } from '../models/AniversariantesState';
 
 const useStyles = makeStyles(theme => ({
     alertIcon: {
@@ -24,23 +24,12 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-type Props = {
-    aniversariantes: Aniversariante[];
-};
-
-const AniversariantesDia: React.FC<Props> = ({ aniversariantes }) => {
+const AniversariantesDia: React.FC = () => {
     const classes = useStyles();
-    const [aniversariantesDia, setAniversariantesDia] = useState<
-        Aniversariante[]
-    >([]);
 
-    useEffect(() => {
-        const pessoasDia = AniversariantesUtils.getAniversariantesDia(
-            aniversariantes,
-        );
-
-        setAniversariantesDia(pessoasDia);
-    }, [aniversariantes]);
+    const aniversariantesDia = useSelector(
+        (state: AniversariantesState) => state.aniversariantesDia,
+    );
 
     const quantidadeAniversariantes = aniversariantesDia.length;
 

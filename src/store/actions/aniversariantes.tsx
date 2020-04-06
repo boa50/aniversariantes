@@ -1,27 +1,29 @@
 import * as actionTypes from './actionsTypes';
 import { Aniversariante } from '../../models/Aniversariante';
 
-export const getAniversariantes = (aniversariantes: Aniversariante[]) => {
+export const initAniversariantes = () => {
     return {
-        type: actionTypes.GET_ANIVERSARIANTES,
+        type: actionTypes.INIT_ANIVERSARIANTES,
+    };
+};
+
+export const setAniversariantes = (aniversariantes: Aniversariante[]) => {
+    return {
+        type: actionTypes.SET_ANIVERSARIANTES,
         aniversariantes,
     };
 };
 
-export const getAniversariantesMes = (
-    aniversariantes: Aniversariante[],
-    mes: number,
-) => {
+export const setAniversariantesMes = (aniversariantes: Aniversariante[]) => {
     return {
-        type: actionTypes.GET_ANIVERSARIANTES_MES,
+        type: actionTypes.SET_ANIVERSARIANTES_MES,
         aniversariantes,
-        mes,
     };
 };
 
-export const getAniversariantesDia = (aniversariantes: Aniversariante[]) => {
+export const setAniversariantesDia = (aniversariantes: Aniversariante[]) => {
     return {
-        type: actionTypes.GET_ANIVERSARIANTES_DIA,
+        type: actionTypes.SET_ANIVERSARIANTES_DIA,
         aniversariantes,
     };
 };
