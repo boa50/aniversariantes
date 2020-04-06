@@ -9,7 +9,6 @@ import { Box } from '@material-ui/core';
 import { AniversariantesState } from '../models/AniversariantesState';
 
 import DateUtils from '../utils/dateUtils';
-import AniversariantesUtils from '../utils/aniversariantesUtils';
 
 import ListaAniversariantes from '../components/listaAniversariantes';
 import TrocaMes from '../components/trocaMes';
@@ -62,13 +61,6 @@ const App: React.FC = () => {
         </Box>
     );
 
-    const shareParams = {
-        text: AniversariantesUtils.getAniversariantesShare(
-            [], //TODO para remover
-            mes,
-        ),
-    };
-
     if (!loading) {
         conteudo = (
             <Box>
@@ -86,11 +78,7 @@ const App: React.FC = () => {
         );
     }
 
-    return (
-        <Layout title="Aniversariantes" shareParams={shareParams}>
-            {conteudo}
-        </Layout>
-    );
+    return <Layout title="Aniversariantes">{conteudo}</Layout>;
 };
 
 export default App;
