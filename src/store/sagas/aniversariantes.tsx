@@ -3,16 +3,12 @@ import { put } from 'redux-saga/effects';
 import {
     setAniversariantes,
     setAniversariantesDia,
+    setMes,
 } from '../actions/aniversariantes';
-import { Aniversariante } from '../../models/Aniversariante';
 import AniversariantesUtils from '../../utils/aniversariantesUtils';
+import DateUtils from '../../utils/dateUtils';
 
-type Action = {
-    type: string;
-    aniversariantes: Aniversariante[];
-};
-
-export function* initAniversariantesSaga(action: Action) {
+export function* initAniversariantesSaga() {
     try {
         const response = yield axios.get(
             'https://firestore.googleapis.com/v1/projects/aniversariantes-a287d/databases/(default)/documents/aniversariantes?pageSize=200',
@@ -34,6 +30,8 @@ export function* initAniversariantesSaga(action: Action) {
             aniversariantes,
         );
         yield put(setAniversariantesDia(aniversariantesDia));
+
+        yield put(setMes(DateUtils.getMesAtual()));
     } catch (error) {
         console.log(error);
     }

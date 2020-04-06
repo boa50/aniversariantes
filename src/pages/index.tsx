@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Box } from '@material-ui/core';
 
-import { Aniversariante } from '../models/Aniversariante';
 import { AniversariantesState } from '../models/AniversariantesState';
 
 import DateUtils from '../utils/dateUtils';
@@ -17,7 +16,7 @@ import TrocaMes from '../components/trocaMes';
 import AniversariantesDia from '../components/aniversariantesDia';
 import Layout from '../components/layout';
 
-import { initAniversariantes } from '../store/actions/aniversariantes';
+import { initAniversariantes, setMes } from '../store/actions/aniversariantes';
 
 const useStyles = makeStyles(theme => ({
     mesTexto: {
@@ -35,46 +34,27 @@ const useStyles = makeStyles(theme => ({
 
 const App: React.FC = () => {
     const classes = useStyles();
-    const [aniversariantesMes, setAniversariantesMes] = useState<
-        Aniversariante[]
-    >([]);
-    const [mes, setMes] = useState(DateUtils.getMesAtual());
-
     const dispatch = useDispatch();
 
-    const aniversariantes = useSelector(
-        (state: AniversariantesState) => state.aniversariantes,
-    );
+    const mes = useSelector((state: AniversariantesState) => state.mes);
     const loading = useSelector((state: AniversariantesState) => state.loading);
 
     const onInitAniversariantes = useCallback(
         () => dispatch(initAniversariantes()),
         [],
     );
+    const onSetMes = (mes: number) => dispatch(setMes(mes));
 
     const trocaMesHandler = (
         event: React.ChangeEvent<unknown>,
         mesNovo: number,
     ) => {
-        setMes(mesNovo);
-    };
-
-    const autlizaListaAniversariantes = (mes: number) => {
-        const pessoasMes = AniversariantesUtils.getAniversariantesMes(
-            aniversariantes,
-            mes,
-        );
-
-        setAniversariantesMes(pessoasMes);
+        onSetMes(mesNovo);
     };
 
     useEffect(() => {
         onInitAniversariantes();
     }, [onInitAniversariantes]);
-
-    useEffect(() => {
-        autlizaListaAniversariantes(mes);
-    }, [mes, aniversariantes]);
 
     let conteudo = (
         <Box className={classes.circularProgress}>
@@ -84,7 +64,7 @@ const App: React.FC = () => {
 
     const shareParams = {
         text: AniversariantesUtils.getAniversariantesShare(
-            aniversariantesMes,
+            [], //TODO para remover
             mes,
         ),
     };
@@ -99,9 +79,9 @@ const App: React.FC = () => {
                 >
                     {DateUtils.getMonthNameFromNumber(mes)}
                 </Typography>
-                <AniversariantesDia aniversariantes={aniversariantes} />
+                <AniversariantesDia />
                 <TrocaMes changeHandler={trocaMesHandler} mes={mes} />
-                <ListaAniversariantes aniversariantes={aniversariantesMes} />
+                <ListaAniversariantes />
             </Box>
         );
     }

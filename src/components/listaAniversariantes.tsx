@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
@@ -11,6 +12,7 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { Aniversariante } from '../models/Aniversariante';
+import { AniversariantesState } from '../models/AniversariantesState';
 import AniversariantesUtils from '../utils/aniversariantesUtils';
 
 const useStyles = makeStyles(theme => ({
@@ -20,12 +22,11 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-type Props = {
-    aniversariantes: Aniversariante[];
-};
-
-const ListaAniversariantes: React.FC<Props> = ({ aniversariantes }) => {
+const ListaAniversariantes: React.FC = () => {
     const classes = useStyles();
+    const aniversariantes = useSelector(
+        (state: AniversariantesState) => state.aniversariantesMes,
+    );
 
     const imprimeListaVazia = (): JSX.Element => (
         <Typography variant="h5" data-testid="sem-aniversariantes-mensagem">

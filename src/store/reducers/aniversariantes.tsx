@@ -1,6 +1,7 @@
 import * as actionTypes from '../actions/actionsTypes';
 import { Aniversariante } from '../../models/Aniversariante';
 import { AniversariantesState } from '../../models/AniversariantesState';
+import AniversariantesUtils from '../../utils/aniversariantesUtils';
 
 type Action = {
     type: string;
@@ -24,13 +25,6 @@ const setAniversariantes = (state: AniversariantesState, action: Action) => {
     };
 };
 
-const setAniversariantesMes = (state: AniversariantesState, action: Action) => {
-    return {
-        ...state,
-        aniversariantesMes: action.aniversariantes,
-    };
-};
-
 const setAniversariantesDia = (state: AniversariantesState, action: Action) => {
     return {
         ...state,
@@ -38,14 +32,27 @@ const setAniversariantesDia = (state: AniversariantesState, action: Action) => {
     };
 };
 
+const setMes = (state: AniversariantesState, action: Action) => {
+    const aniversariantesMes = AniversariantesUtils.getAniversariantesMes(
+        state.aniversariantes,
+        action.mes,
+    );
+
+    return {
+        ...state,
+        aniversariantesMes,
+        mes: action.mes,
+    };
+};
+
 const reducer = (state = initState, action: Action) => {
     switch (action.type) {
         case actionTypes.SET_ANIVERSARIANTES:
             return setAniversariantes(state, action);
-        case actionTypes.SET_ANIVERSARIANTES_MES:
-            return setAniversariantesMes(state, action);
         case actionTypes.SET_ANIVERSARIANTES_DIA:
             return setAniversariantesDia(state, action);
+        case actionTypes.SET_MES:
+            return setMes(state, action);
         default:
             return state;
     }
