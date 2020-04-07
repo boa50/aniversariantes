@@ -4,18 +4,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Box } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 
 import { AniversariantesState } from '../models/AniversariantesState';
-
 import DateUtils from '../utils/dateUtils';
+
+import { initAniversariantes, setMes } from '../store/actions/aniversariantes';
 
 import ListaAniversariantes from '../components/listaAniversariantes';
 import TrocaMes from '../components/trocaMes';
 import AniversariantesDia from '../components/aniversariantesDia';
 import Layout from '../components/layout';
-
-import { initAniversariantes, setMes } from '../store/actions/aniversariantes';
 
 const useStyles = makeStyles(theme => ({
     mesTexto: {

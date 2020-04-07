@@ -1,8 +1,7 @@
 import { List } from 'immutable';
 
-import DateUtils from './dateUtils';
-
 import { Aniversariante } from '../models/Aniversariante';
+import DateUtils from './dateUtils';
 
 const AniversariantesUtils = {
     getAniversariantesMes: (

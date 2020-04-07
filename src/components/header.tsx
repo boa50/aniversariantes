@@ -9,8 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CakeIcon from '@material-ui/icons/Cake';
 
-import AniversariantesUtils from '../utils/aniversariantesUtils';
 import { AniversariantesState } from '../models/AniversariantesState';
+import AniversariantesUtils from '../utils/aniversariantesUtils';
 
 const ShareButton = React.lazy(() => {
     return import('../components/shareButton');
@@ -44,8 +44,6 @@ const Header: React.FC = () => {
             mes,
         ),
     };
-
-    console.log(shareParams);
 
     return (
         <div className={classes.root}>
