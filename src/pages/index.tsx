@@ -9,7 +9,7 @@ import Box from '@material-ui/core/Box';
 import { AniversariantesState } from '../models/AniversariantesState';
 import DateUtils from '../utils/dateUtils';
 
-import { initAniversariantes, setMes } from '../store/actions/aniversariantes';
+import { initAniversariantes } from '../store/actions/aniversariantes';
 
 import ListaAniversariantes from '../components/listaAniversariantes';
 import TrocaMes from '../components/trocaMes';
@@ -41,14 +41,6 @@ const App: React.FC = () => {
         () => dispatch(initAniversariantes()),
         [],
     );
-    const onSetMes = (mes: number) => dispatch(setMes(mes));
-
-    const trocaMesHandler = (
-        event: React.ChangeEvent<unknown>,
-        mesNovo: number,
-    ) => {
-        onSetMes(mesNovo);
-    };
 
     useEffect(() => {
         onInitAniversariantes();
@@ -71,7 +63,7 @@ const App: React.FC = () => {
                     {DateUtils.getMonthNameFromNumber(mes)}
                 </Typography>
                 <AniversariantesDia />
-                <TrocaMes changeHandler={trocaMesHandler} mes={mes} />
+                <TrocaMes />
                 <ListaAniversariantes />
             </Box>
         );

@@ -1,22 +1,24 @@
 import React from 'react';
 import { render } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
 
-import { Aniversariante } from '../../models/Aniversariante';
 import AniversariantesDia from '../../components/aniversariantesDia';
 
-let mockAniversariantesDia: Aniversariante[] = [];
-jest.mock('../../utils/aniversariantesUtils', () => {
-    return { getAniversariantesDia: () => mockAniversariantesDia };
-});
-
 describe('AniversariantesDia component', () => {
+    const mockStore = configureStore();
+    let store, state;
+
     test('verifica se a renderização foi feita de maneira correta para 1 aniversariante', () => {
-        mockAniversariantesDia = [
-            { pessoa: 'joãozinho', mes: '11', dia: '24' },
-        ];
+        state = {
+            aniversariantesDia: [{ pessoa: 'joãozinho', mes: '11', dia: '24' }],
+        };
+        store = mockStore(state);
 
         const { getByTestId } = render(
-            <AniversariantesDia aniversariantes={mockAniversariantesDia} />,
+            <Provider store={store}>
+                <AniversariantesDia />
+            </Provider>,
         );
         const aniversariantesTexto = getByTestId('aniversariante-texto');
         const imagemAlerta = getByTestId('aniversariante-icone');
@@ -26,9 +28,13 @@ describe('AniversariantesDia component', () => {
     });
 
     test('verifica se a renderização foi feita de maneira correta para 0 aniversariantes', () => {
-        mockAniversariantesDia = [];
+        state = { aniversariantesDia: [] };
+        store = mockStore(state);
+
         const { getByTestId } = render(
-            <AniversariantesDia aniversariantes={mockAniversariantesDia} />,
+            <Provider store={store}>
+                <AniversariantesDia />
+            </Provider>,
         );
         let erro = '';
         try {
@@ -41,12 +47,18 @@ describe('AniversariantesDia component', () => {
     });
 
     test('verifica se a renderização foi feita de maneira correta para vários aniversariante', () => {
-        mockAniversariantesDia = [
-            { pessoa: 'pedinho', mes: '11', dia: '24' },
-            { pessoa: 'jumentinho', mes: '11', dia: '25' },
-        ];
+        state = {
+            aniversariantesDia: [
+                { pessoa: 'pedinho', mes: '11', dia: '24' },
+                { pessoa: 'jumentinho', mes: '11', dia: '25' },
+            ],
+        };
+        store = mockStore(state);
+
         const { getByTestId } = render(
-            <AniversariantesDia aniversariantes={mockAniversariantesDia} />,
+            <Provider store={store}>
+                <AniversariantesDia />
+            </Provider>,
         );
         const aniversariantesTexto = getByTestId('aniversariante-texto');
         const imagemAlerta = getByTestId('aniversariante-icone');

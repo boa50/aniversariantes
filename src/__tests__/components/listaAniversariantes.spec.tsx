@@ -1,14 +1,22 @@
 import React from 'react';
 import { render } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
 
-import { Aniversariante } from '../../models/Aniversariante';
 import ListaAniversariantes from '../../components/listaAniversariantes';
 
 describe('ListaAniversariantes component', () => {
+    const mockStore = configureStore();
+    let store, state;
+
     test('verifica se a renderização de uma lista vazia', () => {
-        const aniversariantes: Aniversariante[] = [];
+        state = { aniversariantesMes: [] };
+        store = mockStore(state);
+
         const { getByTestId } = render(
-            <ListaAniversariantes aniversariantes={aniversariantes} />,
+            <Provider store={store}>
+                <ListaAniversariantes />
+            </Provider>,
         );
 
         let erro = '';
@@ -24,12 +32,18 @@ describe('ListaAniversariantes component', () => {
     });
 
     test('verifica se a renderização de uma lista preenchida', () => {
-        const aniversariantes = [
-            { pessoa: 'aniversariante_teste', mes: '11', dia: '24' },
-            { pessoa: 'aniversariante_teste2', mes: '11', dia: '25' },
-        ];
+        state = {
+            aniversariantesMes: [
+                { pessoa: 'aniversariante_teste', mes: '11', dia: '24' },
+                { pessoa: 'aniversariante_teste2', mes: '11', dia: '25' },
+            ],
+        };
+        store = mockStore(state);
+
         const { getByTestId, getAllByTestId } = render(
-            <ListaAniversariantes aniversariantes={aniversariantes} />,
+            <Provider store={store}>
+                <ListaAniversariantes />
+            </Provider>,
         );
 
         const tabela = getByTestId('aniversariantes-tabela');
@@ -46,12 +60,18 @@ describe('ListaAniversariantes component', () => {
     });
 
     test('verifica se os aniversariantes estão ordenados', () => {
-        const aniversariantes = [
-            { pessoa: 'aniversariante_teste', mes: '11', dia: '25' },
-            { pessoa: 'aniversariante_teste2', mes: '11', dia: '24' },
-        ];
+        state = {
+            aniversariantesMes: [
+                { pessoa: 'aniversariante_teste', mes: '11', dia: '25' },
+                { pessoa: 'aniversariante_teste2', mes: '11', dia: '24' },
+            ],
+        };
+        store = mockStore(state);
+
         const { getAllByTestId } = render(
-            <ListaAniversariantes aniversariantes={aniversariantes} />,
+            <Provider store={store}>
+                <ListaAniversariantes />
+            </Provider>,
         );
 
         const aniversariante1 = getAllByTestId('aniversariante-nome')[0];
@@ -59,9 +79,17 @@ describe('ListaAniversariantes component', () => {
         const aniversariante2 = getAllByTestId('aniversariante-nome')[1];
         const aniversariante2Dia = getAllByTestId('aniversariante-dia')[1];
 
-        expect(aniversariante1.textContent).toBe(aniversariantes[1].pessoa);
-        expect(aniversariante1Dia.textContent).toBe(aniversariantes[1].dia);
-        expect(aniversariante2.textContent).toBe(aniversariantes[0].pessoa);
-        expect(aniversariante2Dia.textContent).toBe(aniversariantes[0].dia);
+        expect(aniversariante1.textContent).toBe(
+            state.aniversariantesMes[1].pessoa,
+        );
+        expect(aniversariante1Dia.textContent).toBe(
+            state.aniversariantesMes[1].dia,
+        );
+        expect(aniversariante2.textContent).toBe(
+            state.aniversariantesMes[0].pessoa,
+        );
+        expect(aniversariante2Dia.textContent).toBe(
+            state.aniversariantesMes[0].dia,
+        );
     });
 });
