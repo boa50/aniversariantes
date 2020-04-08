@@ -2,11 +2,9 @@ import axios from 'axios';
 import { put } from 'redux-saga/effects';
 import {
     setAniversariantes,
+    setAniversariantesMes,
     setAniversariantesDia,
-    setMes,
 } from '../actions/aniversariantes';
-import AniversariantesUtils from '../../utils/aniversariantesUtils';
-import DateUtils from '../../utils/dateUtils';
 
 export function* initAniversariantesSaga() {
     try {
@@ -25,13 +23,8 @@ export function* initAniversariantesSaga() {
         );
 
         yield put(setAniversariantes(aniversariantes));
-
-        const aniversariantesDia = yield AniversariantesUtils.getAniversariantesDia(
-            aniversariantes,
-        );
-        yield put(setAniversariantesDia(aniversariantesDia));
-
-        yield put(setMes(DateUtils.getMesAtual()));
+        yield put(setAniversariantesMes());
+        yield put(setAniversariantesDia());
     } catch (error) {
         console.log(error);
     }

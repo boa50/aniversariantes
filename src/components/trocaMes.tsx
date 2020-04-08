@@ -8,7 +8,7 @@ import Pagination from '@material-ui/lab/Pagination';
 
 import { AniversariantesState } from '../models/AniversariantesState';
 
-import { setMes } from '../store/actions/aniversariantes';
+import { setMesInfo } from '../store/actions/aniversariantes';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -25,7 +25,7 @@ const TrocaMes: React.FC = () => {
     const dispatch = useDispatch();
 
     const mes = useSelector((state: AniversariantesState) => state.mes);
-    const onSetMes = (mes: number) => dispatch(setMes(mes));
+    const onSetMes = (mes: number) => dispatch(setMesInfo(mes));
 
     const changeHandler = (
         event: React.ChangeEvent<unknown>,

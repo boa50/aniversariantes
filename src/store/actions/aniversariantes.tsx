@@ -14,16 +14,21 @@ export const setAniversariantes = (aniversariantes: Aniversariante[]) => {
     };
 };
 
-export const setAniversariantesDia = (aniversariantes: Aniversariante[]) => {
+export const setAniversariantesMes = () => {
     return {
-        type: actionTypes.SET_ANIVERSARIANTES_DIA,
-        aniversariantes,
+        type: actionTypes.SET_ANIVERSARIANTES_MES,
     };
 };
 
-export const setMes = (mes: number) => {
+export const setAniversariantesDia = () => {
     return {
-        type: actionTypes.SET_MES,
+        type: actionTypes.SET_ANIVERSARIANTES_DIA,
+    };
+};
+
+export const setMesInfo = (mes: number) => {
+    return {
+        type: actionTypes.SET_MES_INFO,
         mes,
     };
 };

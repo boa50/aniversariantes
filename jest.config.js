@@ -31,6 +31,7 @@ module.exports = {
         '!<rootDir>/src/models/*',
         '!<rootDir>/src/pages/404.tsx',
         '!<rootDir>/src/components/shareButton.tsx',
+        '!<rootDir>/src/components/seo.tsx',
         '!<rootDir>/src/store/reduxWrapper.tsx',
         '!<rootDir>/src/store/actions/actionsTypes.tsx',
         '!<rootDir>/src/store/sagas/index.tsx',
