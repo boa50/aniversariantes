@@ -48,7 +48,7 @@ const App: React.FC = () => {
 
     let conteudo = (
         <Box className={classes.circularProgress}>
-            <CircularProgress />
+            <CircularProgress data-testid="loading-aniversariantes" />
         </Box>
     );
 

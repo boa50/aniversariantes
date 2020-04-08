@@ -36,11 +36,12 @@ jest.mock('../../components/listaAniversariantes', () => {
 describe('App page', () => {
     const mockMesNumero = 10;
     const mockMesTexto = 'Outubro';
-    const state = { mes: mockMesNumero };
     const mockStore = configureStore();
-    const store = mockStore(state);
 
-    test('verifica se a renderização foi feita de maneira correta', async () => {
+    test('verifica se a renderização foi feita de maneira correta', () => {
+        const state = { mes: mockMesNumero, loading: false };
+        const store = mockStore(state);
+
         const { getByTestId } = render(
             <Provider store={store}>
                 <App />
@@ -61,5 +62,20 @@ describe('App page', () => {
         expect(aniversariantesDiaMock).toBeDefined();
         expect(trocaMesMock).toBeDefined();
         expect(listaAniversariantesMock).toBeDefined();
+    });
+
+    test('verifica se carrega o icone de loading', () => {
+        const state = { loading: true };
+        const store = mockStore(state);
+
+        const { getByTestId } = render(
+            <Provider store={store}>
+                <App />
+            </Provider>,
+        );
+
+        const loadingIcon = getByTestId('loading-aniversariantes');
+
+        expect(loadingIcon).toBeDefined();
     });
 });
