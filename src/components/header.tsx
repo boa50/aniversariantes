@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'gatsby';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -7,6 +8,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CakeIcon from '@material-ui/icons/Cake';
+
+import { AniversariantesState } from '../models/AniversariantesState';
+import AniversariantesUtils from '../utils/aniversariantesUtils';
 
 const ShareButton = React.lazy(() => {
     return import('../components/shareButton');
@@ -25,13 +29,21 @@ const useStyles = makeStyles(theme => ({
     offset: theme.mixins.toolbar,
 }));
 
-type Props = {
-    shareParams: { text: String };
-};
-
-const Header: React.FC<Props> = ({ shareParams }) => {
+const Header: React.FC = () => {
     const classes = useStyles();
     const isSSR = typeof window === 'undefined';
+
+    const aniversariantes = useSelector(
+        (state: AniversariantesState) => state.aniversariantesMes,
+    );
+    const mes = useSelector((state: AniversariantesState) => state.mes);
+
+    const shareParams = {
+        text: AniversariantesUtils.getAniversariantesShare(
+            aniversariantes,
+            mes,
+        ),
+    };
 
     return (
         <div className={classes.root}>

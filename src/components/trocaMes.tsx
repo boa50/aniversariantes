@@ -1,9 +1,14 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useMediaQuery } from 'react-responsive';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
+
+import { AniversariantesState } from '../models/AniversariantesState';
+
+import { setMesInfo } from '../store/actions/aniversariantes';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -13,15 +18,21 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-type Props = {
-    mes: number;
-    changeHandler: (event: React.ChangeEvent<unknown>, page: number) => void;
-};
-
-const TrocaMes: React.FC<Props> = ({ mes, changeHandler }) => {
+const TrocaMes: React.FC = () => {
     const classes = useStyles();
     const isBigScreen = useMediaQuery({ minWidth: 550 });
     let eventNulo: React.ChangeEvent<unknown>;
+    const dispatch = useDispatch();
+
+    const mes = useSelector((state: AniversariantesState) => state.mes);
+    const onSetMes = (mes: number) => dispatch(setMesInfo(mes));
+
+    const changeHandler = (
+        event: React.ChangeEvent<unknown>,
+        mesNovo: number,
+    ) => {
+        onSetMes(mesNovo);
+    };
 
     useHotkeys(
         'left',

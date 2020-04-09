@@ -18,14 +18,13 @@ const theme = createMuiTheme({
 
 type Props = {
     title: string;
-    shareParams: { text: String };
 };
 
-const Layout: React.FC<Props> = ({ title, shareParams, children }) => {
+const Layout: React.FC<Props> = ({ title, children }) => {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Header shareParams={shareParams} />
+            <Header />
             <SEO title={title} />
             <Container maxWidth="md">{children}</Container>
         </ThemeProvider>
