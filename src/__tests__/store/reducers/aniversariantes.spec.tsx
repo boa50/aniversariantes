@@ -4,6 +4,7 @@ import * as actionTypes from '../../../store/actions/actionsTypes';
 jest.mock('../../../utils/dateUtils', () => {
     return {
         getMesAtual: () => 10,
+        getDiaAtual: () => 22,
     };
 });
 
@@ -73,6 +74,30 @@ describe('AniversariantesReducer', () => {
                 { pessoa: 'joãozinho', mes: '10', dia: '22' },
                 { pessoa: 'mariazinha', mes: '10', dia: '22' },
                 { pessoa: 'pedinho', mes: '10', dia: '25' },
+            ],
+        });
+    });
+
+    it('verifica o SET_ANIVERSARIANTES_DIA', () => {
+        initState = {
+            aniversariantes: aniversariantesMock,
+            aniversariantesMes: [],
+            aniversariantesDia: [],
+            mes: 10,
+            loading: false,
+        };
+
+        const action = {
+            type: actionTypes.SET_ANIVERSARIANTES_DIA,
+            aniversariantes: aniversariantesMock,
+            mes: 0,
+        };
+
+        expect(reducer(initState, action)).toEqual({
+            ...initState,
+            aniversariantesDia: [
+                { pessoa: 'joãozinho', mes: '10', dia: '22' },
+                { pessoa: 'mariazinha', mes: '10', dia: '22' },
             ],
         });
     });
