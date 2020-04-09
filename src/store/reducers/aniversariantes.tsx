@@ -19,9 +19,19 @@ const initState: AniversariantesState = {
 };
 
 const setAniversariantes = (state: AniversariantesState, action: Action) => {
+    const aniversariantesMes = AniversariantesUtils.getAniversariantesMes(
+        action.aniversariantes,
+        state.mes,
+    );
+    const aniversariantesDia = AniversariantesUtils.getAniversariantesDia(
+        action.aniversariantes,
+    );
+
     return {
         ...state,
         aniversariantes: action.aniversariantes,
+        aniversariantesMes,
+        aniversariantesDia,
         loading: false,
     };
 };

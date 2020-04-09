@@ -23,8 +23,6 @@ export function* initAniversariantesSaga() {
         );
 
         yield put(setAniversariantes(aniversariantes));
-        yield put(setAniversariantesMes());
-        yield put(setAniversariantesDia());
     } catch (error) {
         console.log(error);
     }

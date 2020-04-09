@@ -23,6 +23,17 @@ const aniversariantesMock = [
     { pessoa: 'testinho', mes: '11', dia: '26' },
 ];
 
+const aniversariantesMesMock = [
+    { pessoa: 'joãozinho', mes: '10', dia: '22' },
+    { pessoa: 'mariazinha', mes: '10', dia: '22' },
+    { pessoa: 'pedinho', mes: '10', dia: '25' },
+];
+
+const aniversariantesDiaMock = [
+    { pessoa: 'joãozinho', mes: '10', dia: '22' },
+    { pessoa: 'mariazinha', mes: '10', dia: '22' },
+];
+
 describe('AniversariantesReducer', () => {
     it('verifica o correto estado inicial', () => {
         const action = {
@@ -49,6 +60,8 @@ describe('AniversariantesReducer', () => {
         expect(reducer(initState, action)).toEqual({
             ...initState,
             aniversariantes: aniversariantesMock,
+            aniversariantesMes: aniversariantesMesMock,
+            aniversariantesDia: aniversariantesDiaMock,
             loading: false,
         });
     });
@@ -70,11 +83,7 @@ describe('AniversariantesReducer', () => {
 
         expect(reducer(initState, action)).toEqual({
             ...initState,
-            aniversariantesMes: [
-                { pessoa: 'joãozinho', mes: '10', dia: '22' },
-                { pessoa: 'mariazinha', mes: '10', dia: '22' },
-                { pessoa: 'pedinho', mes: '10', dia: '25' },
-            ],
+            aniversariantesMes: aniversariantesMesMock,
         });
     });
 
@@ -95,10 +104,7 @@ describe('AniversariantesReducer', () => {
 
         expect(reducer(initState, action)).toEqual({
             ...initState,
-            aniversariantesDia: [
-                { pessoa: 'joãozinho', mes: '10', dia: '22' },
-                { pessoa: 'mariazinha', mes: '10', dia: '22' },
-            ],
+            aniversariantesDia: aniversariantesDiaMock,
         });
     });
 });

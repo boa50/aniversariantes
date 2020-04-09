@@ -53,8 +53,6 @@ describe('AniversariantesSaga', () => {
         expect(dispatched).toContainEqual(
             setAniversariantes(aniversariantesMock),
         );
-        expect(dispatched).toContainEqual(setAniversariantesMes());
-        expect(dispatched).toContainEqual(setAniversariantesDia());
 
         fetchAniversariantes.mockClear();
     });
