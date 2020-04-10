@@ -1,16 +1,13 @@
 import axios from 'axios';
 import { put } from 'redux-saga/effects';
-import {
-    setAniversariantes,
-    setAniversariantesMes,
-    setAniversariantesDia,
-} from '../actions/aniversariantes';
+import { setAniversariantes } from '../actions/aniversariantes';
 
 export function* initAniversariantesSaga() {
+    const baseUrl = 'https://firestore.googleapis.com/v1/projects';
+    const url = `${baseUrl}/aniversariantes-a287d/databases/(default)/documents/aniversariantes?pageSize=200`;
+
     try {
-        const response = yield axios.get(
-            'https://firestore.googleapis.com/v1/projects/aniversariantes-a287d/databases/(default)/documents/aniversariantes?pageSize=200',
-        );
+        const response = yield axios.get(url);
 
         const aniversariantes = response.data.documents.map(
             (aniversariante: any) => {
