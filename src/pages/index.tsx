@@ -37,8 +37,10 @@ const App: React.FC = () => {
     const mes = useSelector((state: AniversariantesState) => state.mes);
     const loading = useSelector((state: AniversariantesState) => state.loading);
 
+    const idFamilia = 'ooQKFaqwblGMPNq0AUML';
+    // const idFamilia = 'zRMPmD0qcvFufmu2Cmfz';
     const onInitAniversariantes = useCallback(
-        () => dispatch(initAniversariantes()),
+        () => dispatch(initAniversariantes(idFamilia)),
         [],
     );
 

@@ -1,11 +1,8 @@
 import { runSaga } from 'redux-saga';
 import axios from 'axios';
+import { AniversariantesAction } from '../../../models/AniversariantesAction';
 import { initAniversariantesSaga } from '../../../store/sagas/aniversariantes';
-import {
-    setAniversariantes,
-    setAniversariantesMes,
-    setAniversariantesDia,
-} from '../../../store/actions/aniversariantes';
+import { setAniversariantes } from '../../../store/actions/aniversariantes';
 
 let aniversariantesMock = [
     {
@@ -14,6 +11,13 @@ let aniversariantesMock = [
         dia: '02',
     },
 ];
+
+const actionMock: AniversariantesAction = {
+    type: '',
+    aniversariantes: [],
+    mes: 0,
+    idFamilia: '',
+};
 
 let responseMock = {
     data: {
@@ -47,6 +51,7 @@ describe('AniversariantesSaga', () => {
                 dispatch: action => dispatched.push(action),
             },
             initAniversariantesSaga,
+            actionMock,
         );
 
         expect(fetchAniversariantes).toHaveBeenCalledTimes(1);
@@ -68,6 +73,7 @@ describe('AniversariantesSaga', () => {
                 dispatch: action => dispatched.push(action),
             },
             initAniversariantesSaga,
+            actionMock,
         );
 
         expect(fetchAniversariantes).toHaveBeenCalledTimes(1);

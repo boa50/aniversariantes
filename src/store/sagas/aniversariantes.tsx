@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { put } from 'redux-saga/effects';
+import { AniversariantesAction } from '../../models/AniversariantesAction';
 import { setAniversariantes } from '../actions/aniversariantes';
 
-export function* initAniversariantesSaga() {
+export function* initAniversariantesSaga(action: AniversariantesAction) {
     const baseUrl = 'https://firestore.googleapis.com/v1/projects';
-    const url = `${baseUrl}/aniversariantes-a287d/databases/(default)/documents/aniversariantes?pageSize=200`;
+    const url = `${baseUrl}/${process.env.PROJECT}/databases/(default)/documents/familias/${action.idFamilia}/aniversariantes?pageSize=200`;
 
     try {
         const response = yield axios.get(url);

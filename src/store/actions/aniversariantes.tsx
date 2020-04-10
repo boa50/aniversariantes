@@ -1,9 +1,10 @@
 import * as actionTypes from './actionsTypes';
 import { Aniversariante } from '../../models/Aniversariante';
 
-export const initAniversariantes = () => {
+export const initAniversariantes = (idFamilia: string) => {
     return {
         type: actionTypes.INIT_ANIVERSARIANTES,
+        idFamilia,
     };
 };
 
