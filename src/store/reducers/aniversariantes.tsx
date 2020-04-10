@@ -60,11 +60,14 @@ const setAniversariantesDia = (state: AniversariantesState, action: Action) => {
 };
 
 const setMesInfo = (state: AniversariantesState, action: Action) => {
-    const aniversariantesMesState = setAniversariantesMes(state, action);
+    const aniversariantesMes = AniversariantesUtils.getAniversariantesMes(
+        state.aniversariantes,
+        action.mes,
+    );
 
     return {
         ...state,
-        ...aniversariantesMesState,
+        aniversariantesMes,
         mes: action.mes,
     };
 };

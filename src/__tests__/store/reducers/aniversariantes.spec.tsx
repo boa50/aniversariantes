@@ -90,7 +90,7 @@ describe('AniversariantesReducer', () => {
     it('verifica o SET_ANIVERSARIANTES_DIA', () => {
         initState = {
             aniversariantes: aniversariantesMock,
-            aniversariantesMes: [],
+            aniversariantesMes: aniversariantesMesMock,
             aniversariantesDia: [],
             mes: 10,
             loading: false,
@@ -105,6 +105,28 @@ describe('AniversariantesReducer', () => {
         expect(reducer(initState, action)).toEqual({
             ...initState,
             aniversariantesDia: aniversariantesDiaMock,
+        });
+    });
+
+    it('verifica o SET_MES_INFO', () => {
+        initState = {
+            aniversariantes: aniversariantesMock,
+            aniversariantesMes: [],
+            aniversariantesDia: [],
+            mes: 10,
+            loading: false,
+        };
+
+        const action = {
+            type: actionTypes.SET_MES_INFO,
+            aniversariantes: aniversariantesMock,
+            mes: 11,
+        };
+
+        expect(reducer(initState, action)).toEqual({
+            ...initState,
+            aniversariantesMes: [{ pessoa: 'testinho', mes: '11', dia: '26' }],
+            mes: 11,
         });
     });
 });
