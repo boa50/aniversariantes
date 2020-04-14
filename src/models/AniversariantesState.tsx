@@ -6,4 +6,5 @@ export type AniversariantesState = {
     aniversariantesDia: Aniversariante[];
     mes: number;
     loading: boolean;
+    idFamilia: string;
 };

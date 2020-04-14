@@ -33,3 +33,10 @@ export const setMesInfo = (mes: number) => {
         mes,
     };
 };
+
+export const setIdFamilia = (idFamilia: string) => {
+    return {
+        type: actionTypes.SET_ID_FAMILIA,
+        idFamilia,
+    };
+};

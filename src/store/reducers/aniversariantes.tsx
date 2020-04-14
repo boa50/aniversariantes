@@ -10,6 +10,7 @@ const initState: AniversariantesState = {
     aniversariantesDia: [],
     mes: DateUtils.getMesAtual(),
     loading: true,
+    idFamilia: '',
 };
 
 const setAniversariantes = (
@@ -33,10 +34,7 @@ const setAniversariantes = (
     };
 };
 
-const setAniversariantesMes = (
-    state: AniversariantesState,
-    action: AniversariantesAction,
-) => {
+const setAniversariantesMes = (state: AniversariantesState) => {
     const aniversariantesMes = AniversariantesUtils.getAniversariantesMes(
         state.aniversariantes,
         state.mes,
@@ -48,10 +46,7 @@ const setAniversariantesMes = (
     };
 };
 
-const setAniversariantesDia = (
-    state: AniversariantesState,
-    action: AniversariantesAction,
-) => {
+const setAniversariantesDia = (state: AniversariantesState) => {
     const aniversariantesDia = AniversariantesUtils.getAniversariantesDia(
         state.aniversariantes,
     );
@@ -78,16 +73,28 @@ const setMesInfo = (
     };
 };
 
+const setIdFamilia = (
+    state: AniversariantesState,
+    action: AniversariantesAction,
+) => {
+    return {
+        ...state,
+        idFamilia: action.idFamilia,
+    };
+};
+
 const reducer = (state = initState, action: AniversariantesAction) => {
     switch (action.type) {
         case actionTypes.SET_ANIVERSARIANTES:
             return setAniversariantes(state, action);
         case actionTypes.SET_ANIVERSARIANTES_MES:
-            return setAniversariantesMes(state, action);
+            return setAniversariantesMes(state);
         case actionTypes.SET_ANIVERSARIANTES_DIA:
-            return setAniversariantesDia(state, action);
+            return setAniversariantesDia(state);
         case actionTypes.SET_MES_INFO:
             return setMesInfo(state, action);
+        case actionTypes.SET_ID_FAMILIA:
+            return setIdFamilia(state, action);
         default:
             return state;
     }
