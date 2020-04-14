@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import Layout from '../components/layout';
+import Alerta from '../components/alerta';
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -22,18 +23,23 @@ const useStyles = makeStyles(theme => ({
 
 const Login: React.FC = () => {
     const classes = useStyles();
+    const idsFamilia = ['ooQKFaqwblGMPNq0AUML', 'zRMPmD0qcvFufmu2Cmfz'];
 
     const [idFamilia, setIdFamilia] = useState('');
+    const [erro, setErro] = useState(false);
 
     const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIdFamilia(event.target.value);
+        setErro(false);
     };
 
     const onSubmitHandler = (event: React.FormEvent) => {
         event.preventDefault();
-        alert(idFamilia);
-
-        navigate('/');
+        if (idsFamilia.indexOf(idFamilia) < 0) {
+            setErro(true);
+        } else {
+            navigate('/');
+        }
     };
 
     return (
@@ -45,6 +51,7 @@ const Login: React.FC = () => {
             >
                 <TextField
                     className={classes.input}
+                    error={erro}
                     required
                     id="id-familia"
                     label="Código da Família"
@@ -56,6 +63,9 @@ const Login: React.FC = () => {
                 <Button variant="contained" color="secondary" type="submit">
                     Entrar
                 </Button>
+                {erro ? (
+                    <Alerta severity="error" text="Código inexistente" />
+                ) : null}
             </form>
         </Layout>
     );
