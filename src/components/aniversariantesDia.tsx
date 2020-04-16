@@ -28,7 +28,8 @@ const AniversariantesDia: React.FC = () => {
     const classes = useStyles();
 
     const aniversariantesDia = useSelector(
-        (state: AniversariantesState) => state.aniversariantesDia,
+        (state: AniversariantesState) =>
+            state.aniversariantes.aniversariantesDia,
     );
 
     const quantidadeAniversariantes = aniversariantesDia.length;

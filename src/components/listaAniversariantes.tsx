@@ -25,7 +25,8 @@ const useStyles = makeStyles(theme => ({
 const ListaAniversariantes: React.FC = () => {
     const classes = useStyles();
     const aniversariantes = useSelector(
-        (state: AniversariantesState) => state.aniversariantesMes,
+        (state: AniversariantesState) =>
+            state.aniversariantes.aniversariantesMes,
     );
 
     const imprimeListaVazia = (): JSX.Element => (

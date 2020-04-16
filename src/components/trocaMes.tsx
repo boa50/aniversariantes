@@ -24,7 +24,9 @@ const TrocaMes: React.FC = () => {
     let eventNulo: React.ChangeEvent<unknown>;
     const dispatch = useDispatch();
 
-    const mes = useSelector((state: AniversariantesState) => state.mes);
+    const mes = useSelector(
+        (state: AniversariantesState) => state.aniversariantes.mes,
+    );
     const onSetMes = (mes: number) => dispatch(setMesInfo(mes));
 
     const changeHandler = (

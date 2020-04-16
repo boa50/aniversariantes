@@ -1,20 +1,46 @@
 import * as actionTypes from '../actions/actionsTypes';
-import { AniversariantesState } from '../../models/AniversariantesState';
+import { AniversariantesStateReducer } from '../../models/AniversariantesState';
 import { AniversariantesAction } from '../../models/AniversariantesAction';
 import AniversariantesUtils from '../../utils/aniversariantesUtils';
 import DateUtils from '../../utils/dateUtils';
 
-const initState: AniversariantesState = {
+const initState: AniversariantesStateReducer = {
     aniversariantes: [],
     aniversariantesMes: [],
     aniversariantesDia: [],
     mes: DateUtils.getMesAtual(),
-    loading: true,
-    idFamilia: '',
+    loading: false,
+    error: '',
 };
 
-const setAniversariantes = (
-    state: AniversariantesState,
+const setMesInfo = (
+    state: AniversariantesStateReducer,
+    action: AniversariantesAction,
+) => {
+    const aniversariantesMes = AniversariantesUtils.getAniversariantesMes(
+        state.aniversariantes,
+        action.mes,
+    );
+
+    return {
+        ...state,
+        aniversariantesMes,
+        mes: action.mes,
+    };
+};
+
+const fetchAniversariantesStart = (state: AniversariantesStateReducer) => {
+    return {
+        ...state,
+        aniversariantes: [],
+        aniversariantesMes: [],
+        aniversariantesDia: [],
+        loading: true,
+    };
+};
+
+const fetchAniversariantesSuccess = (
+    state: AniversariantesStateReducer,
     action: AniversariantesAction,
 ) => {
     const aniversariantesMes = AniversariantesUtils.getAniversariantesMes(
@@ -34,67 +60,27 @@ const setAniversariantes = (
     };
 };
 
-const setAniversariantesMes = (state: AniversariantesState) => {
-    const aniversariantesMes = AniversariantesUtils.getAniversariantesMes(
-        state.aniversariantes,
-        state.mes,
-    );
-
-    return {
-        ...state,
-        aniversariantesMes,
-    };
-};
-
-const setAniversariantesDia = (state: AniversariantesState) => {
-    const aniversariantesDia = AniversariantesUtils.getAniversariantesDia(
-        state.aniversariantes,
-    );
-
-    return {
-        ...state,
-        aniversariantesDia,
-    };
-};
-
-const setMesInfo = (
-    state: AniversariantesState,
-    action: AniversariantesAction,
-) => {
-    const aniversariantesMes = AniversariantesUtils.getAniversariantesMes(
-        state.aniversariantes,
-        action.mes,
-    );
-
-    return {
-        ...state,
-        aniversariantesMes,
-        mes: action.mes,
-    };
-};
-
-const setIdFamilia = (
-    state: AniversariantesState,
+const fetchAniversariantesFail = (
+    state: AniversariantesStateReducer,
     action: AniversariantesAction,
 ) => {
     return {
         ...state,
-        idFamilia: action.idFamilia,
+        error: action.error,
+        loading: false,
     };
 };
 
 const reducer = (state = initState, action: AniversariantesAction) => {
     switch (action.type) {
-        case actionTypes.SET_ANIVERSARIANTES:
-            return setAniversariantes(state, action);
-        case actionTypes.SET_ANIVERSARIANTES_MES:
-            return setAniversariantesMes(state);
-        case actionTypes.SET_ANIVERSARIANTES_DIA:
-            return setAniversariantesDia(state);
         case actionTypes.SET_MES_INFO:
             return setMesInfo(state, action);
-        case actionTypes.SET_ID_FAMILIA:
-            return setIdFamilia(state, action);
+        case actionTypes.FETCH_ANIVERSARIANTES_START:
+            return fetchAniversariantesStart(state);
+        case actionTypes.FETCH_ANIVERSARIANTES_SUCCESS:
+            return fetchAniversariantesSuccess(state, action);
+        case actionTypes.FETCH_ANIVERSARIANTES_FAIL:
+            return fetchAniversariantesFail(state, action);
         default:
             return state;
     }

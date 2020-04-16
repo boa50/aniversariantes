@@ -5,4 +5,5 @@ export type AniversariantesAction = {
     aniversariantes: Aniversariante[];
     mes: number;
     idFamilia: string;
+    error: string;
 };

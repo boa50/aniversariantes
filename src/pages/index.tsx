@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { navigate } from 'gatsby';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -7,9 +8,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Box from '@material-ui/core/Box';
 
 import { AniversariantesState } from '../models/AniversariantesState';
+import { AuthState } from '../models/AuthState';
 import DateUtils from '../utils/dateUtils';
 
-import { initAniversariantes } from '../store/actions/aniversariantes';
+import { initAniversariantes, checkIdFamilia } from '../store/actions';
 
 import ListaAniversariantes from '../components/listaAniversariantes';
 import TrocaMes from '../components/trocaMes';
@@ -34,20 +36,32 @@ const App: React.FC = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const mes = useSelector((state: AniversariantesState) => state.mes);
-    const loading = useSelector((state: AniversariantesState) => state.loading);
-    const idFamilia = useSelector(
-        (state: AniversariantesState) => state.idFamilia,
+    const mes = useSelector(
+        (state: AniversariantesState) => state.aniversariantes.mes,
     );
+    const aniversariantesLoading = useSelector(
+        (state: AniversariantesState) => state.aniversariantes.loading,
+    );
+    const authLoading = useSelector((state: AuthState) => state.auth.loading);
+    const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
 
+    const onCheckIdFamilia = useCallback(() => dispatch(checkIdFamilia()), []);
     const onInitAniversariantes = useCallback(
-        () => dispatch(initAniversariantes(idFamilia)),
+        (idFamilia: string) => dispatch(initAniversariantes(idFamilia)),
         [],
     );
 
     useEffect(() => {
-        onInitAniversariantes();
-    }, [onInitAniversariantes]);
+        onCheckIdFamilia();
+    }, [onCheckIdFamilia]);
+
+    useEffect(() => {
+        if (!authLoading && !idFamilia) {
+            navigate('/login');
+        } else if (!authLoading && idFamilia) {
+            onInitAniversariantes(idFamilia);
+        }
+    }, [idFamilia, authLoading, onInitAniversariantes]);
 
     let conteudo = (
         <Box className={classes.circularProgress}>
@@ -55,7 +69,7 @@ const App: React.FC = () => {
         </Box>
     );
 
-    if (!loading) {
+    if (!aniversariantesLoading && !authLoading && idFamilia) {
         conteudo = (
             <Box>
                 <Typography

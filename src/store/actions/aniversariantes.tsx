@@ -8,25 +8,6 @@ export const initAniversariantes = (idFamilia: string) => {
     };
 };
 
-export const setAniversariantes = (aniversariantes: Aniversariante[]) => {
-    return {
-        type: actionTypes.SET_ANIVERSARIANTES,
-        aniversariantes,
-    };
-};
-
-export const setAniversariantesMes = () => {
-    return {
-        type: actionTypes.SET_ANIVERSARIANTES_MES,
-    };
-};
-
-export const setAniversariantesDia = () => {
-    return {
-        type: actionTypes.SET_ANIVERSARIANTES_DIA,
-    };
-};
-
 export const setMesInfo = (mes: number) => {
     return {
         type: actionTypes.SET_MES_INFO,
@@ -34,9 +15,24 @@ export const setMesInfo = (mes: number) => {
     };
 };
 
-export const setIdFamilia = (idFamilia: string) => {
+export const fetchAniversariantesStart = () => {
     return {
-        type: actionTypes.SET_ID_FAMILIA,
-        idFamilia,
+        type: actionTypes.FETCH_ANIVERSARIANTES_START,
+    };
+};
+
+export const fetchAniversariantesSuccess = (
+    aniversariantes: Aniversariante[],
+) => {
+    return {
+        type: actionTypes.FETCH_ANIVERSARIANTES_SUCCESS,
+        aniversariantes,
+    };
+};
+
+export const fetchAniversariantesFail = (error: string) => {
+    return {
+        type: actionTypes.FETCH_ANIVERSARIANTES_FAIL,
+        error,
     };
 };

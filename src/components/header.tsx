@@ -34,9 +34,12 @@ const Header: React.FC = () => {
     const isSSR = typeof window === 'undefined';
 
     const aniversariantes = useSelector(
-        (state: AniversariantesState) => state.aniversariantesMes,
+        (state: AniversariantesState) =>
+            state.aniversariantes.aniversariantesMes,
     );
-    const mes = useSelector((state: AniversariantesState) => state.mes);
+    const mes = useSelector(
+        (state: AniversariantesState) => state.aniversariantes.mes,
+    );
 
     const shareParams = {
         text: AniversariantesUtils.getAniversariantesShare(
