@@ -1,5 +1,4 @@
-import React, { Suspense } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
 import { Link } from 'gatsby';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,14 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CakeIcon from '@material-ui/icons/Cake';
 
-import { AniversariantesState } from '../models/AniversariantesState';
-import AniversariantesUtils from '../utils/aniversariantesUtils';
-
 import LogoutButton from './logoutButton';
-
-const ShareButton = React.lazy(() => {
-    return import('../components/shareButton');
-});
+import ShareAniversariantesButton from './shareAniversariantesButton';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -24,6 +17,9 @@ const useStyles = makeStyles(theme => ({
     },
     menuButton: {
         marginRight: theme.spacing(2),
+    },
+    shareButton: {
+        marginRight: theme.spacing(1),
     },
     title: {
         flexGrow: 1,
@@ -33,22 +29,6 @@ const useStyles = makeStyles(theme => ({
 
 const Header: React.FC = () => {
     const classes = useStyles();
-    const isSSR = typeof window === 'undefined';
-
-    const aniversariantes = useSelector(
-        (state: AniversariantesState) =>
-            state.aniversariantes.aniversariantesMes,
-    );
-    const mes = useSelector(
-        (state: AniversariantesState) => state.aniversariantes.mes,
-    );
-
-    const shareParams = {
-        text: AniversariantesUtils.getAniversariantesShare(
-            aniversariantes,
-            mes,
-        ),
-    };
 
     return (
         <div className={classes.root}>
@@ -72,16 +52,10 @@ const Header: React.FC = () => {
                     >
                         Aniversariantes
                     </Typography>
+                    <ShareAniversariantesButton
+                        className={classes.shareButton}
+                    />
                     <LogoutButton />
-                    {!isSSR && (
-                        <Suspense fallback={<div />}>
-                            <ShareButton
-                                config={{
-                                    params: shareParams,
-                                }}
-                            />
-                        </Suspense>
-                    )}
                 </Toolbar>
             </AppBar>
             <div className={classes.offset} />

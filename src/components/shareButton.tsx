@@ -6,7 +6,12 @@ import ShareIcon from '@material-ui/icons/Share';
 
 const ShareButton: React.FC<WebShareInterface> = ({ share, isSupported }) =>
     isSupported ? (
-        <IconButton edge="end" color="inherit" onClick={share}>
+        <IconButton
+            edge="end"
+            color="inherit"
+            onClick={share}
+            aria-label="share"
+        >
             <ShareIcon />
         </IconButton>
     ) : null;
