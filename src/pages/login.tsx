@@ -31,6 +31,7 @@ const Login: React.FC = () => {
     const dispatch = useDispatch();
 
     const [idFamiliaLocal, setIdFamiliaLocal] = useState('');
+    const [alertStyle, setAlertStyle] = useState(false);
 
     const loading = useSelector((state: AuthState) => state.auth.idFamilia);
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
@@ -51,14 +52,17 @@ const Login: React.FC = () => {
 
     const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIdFamiliaLocal(event.target.value);
+        setAlertStyle(false);
     };
 
     const onSubmitHandler = (event: React.FormEvent) => {
         event.preventDefault();
+        setAlertStyle(true);
         onInitAuth();
     };
 
     let conteudo = <div />;
+    let errorShow = erro.length > 0 && alertStyle;
 
     if (!loading && !idFamilia) {
         conteudo = (
@@ -69,7 +73,7 @@ const Login: React.FC = () => {
             >
                 <TextField
                     className={classes.input}
-                    error={erro ? true : false}
+                    error={errorShow}
                     required
                     id="id-familia"
                     label="Código da Família"
@@ -81,7 +85,7 @@ const Login: React.FC = () => {
                 <Button variant="contained" color="secondary" type="submit">
                     Entrar
                 </Button>
-                {erro ? <Alerta severity="error" text={erro} /> : null}
+                {errorShow ? <Alerta severity="error" text={erro} /> : null}
             </form>
         );
     }
