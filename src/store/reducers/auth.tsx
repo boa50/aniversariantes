@@ -3,7 +3,7 @@ import { AuthStateReducer } from '../../models/AuthState';
 import { AuthAction } from '../../models/AuthAction';
 
 const initState: AuthStateReducer = {
-    loading: true,
+    loading: false,
     idFamilia: '',
     error: '',
 };
@@ -33,6 +33,13 @@ const authFail = (state: AuthStateReducer, action: AuthAction) => {
     };
 };
 
+const logoutComplete = (state: AuthStateReducer) => {
+    return {
+        ...state,
+        idFamilia: '',
+    };
+};
+
 const reducer = (state = initState, action: AuthAction) => {
     switch (action.type) {
         case actionTypes.AUTH_START:
@@ -41,6 +48,8 @@ const reducer = (state = initState, action: AuthAction) => {
             return authSuccess(state, action);
         case actionTypes.AUTH_FAIL:
             return authFail(state, action);
+        case actionTypes.LOGOUT_COMPLETE:
+            return logoutComplete(state);
         default:
             return state;
     }

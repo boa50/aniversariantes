@@ -9,3 +9,5 @@ export const AUTH_START = 'AUTH_START';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
 export const AUTH_FAIL = 'AUTH_FAIL';
 export const CHECK_ID_FAMILIA = 'CHECK_ID_FAMILIA';
+export const INIT_LOGOUT = 'INIT_LOGOUT';
+export const LOGOUT_COMPLETE = 'AUTH_LOGOUT_COMPLETE';

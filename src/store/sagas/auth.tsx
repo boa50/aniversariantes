@@ -26,3 +26,9 @@ export function* checkIdFamiliaSaga() {
         yield put(actions.authFail(''));
     }
 }
+
+export function* initLogoutSaga() {
+    localStorage.removeItem('idFamilia');
+
+    yield put(actions.logoutComplete());
+}

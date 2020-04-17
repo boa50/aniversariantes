@@ -12,6 +12,8 @@ import CakeIcon from '@material-ui/icons/Cake';
 import { AniversariantesState } from '../models/AniversariantesState';
 import AniversariantesUtils from '../utils/aniversariantesUtils';
 
+import LogoutButton from './logoutButton';
+
 const ShareButton = React.lazy(() => {
     return import('../components/shareButton');
 });
@@ -70,6 +72,7 @@ const Header: React.FC = () => {
                     >
                         Aniversariantes
                     </Typography>
+                    <LogoutButton />
                     {!isSSR && (
                         <Suspense fallback={<div />}>
                             <ShareButton

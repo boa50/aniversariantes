@@ -10,7 +10,6 @@ type Props = {
 
 const Alerta: React.FC<Props> = ({ severity, text }) => {
     const [open, setOpen] = useState(true);
-    console.log(open);
 
     const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
         if (reason === 'clickaway') {

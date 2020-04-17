@@ -32,3 +32,15 @@ export const checkIdFamilia = () => {
         type: actionTypes.CHECK_ID_FAMILIA,
     };
 };
+
+export const initLogout = () => {
+    return {
+        type: actionTypes.INIT_LOGOUT,
+    };
+};
+
+export const logoutComplete = () => {
+    return {
+        type: actionTypes.LOGOUT_COMPLETE,
+    };
+};
