@@ -5,5 +5,6 @@ export type AuthState = {
 export type AuthStateReducer = {
     loading: boolean;
     idFamilia: string;
+    familiaNome: string;
     error: string;
 };

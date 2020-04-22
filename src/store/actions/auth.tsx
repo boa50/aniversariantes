@@ -13,10 +13,11 @@ export const authStart = () => {
     };
 };
 
-export const authSuccess = (idFamilia: string) => {
+export const authSuccess = (idFamilia: string, familiaNome: string) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
         idFamilia,
+        familiaNome,
     };
 };
 

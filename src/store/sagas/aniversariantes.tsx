@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../axios';
 import { put } from 'redux-saga/effects';
 import { AniversariantesAction } from '../../models/AniversariantesAction';
 import * as actions from '../actions';
@@ -6,8 +6,7 @@ import * as actions from '../actions';
 export function* initAniversariantesSaga(action: AniversariantesAction) {
     yield put(actions.fetchAniversariantesStart());
 
-    const baseUrl = 'https://firestore.googleapis.com/v1/projects';
-    const url = `${baseUrl}/${process.env.PROJECT}/databases/(default)/documents/familias/${action.idFamilia}/aniversariantes?pageSize=200`;
+    const url = `${action.idFamilia}/aniversariantes?pageSize=200`;
 
     try {
         const response = yield axios.get(url);

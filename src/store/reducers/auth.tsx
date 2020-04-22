@@ -5,6 +5,7 @@ import { AuthAction } from '../../models/AuthAction';
 const initState: AuthStateReducer = {
     loading: false,
     idFamilia: '',
+    familiaNome: '',
     error: '',
 };
 
@@ -12,6 +13,7 @@ const authStart = (state: AuthStateReducer) => {
     return {
         ...state,
         idFamilia: '',
+        familiaNome: '',
         error: '',
         loading: true,
     };
@@ -21,6 +23,7 @@ const authSuccess = (state: AuthStateReducer, action: AuthAction) => {
     return {
         ...state,
         idFamilia: action.idFamilia,
+        familiaNome: action.familiaNome,
         loading: false,
     };
 };
@@ -37,6 +40,7 @@ const logoutComplete = (state: AuthStateReducer) => {
     return {
         ...state,
         idFamilia: '',
+        familiaNome: '',
     };
 };
 
