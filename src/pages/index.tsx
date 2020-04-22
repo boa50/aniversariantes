@@ -56,10 +56,12 @@ const App: React.FC = () => {
     }, [onCheckIdFamilia]);
 
     useEffect(() => {
-        if (!authLoading && !idFamilia) {
-            navigate('/login');
-        } else if (!authLoading && idFamilia) {
-            onInitAniversariantes(idFamilia);
+        if (!authLoading) {
+            if (!idFamilia) {
+                navigate('/login');
+            } else if (idFamilia) {
+                onInitAniversariantes(idFamilia);
+            }
         }
     }, [idFamilia, authLoading, onInitAniversariantes]);
 

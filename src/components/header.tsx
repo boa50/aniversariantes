@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CakeIcon from '@material-ui/icons/Cake';
 
 import { AuthState } from '../models/AuthState';
+import { AniversariantesState } from '../models/AniversariantesState';
 
 import LogoutButton from './logoutButton';
 import ShareAniversariantesButton from './shareAniversariantesButton';
@@ -36,6 +37,9 @@ const Header: React.FC = () => {
     const familiaNome = useSelector(
         (state: AuthState) => state.auth.familiaNome,
     );
+    const loading = useSelector(
+        (state: AniversariantesState) => state.aniversariantes.loading,
+    );
 
     return (
         <div className={classes.root}>
@@ -58,7 +62,9 @@ const Header: React.FC = () => {
                         data-testid="header-texto"
                     >
                         Aniversariantes
-                        {familiaNome ? ' - Família ' + familiaNome : null}
+                        {!loading && familiaNome
+                            ? ' - Família ' + familiaNome
+                            : null}
                     </Typography>
                     <ShareAniversariantesButton
                         className={classes.shareButton}

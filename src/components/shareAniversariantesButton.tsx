@@ -17,7 +17,10 @@ const ShareAniversariantesButton: React.FC<Props> = ({ className }) => {
     const isSSR = typeof window === 'undefined';
 
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
-    const exibeBotao = idFamilia.length > 0;
+    const loading = useSelector(
+        (state: AniversariantesState) => state.aniversariantes.loading,
+    );
+    const exibeBotao = !loading && idFamilia.length > 0;
 
     const aniversariantes = useSelector(
         (state: AniversariantesState) =>

@@ -6,13 +6,17 @@ import IconButton from '@material-ui/core/IconButton';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import { AuthState } from '../models/AuthState';
+import { AniversariantesState } from '../models/AniversariantesState';
 import { initLogout } from '../store/actions';
 
 const LogoutButton: React.FC = () => {
     const dispatch = useDispatch();
 
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
-    const exibeBotao = idFamilia.length > 0;
+    const loading = useSelector(
+        (state: AniversariantesState) => state.aniversariantes.loading,
+    );
+    const exibeBotao = !loading && idFamilia.length > 0;
 
     const onInitLogout = () => dispatch(initLogout());
 
