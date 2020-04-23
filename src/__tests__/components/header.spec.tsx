@@ -10,7 +10,10 @@ describe('Header component', () => {
     let store, state;
 
     test('verifica se a renderização foi feita de maneira correta', () => {
-        state = {};
+        state = {
+            auth: { familiaNome: 'mock', idFamilia: 'mock' },
+            aniversariantes: { loading: false },
+        };
         store = mockStore(state);
 
         const { getByTestId } = render(

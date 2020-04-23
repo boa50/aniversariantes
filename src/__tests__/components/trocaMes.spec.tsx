@@ -10,7 +10,7 @@ import reducer from '../../store/reducers/aniversariantes';
 import TrocaMes from '../../components/trocaMes';
 
 describe('TrocaMes component', () => {
-    const state = {};
+    const state = { aniversariantes: { mes: 10 } };
     const mockStore = configureStore();
     let store;
 

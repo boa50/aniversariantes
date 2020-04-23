@@ -33,13 +33,19 @@ jest.mock('../../components/listaAniversariantes', () => {
     return () => <div data-testid="ListaAniversariantesMock"></div>;
 });
 
-describe('App page', () => {
+describe('Index page', () => {
     const mockMesNumero = 10;
     const mockMesTexto = 'Outubro';
     const mockStore = configureStore();
 
     test('verifica se a renderização foi feita de maneira correta', () => {
-        const state = { mes: mockMesNumero, loading: false };
+        const state = {
+            aniversariantes: {
+                mes: mockMesNumero,
+                loading: false,
+            },
+            auth: { loading: false, idFamilia: 'mock' },
+        };
         const store = mockStore(state);
 
         const { getByTestId } = render(
@@ -65,7 +71,10 @@ describe('App page', () => {
     });
 
     test('verifica se carrega o icone de loading', () => {
-        const state = { loading: true };
+        const state = {
+            aniversariantes: { loading: true, mes: 10 },
+            auth: { loading: false, idFamilia: 'mock' },
+        };
         const store = mockStore(state);
 
         const { getByTestId } = render(
