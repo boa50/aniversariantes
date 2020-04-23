@@ -11,19 +11,28 @@ const trataErroMensagem = (error: any) => {
     }
 };
 
+function* getFamiliaNome(idFamilia: string) {
+    try {
+        const response = yield axios.get(idFamilia);
+        const familiaNome = response.data.fields.nome.stringValue;
+
+        return familiaNome;
+    } catch (error) {
+        let mensagem = trataErroMensagem(error);
+        yield put(actions.authFail(mensagem));
+        throw error;
+    }
+}
+
 export function* initAuthSaga(action: AuthAction) {
     yield put(actions.authStart());
 
     try {
-        const response = yield axios.get(action.idFamilia);
-        const familiaNome = response.data.fields.nome.stringValue;
+        const familiaNome = yield getFamiliaNome(action.idFamilia);
 
         yield localStorage.setItem('idFamilia', action.idFamilia);
         yield put(actions.authSuccess(action.idFamilia, familiaNome));
-    } catch (error) {
-        let mensagem = trataErroMensagem(error);
-        yield put(actions.authFail(mensagem));
-    }
+    } catch (error) {}
 }
 
 export function* checkIdFamiliaSaga() {
@@ -32,14 +41,10 @@ export function* checkIdFamiliaSaga() {
 
     if (idFamilia) {
         try {
-            const response = yield axios.get(idFamilia);
-            const familiaNome = response.data.fields.nome.stringValue;
+            const familiaNome = yield getFamiliaNome(idFamilia);
 
             yield put(actions.authSuccess(idFamilia, familiaNome));
-        } catch (error) {
-            let mensagem = trataErroMensagem(error);
-            yield put(actions.authFail(mensagem));
-        }
+        } catch (error) {}
     } else {
         yield put(actions.authFail(''));
     }
