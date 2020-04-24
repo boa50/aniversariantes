@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { useMediaQuery } from 'react-responsive';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import { AniversariantesState } from '../models/AniversariantesState';
 
@@ -20,7 +20,8 @@ const useStyles = makeStyles(theme => ({
 
 const TrocaMes: React.FC = () => {
     const classes = useStyles();
-    const isBigScreen = useMediaQuery({ minWidth: 550 });
+    const theme = useTheme();
+    const isBigScreen = useMediaQuery(theme.breakpoints.up('sm'));
     let eventNulo: React.ChangeEvent<unknown>;
     const dispatch = useDispatch();
 
