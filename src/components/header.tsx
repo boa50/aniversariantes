@@ -13,8 +13,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { AuthState } from '../models/AuthState';
 import { AniversariantesState } from '../models/AniversariantesState';
 
-import LogoutButton from './logoutButton';
-import ShareAniversariantesButton from './shareAniversariantesButton';
+import MenuAcoes from './menuAcoes';
 
 const useStyles = makeStyles(theme => {
     return {
@@ -29,9 +28,6 @@ const useStyles = makeStyles(theme => {
                 marginRight: theme.spacing(2),
             },
         },
-        shareButton: {
-            marginRight: theme.spacing(1),
-        },
         title: {
             flexGrow: 1,
             [theme.breakpoints.down('sm')]: {
@@ -45,7 +41,7 @@ const useStyles = makeStyles(theme => {
 const Header: React.FC = () => {
     const classes = useStyles();
     const theme = useTheme();
-    const isBigScreen = useMediaQuery(theme.breakpoints.up('sm'));
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const familiaNome = useSelector(
         (state: AuthState) => state.auth.familiaNome,
@@ -70,7 +66,7 @@ const Header: React.FC = () => {
                         </IconButton>
                     </Link>
                     <Typography
-                        variant={isBigScreen ? 'h6' : 'subtitle1'}
+                        variant={isMobile ? 'subtitle1' : 'h6'}
                         component="h1"
                         className={classes.title}
                         data-testid="header-texto"
@@ -80,10 +76,7 @@ const Header: React.FC = () => {
                             ? ' - Família ' + familiaNome
                             : null}
                     </Typography>
-                    <ShareAniversariantesButton
-                        className={classes.shareButton}
-                    />
-                    <LogoutButton />
+                    <MenuAcoes isMobile={isMobile} />
                 </Toolbar>
             </AppBar>
             <div className={classes.offset} />

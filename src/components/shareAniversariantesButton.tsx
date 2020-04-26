@@ -9,11 +9,7 @@ const ShareButton = React.lazy(() => {
     return import('../components/shareButton');
 });
 
-type Props = {
-    className?: string;
-};
-
-const ShareAniversariantesButton: React.FC<Props> = ({ className }) => {
+const ShareAniversariantesButton: React.FC = () => {
     const isSSR = typeof window === 'undefined';
 
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
@@ -39,13 +35,11 @@ const ShareAniversariantesButton: React.FC<Props> = ({ className }) => {
 
     return exibeBotao && !isSSR ? (
         <Suspense fallback={<div />}>
-            <div className={className}>
-                <ShareButton
-                    config={{
-                        params: shareParams,
-                    }}
-                />
-            </div>
+            <ShareButton
+                config={{
+                    params: shareParams,
+                }}
+            />
         </Suspense>
     ) : null;
 };
