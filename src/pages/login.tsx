@@ -33,7 +33,7 @@ const Login: React.FC = () => {
     const [idFamiliaLocal, setIdFamiliaLocal] = useState('');
     const [alertStyle, setAlertStyle] = useState(false);
 
-    const loading = useSelector((state: AuthState) => state.auth.idFamilia);
+    const loading = useSelector((state: AuthState) => state.auth.loading);
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
     const erro = useSelector((state: AuthState) => state.auth.error);
 
@@ -41,7 +41,9 @@ const Login: React.FC = () => {
     const onCheckIdFamilia = useCallback(() => dispatch(checkIdFamilia()), []);
 
     useEffect(() => {
-        onCheckIdFamilia();
+        if (!idFamilia) {
+            onCheckIdFamilia();
+        }
     }, [onCheckIdFamilia]);
 
     useEffect(() => {

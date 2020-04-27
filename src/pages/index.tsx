@@ -52,7 +52,9 @@ const App: React.FC = () => {
     );
 
     useEffect(() => {
-        onCheckIdFamilia();
+        if (!idFamilia) {
+            onCheckIdFamilia();
+        }
     }, [onCheckIdFamilia]);
 
     useEffect(() => {

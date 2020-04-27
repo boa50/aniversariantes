@@ -9,7 +9,7 @@ const initState: AniversariantesStateReducer = {
     aniversariantesMes: [],
     aniversariantesDia: [],
     mes: DateUtils.getMesAtual(),
-    loading: false,
+    loading: true,
     error: '',
 };
 
