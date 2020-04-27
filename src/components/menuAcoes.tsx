@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import webShare, { WebShareInterface } from 'react-web-share-api';
 
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
@@ -16,6 +17,16 @@ type Props = {
     isMobile?: boolean;
 };
 
+let showShare = false;
+const HandleShareShow: React.FC<WebShareInterface> = ({ isSupported }) => {
+    if (isSupported) {
+        showShare = true;
+    }
+    return null;
+};
+
+const CheckShare = webShare()(HandleShareShow);
+
 const MenuAcoes: React.FC<Props> = ({ isMobile }) => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -23,6 +34,7 @@ const MenuAcoes: React.FC<Props> = ({ isMobile }) => {
     const loading = useSelector(
         (state: AniversariantesState) => state.aniversariantes.loading,
     );
+
     const exibeMenu = !loading && idFamilia.length > 0;
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -37,6 +49,7 @@ const MenuAcoes: React.FC<Props> = ({ isMobile }) => {
     if (isMobile && exibeMenu) {
         conteudo = (
             <div>
+                <CheckShare />
                 <IconButton
                     aria-label="more"
                     aria-controls="long-menu"
@@ -52,9 +65,16 @@ const MenuAcoes: React.FC<Props> = ({ isMobile }) => {
                     open={open}
                     onClose={handleClose}
                 >
-                    <MenuItem key="share" color="inherit" aria-label="share">
-                        <ShareAniversariantesButton />
-                    </MenuItem>
+                    {showShare ? (
+                        <MenuItem
+                            key="share"
+                            color="inherit"
+                            aria-label="share"
+                        >
+                            <ShareAniversariantesButton />
+                        </MenuItem>
+                    ) : null}
+
                     <MenuItem key="logout" color="inherit" aria-label="logout">
                         <LogoutButton isMobile />
                     </MenuItem>
