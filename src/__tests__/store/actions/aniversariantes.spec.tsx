@@ -3,48 +3,24 @@ import * as actionsTypes from '../../../store/actions/actionsTypes';
 
 describe('AniversariantesActions', () => {
     it('cria a action para initAniversariantes', () => {
+        const mockIdFamilia = 'mockIdFamilia';
         const expectedAction = {
             type: actionsTypes.INIT_ANIVERSARIANTES,
+            idFamilia: mockIdFamilia,
         };
 
-        expect(actions.initAniversariantes()).toEqual(expectedAction);
-    });
-
-    it('cria a action para setAniversariantes', () => {
-        const expectedAction = {
-            type: actionsTypes.SET_ANIVERSARIANTES,
-            aniversariantes: [{ pessoa: 'joãozinho', mes: '10', dia: '22' }],
-        };
-
-        expect(
-            actions.setAniversariantes([
-                { pessoa: 'joãozinho', mes: '10', dia: '22' },
-            ]),
-        ).toEqual(expectedAction);
-    });
-
-    it('cria a action para setAniversariantesMes', () => {
-        const expectedAction = {
-            type: actionsTypes.SET_ANIVERSARIANTES_MES,
-        };
-
-        expect(actions.setAniversariantesMes()).toEqual(expectedAction);
-    });
-
-    it('cria a action para setAniversariantesDia', () => {
-        const expectedAction = {
-            type: actionsTypes.SET_ANIVERSARIANTES_DIA,
-        };
-
-        expect(actions.setAniversariantesDia()).toEqual(expectedAction);
+        expect(actions.initAniversariantes(mockIdFamilia)).toEqual(
+            expectedAction,
+        );
     });
 
     it('cria a action para setMesInfo', () => {
+        const mockMes = 10;
         const expectedAction = {
             type: actionsTypes.SET_MES_INFO,
-            mes: 10,
+            mes: mockMes,
         };
 
-        expect(actions.setMesInfo(10)).toEqual(expectedAction);
+        expect(actions.setMesInfo(mockMes)).toEqual(expectedAction);
     });
 });

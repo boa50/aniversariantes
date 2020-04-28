@@ -1,8 +1,12 @@
 import { runSaga } from 'redux-saga';
-import axios from 'axios';
+import axios from '../../../axios';
 import { AniversariantesAction } from '../../../models/AniversariantesAction';
 import { initAniversariantesSaga } from '../../../store/sagas/aniversariantes';
-import { setAniversariantes } from '../../../store/actions/aniversariantes';
+import {
+    fetchAniversariantesStart,
+    fetchAniversariantesSuccess,
+    fetchAniversariantesFail,
+} from '../../../store/actions';
 
 let aniversariantesMock = [
     {
@@ -17,6 +21,7 @@ const actionMock: AniversariantesAction = {
     aniversariantes: [],
     mes: 0,
     idFamilia: '',
+    error: '',
 };
 
 let responseMock = {
@@ -55,17 +60,19 @@ describe('AniversariantesSaga', () => {
         );
 
         expect(fetchAniversariantes).toHaveBeenCalledTimes(1);
-        expect(dispatched).toContainEqual(
-            setAniversariantes(aniversariantesMock),
-        );
+        expect(dispatched).toEqual([
+            fetchAniversariantesStart(),
+            fetchAniversariantesSuccess(aniversariantesMock),
+        ]);
 
         fetchAniversariantes.mockClear();
     });
 
     test('verifica se deu erro na chamada da api', async () => {
+        const mockError = 'mockError';
         const fetchAniversariantes = jest
             .spyOn(axios, 'get')
-            .mockImplementation(() => Promise.reject());
+            .mockImplementation(() => Promise.reject(mockError));
 
         const dispatched: any = [];
         await runSaga(
@@ -77,6 +84,11 @@ describe('AniversariantesSaga', () => {
         );
 
         expect(fetchAniversariantes).toHaveBeenCalledTimes(1);
-        expect(dispatched).toEqual([]);
+        expect(dispatched).toEqual([
+            fetchAniversariantesStart(),
+            fetchAniversariantesFail(mockError),
+        ]);
+
+        fetchAniversariantes.mockClear();
     });
 });

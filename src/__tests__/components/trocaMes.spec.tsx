@@ -3,7 +3,6 @@ import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { createStore } from 'redux';
-import { Context as ResponsiveContext } from 'react-responsive';
 
 import reducer from '../../store/reducers/aniversariantes';
 
@@ -51,14 +50,22 @@ describe('TrocaMes component', () => {
 
     test('verifica a quantidade de meses apresentados no pagination em tela grande', () => {
         store = mockStore(state);
+        window.matchMedia = jest.fn().mockImplementation(query => {
+            return {
+                matches: true,
+                media: query,
+                onchange: null,
+                addListener: jest.fn(),
+                removeListener: jest.fn(),
+            };
+        });
 
         const { container, getByTestId } = render(
             <Provider store={store}>
-                <ResponsiveContext.Provider value={{ width: 550 }}>
-                    <TrocaMes />
-                </ResponsiveContext.Provider>
+                <TrocaMes />
             </Provider>,
         );
+
         const pagination = getByTestId('pagination-material-component');
 
         expect(pagination).toBeDefined();

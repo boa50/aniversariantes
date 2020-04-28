@@ -15,7 +15,7 @@ let initState: AniversariantesStateReducer = {
     aniversariantesMes: [],
     aniversariantesDia: [],
     mes: 10,
-    loading: false,
+    loading: true,
     error: '',
 };
 
