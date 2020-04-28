@@ -22,7 +22,6 @@ const useStyles = makeStyles(theme => {
         },
         div: {
             color: 'inherit',
-            textDecoration: 'none',
             alignItems: 'center',
             display: 'flex',
         },

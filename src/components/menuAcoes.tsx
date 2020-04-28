@@ -61,9 +61,11 @@ const MenuAcoes: React.FC<Props> = ({ isMobile }) => {
                 </IconButton>
                 <Menu
                     anchorEl={anchorEl}
-                    keepMounted
                     open={open}
                     onClose={handleClose}
+                    PaperProps={
+                        showShare ? { style: { minWidth: '22ch' } } : {}
+                    }
                 >
                     {showShare ? (
                         <MenuItem

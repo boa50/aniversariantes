@@ -12,24 +12,19 @@ const useStyles = makeStyles(theme => {
         },
         box: {
             color: 'inherit',
-            textDecoration: 'none',
             alignItems: 'center',
             display: 'flex',
         },
     };
 });
 
-const ShareButton: React.FC<WebShareInterface> = ({ share, isSupported }) => {
-    if (isSupported) {
-        const classes = useStyles();
+const ShareButton: React.FC<WebShareInterface> = ({ share }) => {
+    const classes = useStyles();
 
-        return (
-            <Box className={classes.box} onClick={share}>
-                <ShareIcon className={classes.shareIcon} /> {'Compartilhar'}
-            </Box>
-        );
-    } else {
-        return null;
-    }
+    return (
+        <Box className={classes.box} onClick={share}>
+            <ShareIcon className={classes.shareIcon} /> {'Compartilhar'}
+        </Box>
+    );
 };
 export default webShare()(ShareButton);
