@@ -8,7 +8,7 @@ import {
     fetchAniversariantesFail,
 } from '../../../store/actions';
 
-let aniversariantesMock = [
+const aniversariantesMock = [
     {
         pessoa: 'oi',
         mes: '1',
@@ -24,28 +24,27 @@ const actionMock: AniversariantesAction = {
     error: '',
 };
 
-let responseMock = {
-    data: {
-        documents: [
-            {
-                fields: {
-                    pessoa: {
-                        stringValue: aniversariantesMock[0].pessoa,
-                    },
-                    mes: {
-                        stringValue: aniversariantesMock[0].mes,
-                    },
-                    dia: {
-                        stringValue: aniversariantesMock[0].dia,
-                    },
-                },
-            },
-        ],
-    },
-};
-
 describe('AniversariantesSaga', () => {
     test('verifica se os actions foram chamados corretamente', async () => {
+        const responseMock = {
+            data: {
+                documents: [
+                    {
+                        fields: {
+                            pessoa: {
+                                stringValue: aniversariantesMock[0].pessoa,
+                            },
+                            mes: {
+                                stringValue: aniversariantesMock[0].mes,
+                            },
+                            dia: {
+                                stringValue: aniversariantesMock[0].dia,
+                            },
+                        },
+                    },
+                ],
+            },
+        };
         const fetchAniversariantes = jest
             .spyOn(axios, 'get')
             .mockImplementation(() => Promise.resolve(responseMock));

@@ -10,8 +10,9 @@ describe('Header component', () => {
     let store, state;
 
     test('verifica se a renderização foi feita de maneira correta', () => {
+        const mockFamiliaNome = 'mock';
         state = {
-            auth: { familiaNome: 'mock', idFamilia: 'mock' },
+            auth: { familiaNome: mockFamiliaNome, idFamilia: 'mock' },
             aniversariantes: { loading: false },
         };
         store = mockStore(state);
@@ -26,6 +27,25 @@ describe('Header component', () => {
         const logo = getByTestId('header-logo');
 
         expect(logo).toBeDefined();
-        expect(texto.textContent).toMatch(/Aniversariantes/);
+        expect(texto.textContent).toBe(
+            `Aniversariantes - Família ${mockFamiliaNome}`,
+        );
+    });
+
+    test('verifica a renderização sem login', () => {
+        state = {
+            auth: { familiaNome: '' },
+            aniversariantes: { loading: true },
+        };
+        store = mockStore(state);
+
+        const { getByTestId } = render(
+            <Provider store={store}>
+                <Header />
+            </Provider>,
+        );
+
+        const texto = getByTestId('header-texto');
+        expect(texto.textContent).toBe('Aniversariantes');
     });
 });

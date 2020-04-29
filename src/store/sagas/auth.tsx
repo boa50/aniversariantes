@@ -18,7 +18,7 @@ function* getFamiliaNome(idFamilia: string) {
 
         return familiaNome;
     } catch (error) {
-        let mensagem = trataErroMensagem(error);
+        const mensagem = trataErroMensagem(error);
         yield put(actions.authFail(mensagem));
         throw error;
     }

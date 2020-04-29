@@ -35,6 +35,7 @@ const fetchAniversariantesStart = (state: AniversariantesStateReducer) => {
         aniversariantes: [],
         aniversariantesMes: [],
         aniversariantesDia: [],
+        error: '',
         loading: true,
     };
 };
