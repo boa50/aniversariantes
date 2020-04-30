@@ -33,7 +33,6 @@ const Login: React.FC = () => {
     const [idFamiliaLocal, setIdFamiliaLocal] = useState('');
     const [alertStyle, setAlertStyle] = useState(false);
 
-    const loading = useSelector((state: AuthState) => state.auth.loading);
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
     const erro = useSelector((state: AuthState) => state.auth.error);
 
@@ -63,10 +62,10 @@ const Login: React.FC = () => {
         onInitAuth();
     };
 
-    let conteudo = <div />;
-    let errorShow = erro.length > 0 && alertStyle;
+    let conteudo;
+    const errorShow = erro.length > 0 && alertStyle;
 
-    if (!loading && !idFamilia) {
+    if (!idFamilia) {
         conteudo = (
             <form
                 className={classes.form}

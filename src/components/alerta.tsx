@@ -11,11 +11,7 @@ type Props = {
 const Alerta: React.FC<Props> = ({ severity, text }) => {
     const [open, setOpen] = useState(true);
 
-    const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
+    const handleClose = () => {
         setOpen(false);
     };
 
@@ -26,6 +22,7 @@ const Alerta: React.FC<Props> = ({ severity, text }) => {
                 variant="filled"
                 severity={severity}
                 onClose={handleClose}
+                data-testid="alerta"
             >
                 {text}
             </MuiAlert>
