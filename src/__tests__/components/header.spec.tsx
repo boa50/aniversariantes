@@ -47,5 +47,33 @@ describe('Header component', () => {
 
         const texto = getByTestId('header-texto');
         expect(texto.textContent).toBe('Aniversariantes');
+        expect(texto.className).toContain('MuiTypography-h6');
+    });
+
+    test('verifica a renderização no mobile', () => {
+        window.matchMedia = jest.fn().mockImplementation(query => {
+            return {
+                matches: true,
+                media: query,
+                onchange: null,
+                addListener: jest.fn(),
+                removeListener: jest.fn(),
+            };
+        });
+
+        state = {
+            auth: { familiaNome: '' },
+            aniversariantes: { loading: true },
+        };
+        store = mockStore(state);
+
+        const { getByTestId } = render(
+            <Provider store={store}>
+                <Header />
+            </Provider>,
+        );
+
+        const texto = getByTestId('header-texto');
+        expect(texto.className).toContain('MuiTypography-subtitle1');
     });
 });

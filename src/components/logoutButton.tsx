@@ -48,11 +48,15 @@ const LogoutButton: React.FC<Props> = ({ isMobile }) => {
         <Link to="/login" className={classes.link} onClick={onInitLogout}>
             {isMobile ? (
                 <Box className={classes.div}>
-                    <ExitToAppIcon className={classes.logoutButton} /> {'Sair'}
+                    <ExitToAppIcon
+                        className={classes.logoutButton}
+                        data-testid="logout-botao"
+                    />{' '}
+                    {'Sair'}
                 </Box>
             ) : (
                 <IconButton edge="end" color="inherit" aria-label="logout">
-                    <ExitToAppIcon />
+                    <ExitToAppIcon data-testid="logout-botao" />
                 </IconButton>
             )}
         </Link>
