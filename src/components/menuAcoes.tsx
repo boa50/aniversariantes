@@ -56,6 +56,7 @@ const MenuAcoes: React.FC<Props> = ({ isMobile }) => {
                     aria-haspopup="true"
                     color="inherit"
                     onClick={handleClick}
+                    data-testid="dot-menu"
                 >
                     <MoreVertIcon />
                 </IconButton>
@@ -63,6 +64,7 @@ const MenuAcoes: React.FC<Props> = ({ isMobile }) => {
                     anchorEl={anchorEl}
                     open={open}
                     onClose={handleClose}
+                    data-testid="dot-menu-opened"
                     PaperProps={
                         showShare ? { style: { minWidth: '22ch' } } : {}
                     }
@@ -72,6 +74,7 @@ const MenuAcoes: React.FC<Props> = ({ isMobile }) => {
                             key="share"
                             color="inherit"
                             aria-label="share"
+                            data-testid="share-button-menu"
                         >
                             <ShareAniversariantesButton />
                         </MenuItem>
