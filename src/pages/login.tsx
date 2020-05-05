@@ -82,8 +82,14 @@ const Login: React.FC = () => {
                     color="secondary"
                     value={idFamiliaLocal}
                     onChange={inputChangeHandler}
+                    data-testid="codigo-familia-input"
                 />
-                <Button variant="contained" color="secondary" type="submit">
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    type="submit"
+                    data-testid="button-login"
+                >
                     Entrar
                 </Button>
                 {errorShow ? <Alerta severity="error" text={erro} /> : null}

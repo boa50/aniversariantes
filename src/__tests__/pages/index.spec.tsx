@@ -80,6 +80,15 @@ describe('Index page', () => {
             },
             auth: { loading: false, idFamilia: 'mock' },
         };
+
+        const initAniversariantes = jest
+            .spyOn(actions, 'initAniversariantes')
+            .mockImplementation((idFamilia: string) => ({
+                type: 'check',
+                idFamilia: 'mock',
+            }));
+        mocks.push(initAniversariantes);
+
         const { getByTestId } = renderiza(state);
 
         const headerMock = getByTestId('HeaderMock');
@@ -90,8 +99,8 @@ describe('Index page', () => {
         );
         const mesNome = getByTestId('mes-nome');
 
+        expect(initAniversariantes).toBeCalledTimes(1);
         expect(mesNome.textContent).toBe(mockMesTexto);
-
         expect(headerMock).toBeDefined();
         expect(aniversariantesDiaMock).toBeDefined();
         expect(trocaMesMock).toBeDefined();
@@ -99,11 +108,7 @@ describe('Index page', () => {
     });
 
     test('verifica se carrega o icone de loading', () => {
-        const state = {
-            ...defaultState,
-            auth: { loading: false, idFamilia: 'mock' },
-        };
-        const { getByTestId } = renderiza(state);
+        const { getByTestId } = renderiza(defaultState);
 
         const loadingIcon = getByTestId('loading-aniversariantes');
 
