@@ -9,13 +9,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import { AuthState } from '../models/AuthState';
 import { AniversariantesState } from '../models/AniversariantesState';
+import { PropertiesState } from '../models/PropertiesState';
 
 import LogoutButton from './logoutButton';
 import ShareAniversariantesButton from './shareAniversariantesButton';
-
-type Props = {
-    isMobile?: boolean;
-};
 
 let showShare = false;
 const HandleShareShow: React.FC<WebShareInterface> = ({ isSupported }) => {
@@ -27,9 +24,13 @@ const HandleShareShow: React.FC<WebShareInterface> = ({ isSupported }) => {
 
 const CheckShare = webShare()(HandleShareShow);
 
-const MenuAcoes: React.FC<Props> = ({ isMobile }) => {
+const MenuAcoes: React.FC = () => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+
+    const isMobile = useSelector(
+        (state: PropertiesState) => state.properties.isMobile,
+    );
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
     const loading = useSelector(
         (state: AniversariantesState) => state.aniversariantes.loading,
@@ -81,7 +82,7 @@ const MenuAcoes: React.FC<Props> = ({ isMobile }) => {
                     ) : null}
 
                     <MenuItem key="logout" color="inherit" aria-label="logout">
-                        <LogoutButton isMobile />
+                        <LogoutButton />
                     </MenuItem>
                 </Menu>
             </div>

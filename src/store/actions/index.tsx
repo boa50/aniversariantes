@@ -3,6 +3,7 @@ export {
     fetchAniversariantesStart,
     fetchAniversariantesSuccess,
     fetchAniversariantesFail,
+    setMesInfo,
 } from './aniversariantes';
 export {
     initAuth,
@@ -13,3 +14,4 @@ export {
     initLogout,
     logoutComplete,
 } from './auth';
+export { initProperties } from './properties';

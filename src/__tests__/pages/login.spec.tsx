@@ -76,6 +76,7 @@ const inputaTextoAleatorio = (
 
 const defaultState = {
     auth: { error: '', idFamilia: '' },
+    properties: { isMobile: false },
 };
 
 describe('Login page', () => {
@@ -99,6 +100,7 @@ describe('Login page', () => {
 
     test('verifica o redirect', () => {
         const state = {
+            ...defaultState,
             auth: {
                 ...defaultState.auth,
                 idFamilia: 'mock',
@@ -151,6 +153,7 @@ describe('Login page', () => {
         mocks.push(initAuth);
 
         const state = {
+            ...defaultState,
             auth: {
                 ...defaultState.auth,
                 error: 'mockError',

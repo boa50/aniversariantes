@@ -9,6 +9,7 @@ import Box from '@material-ui/core/Box';
 
 import { AuthState } from '../models/AuthState';
 import { AniversariantesState } from '../models/AniversariantesState';
+import { PropertiesState } from '../models/PropertiesState';
 import { initLogout } from '../store/actions';
 
 const useStyles = makeStyles(theme => {
@@ -28,14 +29,13 @@ const useStyles = makeStyles(theme => {
     };
 });
 
-type Props = {
-    isMobile?: boolean;
-};
-
-const LogoutButton: React.FC<Props> = ({ isMobile }) => {
+const LogoutButton: React.FC = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
+    const isMobile = useSelector(
+        (state: PropertiesState) => state.properties.isMobile,
+    );
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
     const loading = useSelector(
         (state: AniversariantesState) => state.aniversariantes.loading,

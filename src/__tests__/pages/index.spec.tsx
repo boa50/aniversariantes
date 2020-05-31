@@ -69,11 +69,13 @@ const defaultState = {
         loading: true,
     },
     auth: { loading: true, idFamilia: '' },
+    properties: { isMobile: false },
 };
 
 describe('Index page', () => {
     test('verifica se a renderização foi feita de maneira correta', () => {
         const state = {
+            ...defaultState,
             aniversariantes: {
                 ...defaultState.aniversariantes,
                 loading: false,

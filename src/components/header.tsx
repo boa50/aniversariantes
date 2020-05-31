@@ -2,16 +2,16 @@ import React from 'react';
 import { Link } from 'gatsby';
 import { useSelector } from 'react-redux';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CakeIcon from '@material-ui/icons/Cake';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import { AuthState } from '../models/AuthState';
 import { AniversariantesState } from '../models/AniversariantesState';
+import { PropertiesState } from '../models/PropertiesState';
 
 import MenuAcoes from './menuAcoes';
 
@@ -40,9 +40,10 @@ const useStyles = makeStyles(theme => {
 
 const Header: React.FC = () => {
     const classes = useStyles();
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+    const isMobile = useSelector(
+        (state: PropertiesState) => state.properties.isMobile,
+    );
     const familiaNome = useSelector(
         (state: AuthState) => state.auth.familiaNome,
     );
@@ -76,7 +77,7 @@ const Header: React.FC = () => {
                             ? ' - Família ' + familiaNome
                             : null}
                     </Typography>
-                    <MenuAcoes isMobile={isMobile} />
+                    <MenuAcoes />
                 </Toolbar>
             </AppBar>
             <div className={classes.offset} />
