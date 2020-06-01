@@ -19,6 +19,7 @@ describe('ShareAniversariantesButton component', () => {
         state = {
             auth: { idFamilia: 'mock' },
             aniversariantes: { loading: false, aniversariantes: [], mes: 10 },
+            properties: { isMobile: true },
         };
 
         store = mockStore(state);
@@ -37,6 +38,7 @@ describe('ShareAniversariantesButton component', () => {
         state = {
             auth: { idFamilia: '' },
             aniversariantes: { loading: true },
+            properties: { isMobile: false },
         };
 
         store = mockStore(state);

@@ -25,12 +25,13 @@ describe('PropertiesReducer', () => {
     test('verifica o INIT_PROPERTIES', () => {
         const newState: PropertiesStateReducer = {
             ...initState,
-            isMobile: true,
+            isMobile: false,
         };
 
         const action: PropertiesAction = {
             ...defaultAction,
             type: actionTypes.INIT_PROPERTIES,
+            isMobile: true,
         };
 
         expect(reducer(newState, action)).toEqual({

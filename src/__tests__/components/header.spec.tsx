@@ -14,6 +14,7 @@ describe('Header component', () => {
         state = {
             auth: { familiaNome: mockFamiliaNome, idFamilia: 'mock' },
             aniversariantes: { loading: false },
+            properties: { isMobile: false },
         };
         store = mockStore(state);
 
@@ -36,6 +37,7 @@ describe('Header component', () => {
         state = {
             auth: { familiaNome: '' },
             aniversariantes: { loading: true },
+            properties: { isMobile: false },
         };
         store = mockStore(state);
 
@@ -51,19 +53,10 @@ describe('Header component', () => {
     });
 
     test('verifica a renderização no mobile', () => {
-        window.matchMedia = jest.fn().mockImplementation(query => {
-            return {
-                matches: true,
-                media: query,
-                onchange: null,
-                addListener: jest.fn(),
-                removeListener: jest.fn(),
-            };
-        });
-
         state = {
             auth: { familiaNome: '' },
             aniversariantes: { loading: true },
+            properties: { isMobile: true },
         };
         store = mockStore(state);
 

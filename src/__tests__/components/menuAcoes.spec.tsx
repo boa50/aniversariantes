@@ -22,6 +22,7 @@ describe('MenuAcoes component', () => {
         state = {
             auth: { idFamilia: 'mock' },
             aniversariantes: { loading: false },
+            properties: { isMobile: false },
         };
 
         store = mockStore(state);
@@ -48,6 +49,7 @@ describe('MenuAcoes component', () => {
         state = {
             auth: { idFamilia: '' },
             aniversariantes: { loading: true },
+            properties: { isMobile: false },
         };
 
         store = mockStore(state);
@@ -79,13 +81,14 @@ describe('MenuAcoes component', () => {
         state = {
             auth: { idFamilia: 'mock' },
             aniversariantes: { loading: false },
+            properties: { isMobile: true },
         };
 
         store = mockStore(state);
 
         const { getByTestId } = render(
             <Provider store={store}>
-                <MenuAcoes isMobile />
+                <MenuAcoes />
             </Provider>,
         );
 

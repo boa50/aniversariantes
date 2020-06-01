@@ -13,6 +13,7 @@ describe('LogoutButton component', () => {
         state = {
             auth: { idFamilia: 'mock' },
             aniversariantes: { loading: false },
+            properties: { isMobile: false },
         };
 
         store = mockStore(state);
@@ -31,13 +32,14 @@ describe('LogoutButton component', () => {
         state = {
             auth: { idFamilia: 'mock' },
             aniversariantes: { loading: false },
+            properties: { isMobile: true },
         };
 
         store = mockStore(state);
 
         const { getByTestId } = render(
             <Provider store={store}>
-                <LogoutButton isMobile />
+                <LogoutButton />
             </Provider>,
         );
 
@@ -49,6 +51,7 @@ describe('LogoutButton component', () => {
         state = {
             auth: { idFamilia: '' },
             aniversariantes: { loading: true },
+            properties: { isMobile: false },
         };
 
         store = mockStore(state);
