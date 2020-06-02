@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { navigate } from 'gatsby';
 
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -8,7 +7,7 @@ import Button from '@material-ui/core/Button';
 
 import { AuthState } from '../models/AuthState';
 
-import { initAuth, checkIdFamilia } from '../store/actions';
+import { initAuth } from '../store/actions';
 
 import Layout from '../components/layout';
 import Alerta from '../components/alerta';
@@ -37,19 +36,6 @@ const Login: React.FC = () => {
     const erro = useSelector((state: AuthState) => state.auth.error);
 
     const onInitAuth = () => dispatch(initAuth(idFamiliaLocal));
-    const onCheckIdFamilia = useCallback(() => dispatch(checkIdFamilia()), []);
-
-    useEffect(() => {
-        if (!idFamilia) {
-            onCheckIdFamilia();
-        }
-    }, [onCheckIdFamilia]);
-
-    useEffect(() => {
-        if (idFamilia) {
-            navigate('/');
-        }
-    }, [idFamilia]);
 
     const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIdFamiliaLocal(event.target.value);
@@ -62,7 +48,7 @@ const Login: React.FC = () => {
         onInitAuth();
     };
 
-    let conteudo;
+    let conteudo = <div />;
     const errorShow = erro.length > 0 && alertStyle;
 
     if (!idFamilia) {

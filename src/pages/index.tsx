@@ -1,6 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { navigate } from 'gatsby';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -11,7 +10,7 @@ import { AniversariantesState } from '../models/AniversariantesState';
 import { AuthState } from '../models/AuthState';
 import DateUtils from '../utils/dateUtils';
 
-import { initAniversariantes, checkIdFamilia } from '../store/actions';
+import { initAniversariantes } from '../store/actions';
 
 import ListaAniversariantes from '../components/listaAniversariantes';
 import TrocaMes from '../components/trocaMes';
@@ -42,30 +41,16 @@ const App: React.FC = () => {
     const aniversariantesLoading = useSelector(
         (state: AniversariantesState) => state.aniversariantes.loading,
     );
-    const authLoading = useSelector((state: AuthState) => state.auth.loading);
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
 
-    const onCheckIdFamilia = useCallback(() => dispatch(checkIdFamilia()), []);
     const onInitAniversariantes = useCallback(
         (idFamilia: string) => dispatch(initAniversariantes(idFamilia)),
         [],
     );
 
     useEffect(() => {
-        if (!idFamilia) {
-            onCheckIdFamilia();
-        }
-    }, [onCheckIdFamilia]);
-
-    useEffect(() => {
-        if (!authLoading) {
-            if (!idFamilia) {
-                navigate('/login');
-            } else if (idFamilia) {
-                onInitAniversariantes(idFamilia);
-            }
-        }
-    }, [idFamilia, authLoading, onInitAniversariantes]);
+        onInitAniversariantes(idFamilia);
+    }, [idFamilia, onInitAniversariantes]);
 
     let conteudo = (
         <Box className={classes.circularProgress}>
@@ -73,7 +58,7 @@ const App: React.FC = () => {
         </Box>
     );
 
-    if (!aniversariantesLoading && !authLoading && idFamilia) {
+    if (!aniversariantesLoading) {
         conteudo = (
             <Box>
                 <Typography
