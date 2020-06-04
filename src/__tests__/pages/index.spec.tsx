@@ -27,8 +27,13 @@ afterEach(() => {
     mocks.length = 0;
 });
 
-jest.mock('../../components/header', () => {
-    return () => <div data-testid="HeaderMock"></div>;
+type LayoutProps = {
+    children: React.ReactNode;
+};
+jest.mock('../../components/layout', () => {
+    return ({ children }: LayoutProps) => (
+        <div data-testid="Layout">{children}</div>
+    );
 });
 
 jest.mock('../../components/aniversariantesDia', () => {
@@ -42,12 +47,6 @@ jest.mock('../../components/trocaMes', () => {
 jest.mock('../../components/listaAniversariantes', () => {
     return () => <div data-testid="ListaAniversariantesMock"></div>;
 });
-
-const navigateMock = () => {
-    return jest
-        .spyOn(Gatsby, 'navigate')
-        .mockImplementation((to: number) => Promise.resolve());
-};
 
 const renderiza = (state: any) => {
     const mockStore = configureStore();
@@ -93,7 +92,6 @@ describe('Index page', () => {
 
         const { getByTestId } = renderiza(state);
 
-        const headerMock = getByTestId('HeaderMock');
         const aniversariantesDiaMock = getByTestId('AniversariantesDiaMock');
         const trocaMesMock = getByTestId('TrocaMesMock');
         const listaAniversariantesMock = getByTestId(
@@ -103,7 +101,6 @@ describe('Index page', () => {
 
         expect(initAniversariantes).toBeCalledTimes(1);
         expect(mesNome.textContent).toBe(mockMesTexto);
-        expect(headerMock).toBeDefined();
         expect(aniversariantesDiaMock).toBeDefined();
         expect(trocaMesMock).toBeDefined();
         expect(listaAniversariantesMock).toBeDefined();
@@ -115,36 +112,5 @@ describe('Index page', () => {
         const loadingIcon = getByTestId('loading-aniversariantes');
 
         expect(loadingIcon).toBeDefined();
-    });
-
-    test('verifica checagem da família', () => {
-        const state = {
-            ...defaultState,
-            auth: { ...defaultState.auth, loading: false },
-        };
-
-        const checkIdFamilia = jest
-            .spyOn(actions, 'checkIdFamilia')
-            .mockImplementation(() => ({ type: 'check' }));
-        mocks.push(checkIdFamilia);
-        mocks.push(navigateMock());
-
-        renderiza(state);
-
-        expect(checkIdFamilia).toBeCalledTimes(1);
-    });
-
-    test('verifica a não autenticação', () => {
-        const state = {
-            ...defaultState,
-            auth: { ...defaultState.auth, loading: false },
-        };
-
-        const navigate = navigateMock();
-        mocks.push(navigate);
-
-        renderiza(state);
-
-        expect(navigate).toBeCalledTimes(1);
     });
 });

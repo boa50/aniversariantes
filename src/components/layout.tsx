@@ -10,7 +10,7 @@ import Box from '@material-ui/core/Box';
 
 import Header from './header';
 import SEO from './seo';
-import useAuthCheck from '../hooks/useAuthCheck';
+import { useAuthCheck } from '../hooks/useAuthCheck';
 
 import { AuthState } from '../models/AuthState';
 import { initProperties } from '../store/actions';

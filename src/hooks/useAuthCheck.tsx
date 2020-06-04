@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { checkIdFamilia } from '../store/actions';
 import { AuthState } from '../models/AuthState';
 
-const useAuthCheck = (location: Location) => {
+export const useAuthCheck = (location: Location) => {
     const dispatch = useDispatch();
 
     const authLoading = useSelector((state: AuthState) => state.auth.loading);
@@ -21,15 +21,13 @@ const useAuthCheck = (location: Location) => {
     if (!authLoading) {
         if (!idFamilia && !location.pathname.startsWith('/login')) {
             navigate('/login/');
-            return null;
+            return false;
         }
         if (idFamilia && location.pathname.startsWith('/login')) {
             navigate('/');
-            return;
+            return true;
         }
     }
 
     return;
 };
-
-export default useAuthCheck;

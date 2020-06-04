@@ -27,19 +27,18 @@ afterEach(() => {
     mocks.length = 0;
 });
 
-jest.mock('../../components/header', () => {
-    return () => <div data-testid="HeaderMock"></div>;
+type LayoutProps = {
+    children: React.ReactNode;
+};
+jest.mock('../../components/layout', () => {
+    return ({ children }: LayoutProps) => (
+        <div data-testid="Layout">{children}</div>
+    );
 });
 
 jest.mock('../../components/alerta', () => {
     return () => <div data-testid="AlertaMock"></div>;
 });
-
-const navigateMock = () => {
-    return jest
-        .spyOn(Gatsby, 'navigate')
-        .mockImplementation((to: number) => Promise.resolve());
-};
 
 const initAuthMock = () => {
     return jest
@@ -96,32 +95,6 @@ describe('Login page', () => {
         expect(erro).toBeTruthy();
         expect(codigoFamiliaInput).toBeVisible();
         expect(loginButton).toBeVisible();
-    });
-
-    test('verifica o redirect', () => {
-        const state = {
-            ...defaultState,
-            auth: {
-                ...defaultState.auth,
-                idFamilia: 'mock',
-            },
-        };
-        const navigate = navigateMock();
-
-        renderiza(state);
-
-        expect(navigate).toBeCalledTimes(1);
-    });
-
-    test('verifica a checagem da família', () => {
-        const checkIdFamilia = jest
-            .spyOn(actions, 'checkIdFamilia')
-            .mockImplementation(() => ({ type: 'check' }));
-        mocks.push(checkIdFamilia);
-
-        renderiza(defaultState);
-
-        expect(checkIdFamilia).toBeCalledTimes(1);
     });
 
     test('verifica a alteração do código da família', () => {
