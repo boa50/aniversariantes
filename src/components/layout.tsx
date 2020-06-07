@@ -46,7 +46,7 @@ const Layout: React.FC<Props> = ({ title, children }) => {
 
     useAuthCheck(location);
 
-    let conteudo = <div />;
+    let conteudo = <div data-testid="vazio" />;
 
     if (!authLoading) {
         conteudo = (
