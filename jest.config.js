@@ -34,6 +34,7 @@ module.exports = {
         '!<rootDir>/src/components/seo.tsx',
         '!<rootDir>/src/store/reduxWrapper.tsx',
         '!<rootDir>/src/store/actions/actionsTypes.tsx',
+        '!<rootDir>/src/store/actions/index.tsx',
         '!<rootDir>/src/store/sagas/index.tsx',
     ],
 };

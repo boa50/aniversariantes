@@ -1,14 +1,14 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { useMediaQuery } from 'react-responsive';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 
 import { AniversariantesState } from '../models/AniversariantesState';
+import { PropertiesState } from '../models/PropertiesState';
 
-import { setMesInfo } from '../store/actions/aniversariantes';
+import { setMesInfo } from '../store/actions';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -20,11 +20,15 @@ const useStyles = makeStyles(theme => ({
 
 const TrocaMes: React.FC = () => {
     const classes = useStyles();
-    const isBigScreen = useMediaQuery({ minWidth: 550 });
     let eventNulo: React.ChangeEvent<unknown>;
     const dispatch = useDispatch();
 
-    const mes = useSelector((state: AniversariantesState) => state.mes);
+    const isMobile = useSelector(
+        (state: PropertiesState) => state.properties.isMobile,
+    );
+    const mes = useSelector(
+        (state: AniversariantesState) => state.aniversariantes.mes,
+    );
     const onSetMes = (mes: number) => dispatch(setMesInfo(mes));
 
     const changeHandler = (
@@ -49,9 +53,9 @@ const TrocaMes: React.FC = () => {
         [mes],
     );
 
-    let siblingCount = 0;
-    if (isBigScreen) {
-        siblingCount = 6;
+    let siblingCount = 6;
+    if (isMobile) {
+        siblingCount = 0;
     }
 
     return (

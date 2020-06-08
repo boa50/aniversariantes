@@ -11,7 +11,11 @@ describe('AniversariantesDia component', () => {
 
     test('verifica se a renderização foi feita de maneira correta para 1 aniversariante', () => {
         state = {
-            aniversariantesDia: [{ pessoa: 'joãozinho', mes: '11', dia: '24' }],
+            aniversariantes: {
+                aniversariantesDia: [
+                    { pessoa: 'joãozinho', mes: '11', dia: '24' },
+                ],
+            },
         };
         store = mockStore(state);
 
@@ -28,7 +32,7 @@ describe('AniversariantesDia component', () => {
     });
 
     test('verifica se a renderização foi feita de maneira correta para 0 aniversariantes', () => {
-        state = { aniversariantesDia: [] };
+        state = { aniversariantes: { aniversariantesDia: [] } };
         store = mockStore(state);
 
         const { getByTestId } = render(
@@ -48,10 +52,12 @@ describe('AniversariantesDia component', () => {
 
     test('verifica se a renderização foi feita de maneira correta para vários aniversariante', () => {
         state = {
-            aniversariantesDia: [
-                { pessoa: 'pedinho', mes: '11', dia: '24' },
-                { pessoa: 'jumentinho', mes: '11', dia: '25' },
-            ],
+            aniversariantes: {
+                aniversariantesDia: [
+                    { pessoa: 'pedinho', mes: '11', dia: '24' },
+                    { pessoa: 'jumentinho', mes: '11', dia: '25' },
+                ],
+            },
         };
         store = mockStore(state);
 

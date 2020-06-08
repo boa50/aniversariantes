@@ -1,5 +1,7 @@
 import reducer from '../../../store/reducers/aniversariantes';
 import * as actionTypes from '../../../store/actions/actionsTypes';
+import { AniversariantesAction } from '../../../models/AniversariantesAction';
+import { AniversariantesStateReducer } from '../../../models/AniversariantesState';
 
 jest.mock('../../../utils/dateUtils', () => {
     return {
@@ -8,12 +10,21 @@ jest.mock('../../../utils/dateUtils', () => {
     };
 });
 
-let initState: any = {
+const initState: AniversariantesStateReducer = {
     aniversariantes: [],
     aniversariantesMes: [],
     aniversariantesDia: [],
     mes: 10,
     loading: true,
+    error: '',
+};
+
+const defaultAction: AniversariantesAction = {
+    type: '',
+    aniversariantes: [],
+    mes: 0,
+    idFamilia: '',
+    error: '',
 };
 
 const aniversariantesMock = [
@@ -23,110 +34,93 @@ const aniversariantesMock = [
     { pessoa: 'testinho', mes: '11', dia: '26' },
 ];
 
-const aniversariantesMesMock = [
-    { pessoa: 'joãozinho', mes: '10', dia: '22' },
-    { pessoa: 'mariazinha', mes: '10', dia: '22' },
-    { pessoa: 'pedinho', mes: '10', dia: '25' },
-];
-
-const aniversariantesDiaMock = [
-    { pessoa: 'joãozinho', mes: '10', dia: '22' },
-    { pessoa: 'mariazinha', mes: '10', dia: '22' },
-];
-
 describe('AniversariantesReducer', () => {
-    it('verifica o correto estado inicial', () => {
-        const action = {
-            type: '',
-            aniversariantes: [],
-            mes: 0,
+    test('verifica o correto estado inicial', () => {
+        const action: AniversariantesAction = {
+            ...defaultAction,
         };
         expect(reducer(undefined, action)).toEqual({
-            aniversariantes: [],
-            aniversariantesMes: [],
-            aniversariantesDia: [],
-            mes: 10,
-            loading: true,
+            ...initState,
         });
     });
 
-    it('verifica o SET_ANIVERSARIANTES', () => {
-        const action = {
-            type: actionTypes.SET_ANIVERSARIANTES,
-            aniversariantes: aniversariantesMock,
-            mes: 0,
-        };
-
-        expect(reducer(initState, action)).toEqual({
+    test('verifica o SET_MES_INFO', () => {
+        const newState: AniversariantesStateReducer = {
             ...initState,
             aniversariantes: aniversariantesMock,
-            aniversariantesMes: aniversariantesMesMock,
-            aniversariantesDia: aniversariantesDiaMock,
-            loading: false,
-        });
-    });
-
-    it('verifica o SET_ANIVERSARIANTES_MES', () => {
-        initState = {
-            aniversariantes: aniversariantesMock,
-            aniversariantesMes: [],
-            aniversariantesDia: [],
-            mes: 10,
-            loading: false,
         };
 
-        const action = {
-            type: actionTypes.SET_ANIVERSARIANTES_MES,
-            aniversariantes: aniversariantesMock,
-            mes: 0,
-        };
-
-        expect(reducer(initState, action)).toEqual({
-            ...initState,
-            aniversariantesMes: aniversariantesMesMock,
-        });
-    });
-
-    it('verifica o SET_ANIVERSARIANTES_DIA', () => {
-        initState = {
-            aniversariantes: aniversariantesMock,
-            aniversariantesMes: aniversariantesMesMock,
-            aniversariantesDia: [],
-            mes: 10,
-            loading: false,
-        };
-
-        const action = {
-            type: actionTypes.SET_ANIVERSARIANTES_DIA,
-            aniversariantes: aniversariantesMock,
-            mes: 0,
-        };
-
-        expect(reducer(initState, action)).toEqual({
-            ...initState,
-            aniversariantesDia: aniversariantesDiaMock,
-        });
-    });
-
-    it('verifica o SET_MES_INFO', () => {
-        initState = {
-            aniversariantes: aniversariantesMock,
-            aniversariantesMes: [],
-            aniversariantesDia: [],
-            mes: 10,
-            loading: false,
-        };
-
-        const action = {
+        const action: AniversariantesAction = {
+            ...defaultAction,
             type: actionTypes.SET_MES_INFO,
             aniversariantes: aniversariantesMock,
             mes: 11,
         };
 
-        expect(reducer(initState, action)).toEqual({
-            ...initState,
+        expect(reducer(newState, action)).toEqual({
+            ...newState,
             aniversariantesMes: [{ pessoa: 'testinho', mes: '11', dia: '26' }],
             mes: 11,
+        });
+    });
+
+    test('verifica o FETCH_ANIVERSARIANTES_START', () => {
+        const newState: AniversariantesStateReducer = {
+            ...initState,
+            aniversariantes: aniversariantesMock,
+            aniversariantesMes: aniversariantesMock,
+            aniversariantesDia: aniversariantesMock,
+            mes: 1,
+            loading: false,
+            error: 'algum erro',
+        };
+
+        const action: AniversariantesAction = {
+            ...defaultAction,
+            type: actionTypes.FETCH_ANIVERSARIANTES_START,
+        };
+
+        expect(reducer(newState, action)).toEqual({
+            ...initState,
+            mes: 1,
+        });
+    });
+
+    test('verifica o FETCH_ANIVERSARIANTES_SUCCESS', () => {
+        const action: AniversariantesAction = {
+            ...defaultAction,
+            type: actionTypes.FETCH_ANIVERSARIANTES_SUCCESS,
+            aniversariantes: aniversariantesMock,
+        };
+
+        expect(reducer(initState, action)).toEqual({
+            ...initState,
+            aniversariantes: aniversariantesMock,
+            aniversariantesMes: [
+                { pessoa: 'joãozinho', mes: '10', dia: '22' },
+                { pessoa: 'mariazinha', mes: '10', dia: '22' },
+                { pessoa: 'pedinho', mes: '10', dia: '25' },
+            ],
+            aniversariantesDia: [
+                { pessoa: 'joãozinho', mes: '10', dia: '22' },
+                { pessoa: 'mariazinha', mes: '10', dia: '22' },
+            ],
+            loading: false,
+        });
+    });
+
+    test('verifica o FETCH_ANIVERSARIANTES_FAIL', () => {
+        const mockError = 'jumentão branco';
+        const action: AniversariantesAction = {
+            ...defaultAction,
+            type: actionTypes.FETCH_ANIVERSARIANTES_FAIL,
+            error: mockError,
+        };
+
+        expect(reducer(initState, action)).toEqual({
+            ...initState,
+            error: mockError,
+            loading: false,
         });
     });
 });

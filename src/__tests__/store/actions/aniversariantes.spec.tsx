@@ -1,50 +1,63 @@
 import * as actions from '../../../store/actions/aniversariantes';
 import * as actionsTypes from '../../../store/actions/actionsTypes';
+import { Aniversariante } from '../../../models/Aniversariante';
 
 describe('AniversariantesActions', () => {
-    it('cria a action para initAniversariantes', () => {
+    test('cria a action para initAniversariantes', () => {
+        const mockIdFamilia = 'mockIdFamilia';
         const expectedAction = {
             type: actionsTypes.INIT_ANIVERSARIANTES,
+            idFamilia: mockIdFamilia,
         };
 
-        expect(actions.initAniversariantes()).toEqual(expectedAction);
+        expect(actions.initAniversariantes(mockIdFamilia)).toEqual(
+            expectedAction,
+        );
     });
 
-    it('cria a action para setAniversariantes', () => {
-        const expectedAction = {
-            type: actionsTypes.SET_ANIVERSARIANTES,
-            aniversariantes: [{ pessoa: 'joãozinho', mes: '10', dia: '22' }],
-        };
-
-        expect(
-            actions.setAniversariantes([
-                { pessoa: 'joãozinho', mes: '10', dia: '22' },
-            ]),
-        ).toEqual(expectedAction);
-    });
-
-    it('cria a action para setAniversariantesMes', () => {
-        const expectedAction = {
-            type: actionsTypes.SET_ANIVERSARIANTES_MES,
-        };
-
-        expect(actions.setAniversariantesMes()).toEqual(expectedAction);
-    });
-
-    it('cria a action para setAniversariantesDia', () => {
-        const expectedAction = {
-            type: actionsTypes.SET_ANIVERSARIANTES_DIA,
-        };
-
-        expect(actions.setAniversariantesDia()).toEqual(expectedAction);
-    });
-
-    it('cria a action para setMesInfo', () => {
+    test('cria a action para setMesInfo', () => {
+        const mockMes = 10;
         const expectedAction = {
             type: actionsTypes.SET_MES_INFO,
-            mes: 10,
+            mes: mockMes,
         };
 
-        expect(actions.setMesInfo(10)).toEqual(expectedAction);
+        expect(actions.setMesInfo(mockMes)).toEqual(expectedAction);
+    });
+
+    test('cria a action para fetchAniversariantesStart', () => {
+        const expectedAction = {
+            type: actionsTypes.FETCH_ANIVERSARIANTES_START,
+        };
+
+        expect(actions.fetchAniversariantesStart()).toEqual(expectedAction);
+    });
+
+    test('cria a action para fetchAniversariantesSuccess', () => {
+        const aniversariantes: Aniversariante[] = [
+            {
+                pessoa: 'jumentinho',
+                dia: '10',
+                mes: '8',
+            },
+        ];
+        const expectedAction = {
+            type: actionsTypes.FETCH_ANIVERSARIANTES_SUCCESS,
+            aniversariantes: aniversariantes,
+        };
+
+        expect(actions.fetchAniversariantesSuccess(aniversariantes)).toEqual(
+            expectedAction,
+        );
+    });
+
+    test('cria a action para fetchAniversariantesFail', () => {
+        const error = 'erro do jumento branco';
+        const expectedAction = {
+            type: actionsTypes.FETCH_ANIVERSARIANTES_FAIL,
+            error: error,
+        };
+
+        expect(actions.fetchAniversariantesFail(error)).toEqual(expectedAction);
     });
 });

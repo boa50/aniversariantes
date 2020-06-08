@@ -1,6 +1,6 @@
-import React, { Suspense } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
 import { Link } from 'gatsby';
+import { useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -9,41 +9,47 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CakeIcon from '@material-ui/icons/Cake';
 
+import { AuthState } from '../models/AuthState';
 import { AniversariantesState } from '../models/AniversariantesState';
-import AniversariantesUtils from '../utils/aniversariantesUtils';
+import { PropertiesState } from '../models/PropertiesState';
 
-const ShareButton = React.lazy(() => {
-    return import('../components/shareButton');
+import MenuAcoes from './menuAcoes';
+
+const useStyles = makeStyles(theme => {
+    return {
+        root: {
+            flexGrow: 1,
+        },
+        menuButton: {
+            [theme.breakpoints.down('sm')]: {
+                marginRight: theme.spacing(0),
+            },
+            [theme.breakpoints.up('sm')]: {
+                marginRight: theme.spacing(2),
+            },
+        },
+        title: {
+            flexGrow: 1,
+            [theme.breakpoints.down('sm')]: {
+                textAlign: 'center',
+            },
+        },
+        offset: theme.mixins.toolbar,
+    };
 });
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        flexGrow: 1,
-    },
-    menuButton: {
-        marginRight: theme.spacing(2),
-    },
-    title: {
-        flexGrow: 1,
-    },
-    offset: theme.mixins.toolbar,
-}));
 
 const Header: React.FC = () => {
     const classes = useStyles();
-    const isSSR = typeof window === 'undefined';
 
-    const aniversariantes = useSelector(
-        (state: AniversariantesState) => state.aniversariantesMes,
+    const isMobile = useSelector(
+        (state: PropertiesState) => state.properties.isMobile,
     );
-    const mes = useSelector((state: AniversariantesState) => state.mes);
-
-    const shareParams = {
-        text: AniversariantesUtils.getAniversariantesShare(
-            aniversariantes,
-            mes,
-        ),
-    };
+    const familiaNome = useSelector(
+        (state: AuthState) => state.auth.familiaNome,
+    );
+    const loading = useSelector(
+        (state: AniversariantesState) => state.aniversariantes.loading,
+    );
 
     return (
         <div className={classes.root}>
@@ -61,21 +67,17 @@ const Header: React.FC = () => {
                         </IconButton>
                     </Link>
                     <Typography
-                        variant="h6"
+                        variant={isMobile ? 'subtitle1' : 'h6'}
+                        component="h1"
                         className={classes.title}
                         data-testid="header-texto"
                     >
                         Aniversariantes
+                        {!loading && familiaNome
+                            ? ' - Família ' + familiaNome
+                            : null}
                     </Typography>
-                    {!isSSR && (
-                        <Suspense fallback={<div />}>
-                            <ShareButton
-                                config={{
-                                    params: shareParams,
-                                }}
-                            />
-                        </Suspense>
-                    )}
+                    <MenuAcoes />
                 </Toolbar>
             </AppBar>
             <div className={classes.offset} />

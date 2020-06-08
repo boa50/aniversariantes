@@ -7,9 +7,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Box from '@material-ui/core/Box';
 
 import { AniversariantesState } from '../models/AniversariantesState';
+import { AuthState } from '../models/AuthState';
 import DateUtils from '../utils/dateUtils';
 
-import { initAniversariantes } from '../store/actions/aniversariantes';
+import { initAniversariantes } from '../store/actions';
 
 import ListaAniversariantes from '../components/listaAniversariantes';
 import TrocaMes from '../components/trocaMes';
@@ -34,17 +35,22 @@ const App: React.FC = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const mes = useSelector((state: AniversariantesState) => state.mes);
-    const loading = useSelector((state: AniversariantesState) => state.loading);
+    const mes = useSelector(
+        (state: AniversariantesState) => state.aniversariantes.mes,
+    );
+    const aniversariantesLoading = useSelector(
+        (state: AniversariantesState) => state.aniversariantes.loading,
+    );
+    const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
 
     const onInitAniversariantes = useCallback(
-        () => dispatch(initAniversariantes()),
+        (idFamilia: string) => dispatch(initAniversariantes(idFamilia)),
         [],
     );
 
     useEffect(() => {
-        onInitAniversariantes();
-    }, [onInitAniversariantes]);
+        onInitAniversariantes(idFamilia);
+    }, [idFamilia, onInitAniversariantes]);
 
     let conteudo = (
         <Box className={classes.circularProgress}>
@@ -52,7 +58,7 @@ const App: React.FC = () => {
         </Box>
     );
 
-    if (!loading) {
+    if (!aniversariantesLoading) {
         conteudo = (
             <Box>
                 <Typography
