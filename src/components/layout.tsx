@@ -44,7 +44,10 @@ const Layout: React.FC<Props> = ({ title, children }) => {
         onInitProperties(isMobile);
     }, [onInitProperties, isMobile]);
 
-    useAuthCheck(location);
+    const isSSR = typeof window !== 'undefined';
+    if (isSSR) {
+        useAuthCheck(location);
+    }
 
     let conteudo = <div data-testid="vazio" />;
 
