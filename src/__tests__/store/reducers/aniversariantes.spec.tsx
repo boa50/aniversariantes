@@ -7,6 +7,12 @@ jest.mock('../../../utils/dateUtils', () => {
     return {
         getMesAtual: () => 10,
         getDiaAtual: () => 22,
+        getMes(data: Date): number {
+            return data.getMonth() + 1;
+        },
+        getDia(data: Date): number {
+            return data.getDate();
+        },
     };
 });
 
@@ -28,10 +34,10 @@ const defaultAction: AniversariantesAction = {
 };
 
 const aniversariantesMock = [
-    { pessoa: 'mariazinha', mes: '10', dia: '22' },
-    { pessoa: 'pedinho', mes: '10', dia: '25' },
-    { pessoa: 'joãozinho', mes: '10', dia: '22' },
-    { pessoa: 'testinho', mes: '11', dia: '26' },
+    { pessoa: 'mariazinha', nascimento: new Date('2000-10-22T03:00:00Z') },
+    { pessoa: 'pedinho', nascimento: new Date('2000-10-25T03:00:00Z') },
+    { pessoa: 'joãozinho', nascimento: new Date('2000-10-22T03:00:00Z') },
+    { pessoa: 'testinho', nascimento: new Date('2000-11-26T03:00:00Z') },
 ];
 
 describe('AniversariantesReducer', () => {
@@ -59,7 +65,12 @@ describe('AniversariantesReducer', () => {
 
         expect(reducer(newState, action)).toEqual({
             ...newState,
-            aniversariantesMes: [{ pessoa: 'testinho', mes: '11', dia: '26' }],
+            aniversariantesMes: [
+                {
+                    pessoa: 'testinho',
+                    nascimento: new Date('2000-11-26T03:00:00Z'),
+                },
+            ],
             mes: 11,
         });
     });
@@ -97,13 +108,28 @@ describe('AniversariantesReducer', () => {
             ...initState,
             aniversariantes: aniversariantesMock,
             aniversariantesMes: [
-                { pessoa: 'joãozinho', mes: '10', dia: '22' },
-                { pessoa: 'mariazinha', mes: '10', dia: '22' },
-                { pessoa: 'pedinho', mes: '10', dia: '25' },
+                {
+                    pessoa: 'joãozinho',
+                    nascimento: new Date('2000-10-22T03:00:00Z'),
+                },
+                {
+                    pessoa: 'mariazinha',
+                    nascimento: new Date('2000-10-22T03:00:00Z'),
+                },
+                {
+                    pessoa: 'pedinho',
+                    nascimento: new Date('2000-10-25T03:00:00Z'),
+                },
             ],
             aniversariantesDia: [
-                { pessoa: 'joãozinho', mes: '10', dia: '22' },
-                { pessoa: 'mariazinha', mes: '10', dia: '22' },
+                {
+                    pessoa: 'joãozinho',
+                    nascimento: new Date('2000-10-22T03:00:00Z'),
+                },
+                {
+                    pessoa: 'mariazinha',
+                    nascimento: new Date('2000-10-22T03:00:00Z'),
+                },
             ],
             loading: false,
         });
