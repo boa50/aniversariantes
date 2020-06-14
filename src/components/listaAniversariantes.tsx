@@ -14,6 +14,7 @@ import Paper from '@material-ui/core/Paper';
 import { Aniversariante } from '../models/Aniversariante';
 import { AniversariantesState } from '../models/AniversariantesState';
 import AniversariantesUtils from '../utils/aniversariantesUtils';
+import DateUtils from '../utils/dateUtils';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -49,7 +50,7 @@ const ListaAniversariantes: React.FC = () => {
                         {linha.pessoa}
                     </TableCell>
                     <TableCell data-testid="aniversariante-dia">
-                        {linha.dia}
+                        {DateUtils.getDia(linha.nascimento)}
                     </TableCell>
                 </TableRow>
             );

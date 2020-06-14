@@ -11,7 +11,10 @@ const AniversariantesUtils = {
         return AniversariantesUtils.ordenaPorDiaNome(aniversariantes)
             .toArray()
             .filter(aniversariante => {
-                return Number(aniversariante.mes) === mes;
+                const pessoaMes: number = DateUtils.getMes(
+                    aniversariante.nascimento,
+                );
+                return pessoaMes === mes;
             });
     },
 
@@ -24,10 +27,14 @@ const AniversariantesUtils = {
         return AniversariantesUtils.ordenaPorDiaNome(aniversariantes)
             .toArray()
             .filter(aniversariante => {
-                return (
-                    Number(aniversariante.mes) === mesAtual &&
-                    Number(aniversariante.dia) === diaAtual
+                const pessoaMes: number = DateUtils.getMes(
+                    aniversariante.nascimento,
                 );
+                const pessoaDia: number = DateUtils.getDia(
+                    aniversariante.nascimento,
+                );
+
+                return pessoaMes === mesAtual && pessoaDia === diaAtual;
             });
     },
 
@@ -41,7 +48,11 @@ const AniversariantesUtils = {
             ':\n';
         const corpo = AniversariantesUtils.ordenaPorDiaNome(aniversariantes)
             .map(aniversariante => {
-                return aniversariante.pessoa + ' - ' + aniversariante.dia;
+                const pessoaDia: number = DateUtils.getDia(
+                    aniversariante.nascimento,
+                );
+
+                return aniversariante.pessoa + ' - ' + pessoaDia;
             })
             .join('\n');
 
@@ -55,9 +66,12 @@ const AniversariantesUtils = {
 
         return listaAniversariantesOrdenada.sort(
             (a: Aniversariante, b: Aniversariante) => {
-                if (a.dia < b.dia) {
+                const aDia: number = DateUtils.getDia(a.nascimento);
+                const bDia: number = DateUtils.getDia(b.nascimento);
+
+                if (aDia < bDia) {
                     return -1;
-                } else if (a.dia === b.dia) {
+                } else if (aDia === bDia) {
                     return a.pessoa.localeCompare(b.pessoa);
                 } else {
                     return 1;

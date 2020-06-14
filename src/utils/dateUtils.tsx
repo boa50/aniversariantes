@@ -41,6 +41,14 @@ const DateUtils = {
 
         return data.getDate();
     },
+
+    getMes(data: Date): number {
+        return data.getMonth() + 1;
+    },
+
+    getDia(data: Date): number {
+        return data.getDate();
+    },
 };
 
 export default DateUtils;
