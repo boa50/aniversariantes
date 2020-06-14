@@ -11,8 +11,7 @@ import {
 const aniversariantesMock = [
     {
         pessoa: 'oi',
-        mes: '1',
-        dia: '02',
+        nascimento: new Date('2000-01-02T03:00:00Z'),
     },
 ];
 
@@ -34,11 +33,9 @@ describe('AniversariantesSaga', () => {
                             pessoa: {
                                 stringValue: aniversariantesMock[0].pessoa,
                             },
-                            mes: {
-                                stringValue: aniversariantesMock[0].mes,
-                            },
-                            dia: {
-                                stringValue: aniversariantesMock[0].dia,
+                            nascimento: {
+                                timestampValue:
+                                    aniversariantesMock[0].nascimento,
                             },
                         },
                     },

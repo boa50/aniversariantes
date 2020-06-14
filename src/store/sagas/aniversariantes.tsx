@@ -13,10 +13,13 @@ export function* initAniversariantesSaga(action: AniversariantesAction) {
 
         const aniversariantes = response.data.documents.map(
             (aniversariante: any) => {
+                const nascimento: string =
+                    aniversariante.fields.nascimento.timestampValue;
+                const dtNascimento: Date = new Date(nascimento);
+
                 return {
                     pessoa: aniversariante.fields.pessoa.stringValue,
-                    mes: aniversariante.fields.mes.stringValue,
-                    dia: aniversariante.fields.dia.stringValue,
+                    nascimento: dtNascimento,
                 };
             },
         );

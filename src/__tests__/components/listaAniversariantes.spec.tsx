@@ -35,8 +35,14 @@ describe('ListaAniversariantes component', () => {
         state = {
             aniversariantes: {
                 aniversariantesMes: [
-                    { pessoa: 'aniversariante_teste', mes: '11', dia: '24' },
-                    { pessoa: 'aniversariante_teste2', mes: '11', dia: '25' },
+                    {
+                        pessoa: 'aniversariante_teste',
+                        nascimento: new Date('2000-11-24T03:00:00Z'),
+                    },
+                    {
+                        pessoa: 'aniversariante_teste2',
+                        nascimento: new Date('2000-11-25T03:00:00Z'),
+                    },
                 ],
             },
         };
@@ -62,11 +68,20 @@ describe('ListaAniversariantes component', () => {
     });
 
     test('verifica se os aniversariantes estão ordenados', () => {
+        const dia1 = '25';
+        const dia2 = '24';
+
         state = {
             aniversariantes: {
                 aniversariantesMes: [
-                    { pessoa: 'aniversariante_teste', mes: '11', dia: '25' },
-                    { pessoa: 'aniversariante_teste2', mes: '11', dia: '24' },
+                    {
+                        pessoa: 'aniversariante_teste',
+                        nascimento: new Date('2000-11-' + dia1 + 'T03:00:00Z'),
+                    },
+                    {
+                        pessoa: 'aniversariante_teste2',
+                        nascimento: new Date('2000-11-' + dia2 + 'T03:00:00Z'),
+                    },
                 ],
             },
         };
@@ -86,14 +101,10 @@ describe('ListaAniversariantes component', () => {
         expect(aniversariante1.textContent).toBe(
             state.aniversariantes.aniversariantesMes[1].pessoa,
         );
-        expect(aniversariante1Dia.textContent).toBe(
-            state.aniversariantes.aniversariantesMes[1].dia,
-        );
+        expect(aniversariante1Dia.textContent).toBe(dia2);
         expect(aniversariante2.textContent).toBe(
             state.aniversariantes.aniversariantesMes[0].pessoa,
         );
-        expect(aniversariante2Dia.textContent).toBe(
-            state.aniversariantes.aniversariantesMes[0].dia,
-        );
+        expect(aniversariante2Dia.textContent).toBe(dia1);
     });
 });

@@ -5,14 +5,20 @@ jest.mock('../../utils/dateUtils', () => {
         getMesAtual: () => 10,
         getDiaAtual: () => 22,
         getMonthNameFromNumber: () => 'Outubro',
+        getMes(data: Date): number {
+            return data.getMonth() + 1;
+        },
+        getDia(data: Date): number {
+            return data.getDate();
+        },
     };
 });
 
 const aniversariantesLista = [
-    { pessoa: 'mariazinha', mes: '10', dia: '22' },
-    { pessoa: 'pedinho', mes: '10', dia: '25' },
-    { pessoa: 'joãozinho', mes: '10', dia: '22' },
-    { pessoa: 'testinho', mes: '11', dia: '26' },
+    { pessoa: 'mariazinha', nascimento: new Date('2000-10-22T03:00:00Z') },
+    { pessoa: 'pedinho', nascimento: new Date('2000-10-25T03:00:00Z') },
+    { pessoa: 'joãozinho', nascimento: new Date('2000-10-22T03:00:00Z') },
+    { pessoa: 'testinho', nascimento: new Date('2000-11-26T03:00:00Z') },
 ];
 
 describe('Aniversariantes utils', () => {
