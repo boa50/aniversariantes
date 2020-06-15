@@ -6,10 +6,12 @@ import { TextField, Button } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 
 import { AuthState } from '../models/AuthState';
+import { PessoaCadastroState } from '../models/PessoaCadastroState';
 
 import { initCadastro } from '../store/actions';
 
 import Layout from '../components/layout';
+import Alerta from '../components/alerta';
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -35,8 +37,15 @@ const PessoasCadastro: React.FC = () => {
 
     const [nome, setNome] = useState('');
     const [nascimento, setNascimento] = useState();
+    const [alertStyle, setAlertStyle] = useState(false);
 
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
+    const pessoaCadastrada = useSelector(
+        (state: PessoaCadastroState) => state.pessoaCadastro.pessoa,
+    );
+    const erro = useSelector(
+        (state: PessoaCadastroState) => state.pessoaCadastro.error,
+    );
 
     const onInitCadastro = (
         idFamilia: string,
@@ -46,19 +55,26 @@ const PessoasCadastro: React.FC = () => {
 
     const nomeChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNome(event.target.value);
+        setAlertStyle(false);
     };
 
     const nascimentoChangeHandler = (
         event: React.ChangeEvent<HTMLInputElement>,
     ) => {
         setNascimento(event.target.value);
+        setAlertStyle(false);
     };
 
     const onSubmitHandler = (event: React.FormEvent) => {
         event.preventDefault();
-        // setAlertStyle(true);
+        setAlertStyle(true);
         onInitCadastro(idFamilia, nome, nascimento);
     };
+
+    const errorShow = erro.length > 0 && alertStyle;
+    const successShow = pessoaCadastrada.length > 0 && alertStyle;
+    const mensagemSucesso =
+        pessoaCadastrada + ' cadastrado(a) nos aniversariantes da família :)';
 
     const conteudo = (
         <form
@@ -99,6 +115,10 @@ const PessoasCadastro: React.FC = () => {
                     Cadastrar
                 </Button>
             </Box>
+            {errorShow ? <Alerta severity="error" text={erro} /> : null}
+            {successShow ? (
+                <Alerta severity="success" text={mensagemSucesso} />
+            ) : null}
         </form>
     );
 

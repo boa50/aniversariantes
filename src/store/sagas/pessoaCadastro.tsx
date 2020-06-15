@@ -21,12 +21,12 @@ export function* initCadastroSaga(action: PessoaCadastroAction) {
             },
         };
 
-        // const response = yield axios.post(url, payload);
-        // const pessoaCadastrada = response.data.fields.pessoa.stringValue;
-        const pessoaCadastrada = action.pessoa;
+        const response = yield axios.post(url, payload);
+        const pessoaCadastrada = response.data.fields.pessoa.stringValue;
+        // const pessoaCadastrada = action.pessoa;
 
         yield put(actions.cadastroSuccess(pessoaCadastrada));
     } catch (error) {
-        yield put(actions.cadastroFail(error));
+        yield put(actions.cadastroFail(error.response.data.error.message));
     }
 }
