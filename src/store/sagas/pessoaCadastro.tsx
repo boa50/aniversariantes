@@ -9,7 +9,7 @@ export function* initCadastroSaga(action: PessoaCadastroAction) {
     try {
         const idFamilia = action.idFamilia;
         const url = idFamilia + '/aniversariantes/';
-        const nascimento = action.nascimento + 'T03:00:00Z';
+        const nascimento = action.nascimento;
         const payload = {
             fields: {
                 pessoa: {
@@ -20,6 +20,8 @@ export function* initCadastroSaga(action: PessoaCadastroAction) {
                 },
             },
         };
+
+        console.log(payload);
 
         const response = yield axios.post(url, payload);
         const pessoaCadastrada = response.data.fields.pessoa.stringValue;

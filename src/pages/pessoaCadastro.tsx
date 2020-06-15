@@ -35,9 +35,8 @@ const PessoasCadastro: React.FC = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const [nome, setNome] = useState('');
-    const [nascimento, setNascimento] = useState();
     const [alertStyle, setAlertStyle] = useState(false);
+    const [formulario, setformulario] = useState({ nome: '', nascimento: '' });
 
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
     const pessoaCadastrada = useSelector(
@@ -53,22 +52,20 @@ const PessoasCadastro: React.FC = () => {
         nascimento: Date,
     ) => dispatch(initCadastro(idFamilia, nome, nascimento));
 
-    const nomeChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNome(event.target.value);
-        setAlertStyle(false);
-    };
+    const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const nome = event.target.name;
+        const valor = event.target.value;
 
-    const nascimentoChangeHandler = (
-        event: React.ChangeEvent<HTMLInputElement>,
-    ) => {
-        setNascimento(event.target.value);
+        setformulario({ ...formulario, [nome]: valor });
         setAlertStyle(false);
     };
 
     const onSubmitHandler = (event: React.FormEvent) => {
         event.preventDefault();
         setAlertStyle(true);
-        onInitCadastro(idFamilia, nome, nascimento);
+
+        const dtNascimento = new Date(formulario.nascimento + 'T03:00:00Z');
+        onInitCadastro(idFamilia, formulario.nome, dtNascimento);
     };
 
     const errorShow = erro.length > 0 && alertStyle;
@@ -86,24 +83,26 @@ const PessoasCadastro: React.FC = () => {
                 required
                 className={classes.input}
                 autoFocus={true}
+                name="nome"
                 id="pessoa-nome"
                 label="Nome"
                 variant="outlined"
                 color="secondary"
-                value={nome}
-                onChange={nomeChangeHandler}
+                value={formulario.nome}
+                onChange={inputChangeHandler}
             />
             <TextField
                 required
                 className={classes.input}
                 InputLabelProps={{ shrink: true }}
                 type="date"
+                name="nascimento"
                 id="pessoa-data-nascimento"
                 label="Data de nascimento"
                 variant="outlined"
                 color="secondary"
-                value={nascimento}
-                onChange={nascimentoChangeHandler}
+                value={formulario.nascimento}
+                onChange={inputChangeHandler}
             />
             <Box>
                 <Button
