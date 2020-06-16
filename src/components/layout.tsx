@@ -28,9 +28,10 @@ const theme = createMuiTheme({
 
 type Props = {
     title: string;
+    headerTexto?: string;
 };
 
-const Layout: React.FC<Props> = ({ title, children }) => {
+const Layout: React.FC<Props> = ({ title, headerTexto, children }) => {
     const dispatch = useDispatch();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -55,7 +56,7 @@ const Layout: React.FC<Props> = ({ title, children }) => {
         conteudo = (
             <Box>
                 <CssBaseline />
-                <Header />
+                <Header title={headerTexto} />
                 <SEO title={title} />
                 <Container maxWidth="md">{children}</Container>
             </Box>

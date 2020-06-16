@@ -3,6 +3,7 @@ import { Link } from 'gatsby';
 import { useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -10,19 +11,15 @@ import IconButton from '@material-ui/core/IconButton';
 import CakeIcon from '@material-ui/icons/Cake';
 
 import { AuthState } from '../models/AuthState';
-import { AniversariantesState } from '../models/AniversariantesState';
 import { PropertiesState } from '../models/PropertiesState';
 
 import MenuAcoes from './menuAcoes';
 
 const useStyles = makeStyles(theme => {
     return {
-        root: {
-            flexGrow: 1,
-        },
         menuButton: {
             [theme.breakpoints.down('sm')]: {
-                marginRight: theme.spacing(0),
+                marginRight: theme.spacing(1),
             },
             [theme.breakpoints.up('sm')]: {
                 marginRight: theme.spacing(2),
@@ -30,15 +27,28 @@ const useStyles = makeStyles(theme => {
         },
         title: {
             flexGrow: 1,
-            [theme.breakpoints.down('sm')]: {
-                textAlign: 'center',
-            },
         },
         offset: theme.mixins.toolbar,
     };
 });
 
-const Header: React.FC = () => {
+const getTitulo = (familiaNome: string, title?: string) => {
+    if (title) {
+        return title;
+    }
+
+    if (familiaNome) {
+        return 'Família ' + familiaNome;
+    }
+
+    return 'Aniversariantes';
+};
+
+type Props = {
+    title?: string;
+};
+
+const Header: React.FC<Props> = ({ title }) => {
     const classes = useStyles();
 
     const isMobile = useSelector(
@@ -47,12 +57,11 @@ const Header: React.FC = () => {
     const familiaNome = useSelector(
         (state: AuthState) => state.auth.familiaNome,
     );
-    const loading = useSelector(
-        (state: AniversariantesState) => state.aniversariantes.loading,
-    );
+
+    const titulo = getTitulo(familiaNome, title);
 
     return (
-        <div className={classes.root}>
+        <Box>
             <AppBar position="fixed">
                 <Toolbar>
                     <Link to="/" style={{ color: 'inherit' }}>
@@ -72,16 +81,13 @@ const Header: React.FC = () => {
                         className={classes.title}
                         data-testid="header-texto"
                     >
-                        Aniversariantes
-                        {!loading && familiaNome
-                            ? ' - Família ' + familiaNome
-                            : null}
+                        {titulo}
                     </Typography>
                     <MenuAcoes />
                 </Toolbar>
             </AppBar>
             <div className={classes.offset} />
-        </div>
+        </Box>
     );
 };
 

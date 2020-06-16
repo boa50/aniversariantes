@@ -23,15 +23,16 @@ const useStyles = makeStyles(theme => ({
     },
     input: {
         marginBottom: theme.spacing(3),
-        width: '50%',
-    },
-    button: {
-        marginRight: theme.spacing(1),
-        marginLeft: theme.spacing(1),
+        [theme.breakpoints.down('sm')]: {
+            width: '90%',
+        },
+        [theme.breakpoints.up('sm')]: {
+            width: '50%',
+        },
     },
 }));
 
-const PessoasCadastro: React.FC = () => {
+const PessoaCadastro: React.FC = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
@@ -71,7 +72,7 @@ const PessoasCadastro: React.FC = () => {
     const errorShow = erro.length > 0 && alertStyle;
     const successShow = pessoaCadastrada.length > 0 && alertStyle;
     const mensagemSucesso =
-        pessoaCadastrada + ' cadastrado(a) nos aniversariantes da família :)';
+        pessoaCadastrada + ' cadastrado(a) nos aniversariantes da família ;)';
 
     const conteudo = (
         <form
@@ -105,12 +106,7 @@ const PessoasCadastro: React.FC = () => {
                 onChange={inputChangeHandler}
             />
             <Box>
-                <Button
-                    className={classes.button}
-                    variant="contained"
-                    color="secondary"
-                    type="submit"
-                >
+                <Button variant="contained" color="secondary" type="submit">
                     Cadastrar
                 </Button>
             </Box>
@@ -121,7 +117,14 @@ const PessoasCadastro: React.FC = () => {
         </form>
     );
 
-    return <Layout title="Cadastro de Pessoas">{conteudo}</Layout>;
+    return (
+        <Layout
+            title="Cadastro de Aniversariantes"
+            headerTexto="Cadastro de Aniversariantes"
+        >
+            {conteudo}
+        </Layout>
+    );
 };
 
-export default PessoasCadastro;
+export default PessoaCadastro;
