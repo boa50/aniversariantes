@@ -21,8 +21,6 @@ export function* initCadastroSaga(action: PessoaCadastroAction) {
             },
         };
 
-        console.log(payload);
-
         const response = yield axios.post(url, payload);
         const pessoaCadastrada = response.data.fields.pessoa.stringValue;
 
