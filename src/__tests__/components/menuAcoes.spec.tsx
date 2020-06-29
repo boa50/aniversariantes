@@ -40,7 +40,7 @@ describe('MenuAcoes component', () => {
             erro = error;
         }
 
-        const logoutBotao = getByTestId('logout-botao');
+        const logoutBotao = getByTestId('Sair-menu-button');
         expect(logoutBotao).toBeVisible();
         expect(erro).toBeTruthy();
     });
@@ -70,7 +70,7 @@ describe('MenuAcoes component', () => {
 
         erro = '';
         try {
-            getByTestId('logout-botao');
+            getByTestId('Sair-menu-button');
         } catch (error) {
             erro = error;
         }
@@ -94,7 +94,7 @@ describe('MenuAcoes component', () => {
 
         let erro = '';
         try {
-            getByTestId('logout-botao');
+            getByTestId('Sair-menu-button');
         } catch (error) {
             erro = error;
         }
@@ -107,7 +107,7 @@ describe('MenuAcoes component', () => {
 
         const dotMenuOpened = getByTestId('dot-menu-opened');
         const shareButton = getByTestId('share-button-menu');
-        const logoutBotao = getByTestId('logout-botao');
+        const logoutBotao = getByTestId('Sair-menu-button');
         expect(dotMenuOpened).toBeDefined();
         expect(shareButton).toBeDefined();
         expect(logoutBotao).toBeDefined();
