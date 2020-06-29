@@ -91,6 +91,7 @@ const PessoaCadastro: React.FC = () => {
                 color="secondary"
                 value={formulario.nome}
                 onChange={inputChangeHandler}
+                data-testid="nome-input"
             />
             <TextField
                 required
@@ -104,9 +105,15 @@ const PessoaCadastro: React.FC = () => {
                 color="secondary"
                 value={formulario.nascimento}
                 onChange={inputChangeHandler}
+                data-testid="nascimento-input"
             />
             <Box>
-                <Button variant="contained" color="secondary" type="submit">
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    type="submit"
+                    data-testid="cadastrar-button"
+                >
                     Cadastrar
                 </Button>
             </Box>
