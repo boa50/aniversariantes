@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
+import { isDisplayed } from '../testUtils';
+
 import MenuButton from '../../components/menuButton';
 
 describe('MenuButton component', () => {
@@ -75,13 +77,6 @@ describe('MenuButton component', () => {
             </Provider>,
         );
 
-        let erro = '';
-        try {
-            getByTestId('textmock-menu-button');
-        } catch (error) {
-            erro = error;
-        }
-
-        expect(erro).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'textmock-menu-button')).toBeFalsy();
     });
 });

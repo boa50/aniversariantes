@@ -3,6 +3,8 @@ import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 
+import { isDisplayed } from '../testUtils';
+
 import ListaAniversariantes from '../../components/listaAniversariantes';
 
 describe('ListaAniversariantes component', () => {
@@ -19,15 +21,9 @@ describe('ListaAniversariantes component', () => {
             </Provider>,
         );
 
-        let erro = '';
-        try {
-            getByTestId('aniversariantes-tabela');
-        } catch (error) {
-            erro = error;
-        }
         const mensagem = getByTestId('sem-aniversariantes-mensagem');
 
-        expect(erro).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'aniversariantes-tabela')).toBeFalsy();
         expect(mensagem.textContent).toBe('Sem aniversariantes no mês');
     });
 

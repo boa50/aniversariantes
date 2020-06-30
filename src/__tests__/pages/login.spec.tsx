@@ -4,6 +4,8 @@ import { render, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 
+import { isDisplayed } from '../testUtils';
+
 import * as actions from '../../store/actions';
 
 import Login from '../../pages/login';
@@ -85,14 +87,7 @@ describe('Login page', () => {
         const codigoFamiliaInput = getByTestId('codigo-familia-input');
         const loginButton = getByTestId('button-login');
 
-        let erro = '';
-        try {
-            getByTestId('AlertaMock');
-        } catch (error) {
-            erro = error;
-        }
-
-        expect(erro).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'AlertaMock')).toBeFalsy();
         expect(codigoFamiliaInput).toBeVisible();
         expect(loginButton).toBeVisible();
     });
@@ -156,21 +151,7 @@ describe('Login page', () => {
         };
         const { getByTestId } = renderiza(state);
 
-        let erroCodigoFamilia = '';
-        try {
-            getByTestId('codigo-familia-input');
-        } catch (error) {
-            erroCodigoFamilia = error;
-        }
-
-        let erroButton = '';
-        try {
-            getByTestId('button-login');
-        } catch (error) {
-            erroButton = error;
-        }
-
-        expect(erroCodigoFamilia).toBeTruthy();
-        expect(erroButton).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'codigo-familia-input')).toBeFalsy();
+        expect(isDisplayed(getByTestId, 'button-login')).toBeFalsy();
     });
 });

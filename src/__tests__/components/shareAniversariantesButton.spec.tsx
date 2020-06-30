@@ -3,6 +3,8 @@ import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 
+import { isDisplayed } from '../testUtils';
+
 import RenderUtils from '../../utils/renderUtils';
 
 import ShareAniversariantesButton from '../../components/shareAniversariantesButton';
@@ -53,13 +55,6 @@ describe('ShareAniversariantesButton component', () => {
             </Provider>,
         );
 
-        let erro = '';
-        try {
-            getByTestId('share-button');
-        } catch (error) {
-            erro = error;
-        }
-
-        expect(erro).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'share-button')).toBeFalsy();
     });
 });

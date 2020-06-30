@@ -4,6 +4,8 @@ import { render, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 
+import { isDisplayed } from '../testUtils';
+
 import * as actions from '../../store/actions';
 
 import PessoaCadastro from '../../pages/pessoaCadastro';
@@ -106,22 +108,8 @@ describe('PessoaCadastro page', () => {
         const nascimentoInput = getByTestId('nascimento-input');
         const cadastrarButton = getByTestId('cadastrar-button');
 
-        let errorAlerterror = '';
-        try {
-            getByTestId('error-alert');
-        } catch (error) {
-            errorAlerterror = error;
-        }
-
-        let successAlerterror = '';
-        try {
-            getByTestId('success-alert');
-        } catch (error) {
-            successAlerterror = error;
-        }
-
-        expect(errorAlerterror).toBeTruthy();
-        expect(successAlerterror).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'error-alert')).toBeFalsy();
+        expect(isDisplayed(getByTestId, 'success-alert')).toBeFalsy();
         expect(nomeInput).toBeVisible();
         expect(nascimentoInput).toBeVisible();
         expect(cadastrarButton).toBeVisible();
