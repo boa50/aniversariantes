@@ -28,6 +28,7 @@ module.exports = {
     collectCoverageFrom: [
         '**/*tsx',
         '!<rootDir>/src/utils/dateUtils.tsx',
+        '!<rootDir>/src/utils/renderUtils.tsx',
         '!<rootDir>/src/models/*',
         '!<rootDir>/src/pages/404.tsx',
         '!<rootDir>/src/components/shareButton.tsx',

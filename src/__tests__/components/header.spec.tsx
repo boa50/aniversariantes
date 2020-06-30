@@ -67,4 +67,26 @@ describe('Header component', () => {
         const texto = getByTestId('header-texto');
         expect(texto.className).toContain('MuiTypography-subtitle1');
     });
+
+    test('verifica a renderização com título alternativo', () => {
+        const mockTitle = 'titleMock';
+        state = {
+            auth: { familiaNome: '', idFamilia: 'mock' },
+            aniversariantes: { loading: false },
+            properties: { isMobile: false },
+        };
+        store = mockStore(state);
+
+        const { getByTestId } = render(
+            <Provider store={store}>
+                <Header title={mockTitle} />
+            </Provider>,
+        );
+
+        const texto = getByTestId('header-texto');
+        const logo = getByTestId('header-logo');
+
+        expect(logo).toBeDefined();
+        expect(texto.textContent).toBe(mockTitle);
+    });
 });

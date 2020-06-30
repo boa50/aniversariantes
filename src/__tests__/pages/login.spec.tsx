@@ -145,4 +145,32 @@ describe('Login page', () => {
         expect(initAuth).toBeCalledTimes(1);
         expect(alerta).toBeVisible();
     });
+
+    test('verifica a renderização com família preenchida', () => {
+        const state = {
+            ...defaultState,
+            auth: {
+                ...defaultState.auth,
+                idFamilia: 'familiaMock',
+            },
+        };
+        const { getByTestId } = renderiza(state);
+
+        let erroCodigoFamilia = '';
+        try {
+            getByTestId('codigo-familia-input');
+        } catch (error) {
+            erroCodigoFamilia = error;
+        }
+
+        let erroButton = '';
+        try {
+            getByTestId('button-login');
+        } catch (error) {
+            erroButton = error;
+        }
+
+        expect(erroCodigoFamilia).toBeTruthy();
+        expect(erroButton).toBeTruthy();
+    });
 });

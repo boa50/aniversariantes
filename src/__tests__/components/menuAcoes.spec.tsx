@@ -75,6 +75,14 @@ describe('MenuAcoes component', () => {
             erro = error;
         }
         expect(erro).toBeTruthy();
+
+        erro = '';
+        try {
+            getByTestId('Cadastrar-menu-button');
+        } catch (error) {
+            erro = error;
+        }
+        expect(erro).toBeTruthy();
     });
 
     test('verifica a renderização do mobile', () => {
@@ -108,8 +116,10 @@ describe('MenuAcoes component', () => {
         const dotMenuOpened = getByTestId('dot-menu-opened');
         const shareButton = getByTestId('share-button-menu');
         const logoutBotao = getByTestId('Sair-menu-button');
+        const cadastroBotao = getByTestId('Cadastrar-menu-button');
         expect(dotMenuOpened).toBeDefined();
         expect(shareButton).toBeDefined();
         expect(logoutBotao).toBeDefined();
+        expect(cadastroBotao).toBeDefined();
     });
 });

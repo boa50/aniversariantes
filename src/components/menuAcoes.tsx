@@ -19,6 +19,8 @@ import { initLogout } from '../store/actions';
 import MenuButton from './menuButton';
 import ShareAniversariantesButton from './shareAniversariantesButton';
 
+import RenderUtils from '../utils/renderUtils';
+
 const useStyles = makeStyles(theme => {
     return {
         buttonSpacing: {
@@ -77,9 +79,8 @@ const MenuAcoes: React.FC = () => {
         />
     );
 
-    const isSSR = typeof window !== 'undefined';
     let telaAniversariantes = false;
-    if (isSSR) {
+    if (RenderUtils.isSSR(window)) {
         telaAniversariantes = !location.pathname.startsWith('/pessoaCadastro');
     }
 
