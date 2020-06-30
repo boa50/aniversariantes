@@ -4,13 +4,13 @@ import { useSelector } from 'react-redux';
 import { AuthState } from '../models/AuthState';
 import { AniversariantesState } from '../models/AniversariantesState';
 import AniversariantesUtils from '../utils/aniversariantesUtils';
-import RenderUtils from '../utils/renderUtils';
 
 const ShareButton = React.lazy(() => {
     return import('../components/shareButton');
 });
 
 const ShareAniversariantesButton: React.FC = () => {
+    const isSSR = typeof window === 'undefined';
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
     const loading = useSelector(
         (state: AniversariantesState) => state.aniversariantes.loading,
@@ -32,7 +32,7 @@ const ShareAniversariantesButton: React.FC = () => {
         ),
     };
 
-    return exibeBotao && !RenderUtils.isSSR(window) ? (
+    return exibeBotao && !isSSR ? (
         <Suspense fallback={<div />}>
             <ShareButton
                 config={{

@@ -3,7 +3,6 @@ import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 
-import RenderUtils from '../../utils/renderUtils';
 import Layout from '../../components/layout';
 
 jest.mock('../../components/header', () => {
@@ -48,18 +47,6 @@ describe('Layout component', () => {
     });
 
     test('verifica a renderização não autenticada correta', () => {
-        const state = {
-            auth: { loading: true },
-        };
-        const { getByTestId } = renderiza(state);
-
-        const vazio = getByTestId('vazio');
-
-        expect(vazio).toBeDefined();
-    });
-
-    test('verifica a renderização quando não é SSR', () => {
-        jest.spyOn(RenderUtils, 'isSSR').mockImplementation(() => false);
         const state = {
             auth: { loading: true },
         };

@@ -5,8 +5,6 @@ import configureStore from 'redux-mock-store';
 
 import { isDisplayed } from '../testUtils';
 
-import RenderUtils from '../../utils/renderUtils';
-
 import ShareAniversariantesButton from '../../components/shareAniversariantesButton';
 
 jest.mock('react', () => {
@@ -20,7 +18,6 @@ describe('ShareAniversariantesButton component', () => {
     let store, state;
 
     test('verifica a renderiação correta', () => {
-        jest.spyOn(RenderUtils, 'isSSR').mockImplementation(() => false);
         state = {
             auth: { idFamilia: 'mock' },
             aniversariantes: { loading: false, aniversariantes: [], mes: 10 },
@@ -40,7 +37,6 @@ describe('ShareAniversariantesButton component', () => {
     });
 
     test('verifica a não renderiação', () => {
-        jest.spyOn(RenderUtils, 'isSSR').mockImplementation(() => true);
         state = {
             auth: { idFamilia: '' },
             aniversariantes: { loading: true },

@@ -15,8 +15,6 @@ import { useAuthCheck } from '../hooks/useAuthCheck';
 import { AuthState } from '../models/AuthState';
 import { initProperties } from '../store/actions';
 
-import RenderUtils from '../utils/renderUtils';
-
 const theme = createMuiTheme({
     palette: {
         primary: {
@@ -47,7 +45,8 @@ const Layout: React.FC<Props> = ({ title, headerTexto, children }) => {
         onInitProperties(isMobile);
     }, [onInitProperties, isMobile]);
 
-    if (RenderUtils.isSSR(window)) {
+    const isSSR = typeof window === 'undefined';
+    if (!isSSR) {
         useAuthCheck(location);
     }
 
