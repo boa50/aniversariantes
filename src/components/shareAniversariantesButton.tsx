@@ -11,7 +11,6 @@ const ShareButton = React.lazy(() => {
 
 const ShareAniversariantesButton: React.FC = () => {
     const isSSR = typeof window === 'undefined';
-
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
     const loading = useSelector(
         (state: AniversariantesState) => state.aniversariantes.loading,

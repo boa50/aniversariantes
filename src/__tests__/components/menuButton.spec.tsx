@@ -2,10 +2,13 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-import LogoutButton from '../../components/logoutButton';
+import { isDisplayed } from '../testUtils';
 
-describe('LogoutButton component', () => {
+import MenuButton from '../../components/menuButton';
+
+describe('MenuButton component', () => {
     const mockStore = configureStore();
     let store, state;
 
@@ -20,11 +23,15 @@ describe('LogoutButton component', () => {
 
         const { getByTestId } = render(
             <Provider store={store}>
-                <LogoutButton />
+                <MenuButton
+                    link="/mock"
+                    textMobile="textmock"
+                    Icon={ExitToAppIcon}
+                />
             </Provider>,
         );
 
-        const botao = getByTestId('logout-botao');
+        const botao = getByTestId('textmock-menu-button');
         expect(botao).toBeVisible();
     });
 
@@ -39,11 +46,15 @@ describe('LogoutButton component', () => {
 
         const { getByTestId } = render(
             <Provider store={store}>
-                <LogoutButton />
+                <MenuButton
+                    link="/mock"
+                    textMobile="textmock"
+                    Icon={ExitToAppIcon}
+                />
             </Provider>,
         );
 
-        const botao = getByTestId('logout-botao');
+        const botao = getByTestId('textmock-menu-button');
         expect(botao).toBeVisible();
     });
 
@@ -58,17 +69,14 @@ describe('LogoutButton component', () => {
 
         const { getByTestId } = render(
             <Provider store={store}>
-                <LogoutButton />
+                <MenuButton
+                    link="/mock"
+                    textMobile="textmock"
+                    Icon={ExitToAppIcon}
+                />
             </Provider>,
         );
 
-        let erro = '';
-        try {
-            getByTestId('logout-botao');
-        } catch (error) {
-            erro = error;
-        }
-
-        expect(erro).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'textmock-menu-button')).toBeFalsy();
     });
 });

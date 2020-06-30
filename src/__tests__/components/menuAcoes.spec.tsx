@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { WebShareInterface } from 'react-web-share-api';
 
+import { isDisplayed } from '../testUtils';
+
 import MenuAcoes from '../../components/menuAcoes';
 
 jest.mock('react-web-share-api', () => {
@@ -33,16 +35,9 @@ describe('MenuAcoes component', () => {
             </Provider>,
         );
 
-        let erro = '';
-        try {
-            getByTestId('dot-menu');
-        } catch (error) {
-            erro = error;
-        }
-
-        const logoutBotao = getByTestId('logout-botao');
+        const logoutBotao = getByTestId('Sair-menu-button');
         expect(logoutBotao).toBeVisible();
-        expect(erro).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'dot-menu')).toBeFalsy();
     });
 
     test('verifica a renderização sem login', () => {
@@ -60,21 +55,9 @@ describe('MenuAcoes component', () => {
             </Provider>,
         );
 
-        let erro = '';
-        try {
-            getByTestId('dot-menu');
-        } catch (error) {
-            erro = error;
-        }
-        expect(erro).toBeTruthy();
-
-        erro = '';
-        try {
-            getByTestId('logout-botao');
-        } catch (error) {
-            erro = error;
-        }
-        expect(erro).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'dot-menu')).toBeFalsy();
+        expect(isDisplayed(getByTestId, 'Sair-menu-button')).toBeFalsy();
+        expect(isDisplayed(getByTestId, 'Cadastrar-menu-button')).toBeFalsy();
     });
 
     test('verifica a renderização do mobile', () => {
@@ -92,13 +75,7 @@ describe('MenuAcoes component', () => {
             </Provider>,
         );
 
-        let erro = '';
-        try {
-            getByTestId('logout-botao');
-        } catch (error) {
-            erro = error;
-        }
-        expect(erro).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'Sair-menu-button')).toBeFalsy();
 
         const dotMenu = getByTestId('dot-menu');
         expect(dotMenu).toBeDefined();
@@ -107,9 +84,11 @@ describe('MenuAcoes component', () => {
 
         const dotMenuOpened = getByTestId('dot-menu-opened');
         const shareButton = getByTestId('share-button-menu');
-        const logoutBotao = getByTestId('logout-botao');
+        const logoutBotao = getByTestId('Sair-menu-button');
+        const cadastroBotao = getByTestId('Cadastrar-menu-button');
         expect(dotMenuOpened).toBeDefined();
         expect(shareButton).toBeDefined();
         expect(logoutBotao).toBeDefined();
+        expect(cadastroBotao).toBeDefined();
     });
 });

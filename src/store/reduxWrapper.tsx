@@ -6,6 +6,7 @@ import createSagaMiddleware from 'redux-saga';
 import aniversariantesReducer from './reducers/aniversariantes';
 import authReducer from './reducers/auth';
 import propertiesReducer from './reducers/properties';
+import pessoaCadastroReducer from './reducers/pessoaCadastro';
 import { watch } from './sagas';
 
 declare global {
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
     aniversariantes: aniversariantesReducer,
     auth: authReducer,
     properties: propertiesReducer,
+    pessoaCadastro: pessoaCadastroReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

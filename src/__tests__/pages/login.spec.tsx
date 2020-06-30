@@ -4,6 +4,8 @@ import { render, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 
+import { isDisplayed } from '../testUtils';
+
 import * as actions from '../../store/actions';
 
 import Login from '../../pages/login';
@@ -85,14 +87,7 @@ describe('Login page', () => {
         const codigoFamiliaInput = getByTestId('codigo-familia-input');
         const loginButton = getByTestId('button-login');
 
-        let erro = '';
-        try {
-            getByTestId('AlertaMock');
-        } catch (error) {
-            erro = error;
-        }
-
-        expect(erro).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'AlertaMock')).toBeFalsy();
         expect(codigoFamiliaInput).toBeVisible();
         expect(loginButton).toBeVisible();
     });
@@ -144,5 +139,19 @@ describe('Login page', () => {
 
         expect(initAuth).toBeCalledTimes(1);
         expect(alerta).toBeVisible();
+    });
+
+    test('verifica a renderização com família preenchida', () => {
+        const state = {
+            ...defaultState,
+            auth: {
+                ...defaultState.auth,
+                idFamilia: 'familiaMock',
+            },
+        };
+        const { getByTestId } = renderiza(state);
+
+        expect(isDisplayed(getByTestId, 'codigo-familia-input')).toBeFalsy();
+        expect(isDisplayed(getByTestId, 'button-login')).toBeFalsy();
     });
 });

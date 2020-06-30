@@ -62,6 +62,7 @@ const Login: React.FC = () => {
                     className={classes.input}
                     error={errorShow}
                     required
+                    autoFocus={true}
                     id="id-familia"
                     label="Código da Família"
                     variant="outlined"

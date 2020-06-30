@@ -21,12 +21,13 @@ module.exports = {
     globals: {
         __PATH_PREFIX__: ``,
     },
-    testRegex: '(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$',
+    testRegex: '/__tests__/.*\\.(test|spec)\\.(ts|tsx)$',
     moduleFileExtensions: ['ts', 'tsx', 'js'],
     collectCoverage: false,
     coverageReporters: ['lcov', 'text', 'html'],
     collectCoverageFrom: [
         '**/*tsx',
+        '!<rootDir>/src/__tests__/*',
         '!<rootDir>/src/utils/dateUtils.tsx',
         '!<rootDir>/src/models/*',
         '!<rootDir>/src/pages/404.tsx',

@@ -37,8 +37,7 @@ describe('AniversariantesActions', () => {
         const aniversariantes: Aniversariante[] = [
             {
                 pessoa: 'jumentinho',
-                dia: '10',
-                mes: '8',
+                nascimento: new Date('2000-08-10T03:00:00Z'),
             },
         ];
         const expectedAction = {
