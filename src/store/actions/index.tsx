@@ -10,7 +10,7 @@ export {
     authStart,
     authSuccess,
     authFail,
-    checkIdFamilia,
+    authCheckState,
     initLogout,
     logoutComplete,
 } from './auth';

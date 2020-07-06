@@ -41,6 +41,8 @@ const logoutComplete = (state: AuthStateReducer) => {
         ...state,
         idFamilia: '',
         familiaNome: '',
+        error: '',
+        loading: false,
     };
 };
 
