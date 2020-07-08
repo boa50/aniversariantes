@@ -25,7 +25,7 @@ function* getFamiliaNome(idFamilia: string, token: string) {
         return familiaNome;
     } catch (error) {
         const mensagem = trataErroMensagem(error);
-        yield put(actions.authFail(mensagem));
+        error.response.statusText = mensagem;
         throw error;
     }
 }
@@ -51,8 +51,8 @@ export function* initAuthSaga(action: AuthAction) {
         yield localStorage.setItem('expirationDate', expirationDate);
 
         const familiaNome = yield getFamiliaNome(action.idFamilia, token);
-
         yield localStorage.setItem('idFamilia', action.idFamilia);
+
         yield put(actions.authSuccess(action.idFamilia, familiaNome));
     } catch (error) {
         yield put(actions.authFail(error.response.statusText));
