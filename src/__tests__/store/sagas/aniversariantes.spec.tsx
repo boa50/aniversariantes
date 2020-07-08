@@ -1,4 +1,3 @@
-import { runSaga } from 'redux-saga';
 import axios from '../../../axios';
 import { AniversariantesAction } from '../../../models/AniversariantesAction';
 import { initAniversariantesSaga } from '../../../store/sagas/aniversariantes';
@@ -7,6 +6,8 @@ import {
     fetchAniversariantesSuccess,
     fetchAniversariantesFail,
 } from '../../../store/actions';
+
+import { executeSaga } from '../../testUtils';
 
 const aniversariantesMock = [
     {
@@ -46,11 +47,7 @@ describe('AniversariantesSaga', () => {
             .spyOn(axios, 'get')
             .mockImplementation(() => Promise.resolve(responseMock));
 
-        const dispatched: any = [];
-        await runSaga(
-            {
-                dispatch: action => dispatched.push(action),
-            },
+        const dispatched = await executeSaga(
             initAniversariantesSaga,
             actionMock,
         );
@@ -70,16 +67,12 @@ describe('AniversariantesSaga', () => {
             .spyOn(axios, 'get')
             .mockImplementation(() => Promise.reject(mockError));
 
-        const dispatched: any = [];
-        await runSaga(
-            {
-                dispatch: action => dispatched.push(action),
-            },
+        const dispatched = await executeSaga(
             initAniversariantesSaga,
             actionMock,
         );
 
-        expect(fetchAniversariantes).toHaveBeenCalledTimes(1);
+        await expect(fetchAniversariantes).toHaveBeenCalledTimes(1);
         expect(dispatched).toEqual([
             fetchAniversariantesStart(),
             fetchAniversariantesFail(mockError),

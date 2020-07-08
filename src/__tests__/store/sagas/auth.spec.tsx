@@ -1,4 +1,3 @@
-import { runSaga, Saga } from 'redux-saga';
 import axios from '../../../axios';
 import axiosRaw from 'axios';
 import { AuthAction } from '../../../models/AuthAction';
@@ -15,6 +14,8 @@ import {
     initLogout,
     initAuth,
 } from '../../../store/actions';
+
+import { executeSaga } from '../../testUtils';
 
 const mocks: jest.SpyInstance[] = [];
 
@@ -88,19 +89,6 @@ const axiosMock = (
     return { getToken, fetchFamilia };
 };
 
-const executeSaga = async (saga: Saga<any[]>, action = actionMock) => {
-    const dispatched: any = [];
-    await runSaga(
-        {
-            dispatch: action => dispatched.push(action),
-        },
-        saga,
-        action,
-    );
-
-    return dispatched;
-};
-
 const mockGetItem = (token: string, idFamilia: string, data: string) => {
     const arr: string[] = [];
 
@@ -148,7 +136,7 @@ describe('AuthSaga', () => {
         const errorMessage = 'Código não existente!';
         const { getToken, fetchFamilia } = axiosMock(true, false);
 
-        const dispatched = await executeSaga(initAuthSaga);
+        const dispatched = await executeSaga(initAuthSaga, actionMock);
 
         await expect(getToken).toHaveBeenCalledTimes(1);
         await expect(fetchFamilia).toHaveBeenCalledTimes(1);
@@ -164,7 +152,7 @@ describe('AuthSaga', () => {
             errorMessage,
         );
 
-        const dispatched = await executeSaga(initAuthSaga);
+        const dispatched = await executeSaga(initAuthSaga, actionMock);
 
         await expect(getToken).toHaveBeenCalledTimes(1);
         await expect(fetchFamilia).toHaveBeenCalledTimes(1);
@@ -177,7 +165,7 @@ describe('AuthSaga', () => {
         const expectedArr = [mockToken, mockIdFamilia, dataAtual];
         const arr = mockGetItem(mockToken, mockIdFamilia, dataAtual);
 
-        const dispatched = await executeSaga(authCheckStateSaga);
+        const dispatched = await executeSaga(authCheckStateSaga, actionMock);
 
         await expect(fetchFamilia).toHaveBeenCalledTimes(1);
         expect(Storage.prototype.getItem).toHaveBeenCalledTimes(3);
@@ -192,7 +180,7 @@ describe('AuthSaga', () => {
         const expectedArr = [mockToken, ''];
         const arr = mockGetItem(mockToken, '', dataAtual);
 
-        const dispatched = await executeSaga(authCheckStateSaga);
+        const dispatched = await executeSaga(authCheckStateSaga, actionMock);
 
         expect(Storage.prototype.getItem).toHaveBeenCalledTimes(2);
         expect(expectedArr).toEqual(arr);
@@ -203,7 +191,7 @@ describe('AuthSaga', () => {
         const expectedArr = ['', mockIdFamilia];
         const arr = mockGetItem('', mockIdFamilia, dataAtual);
 
-        const dispatched = await executeSaga(authCheckStateSaga);
+        const dispatched = await executeSaga(authCheckStateSaga, actionMock);
 
         expect(Storage.prototype.getItem).toHaveBeenCalledTimes(2);
         expect(expectedArr).toEqual(arr);
@@ -214,7 +202,7 @@ describe('AuthSaga', () => {
         const expectedArr = [mockToken, mockIdFamilia, dataPassada];
         const arr = mockGetItem(mockToken, mockIdFamilia, dataPassada);
 
-        const dispatched = await executeSaga(authCheckStateSaga);
+        const dispatched = await executeSaga(authCheckStateSaga, actionMock);
 
         expect(Storage.prototype.getItem).toHaveBeenCalledTimes(3);
         expect(expectedArr).toEqual(arr);
@@ -224,7 +212,7 @@ describe('AuthSaga', () => {
     test('verifica initLogoutSaga', async () => {
         Storage.prototype.removeItem = jest.fn((a: string) => true);
 
-        const dispatched = await executeSaga(initLogoutSaga);
+        const dispatched = await executeSaga(initLogoutSaga, actionMock);
 
         expect(Storage.prototype.removeItem).toHaveBeenCalledTimes(3);
         expect(dispatched).toEqual([logoutComplete()]);
