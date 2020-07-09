@@ -101,6 +101,8 @@ describe('AuthReducer', () => {
             ...initState,
             idFamilia: '',
             familiaNome: '',
+            error: '',
+            loading: false,
         });
     });
 });

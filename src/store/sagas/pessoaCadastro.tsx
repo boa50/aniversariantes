@@ -5,6 +5,12 @@ import * as actions from '../actions';
 
 export function* initCadastroSaga(action: PessoaCadastroAction) {
     yield put(actions.cadastroStart());
+    const token = yield localStorage.getItem('token');
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
 
     try {
         const idFamilia = action.idFamilia;
@@ -21,7 +27,7 @@ export function* initCadastroSaga(action: PessoaCadastroAction) {
             },
         };
 
-        const response = yield axios.post(url, payload);
+        const response = yield axios.post(url, payload, config);
         const pessoaCadastrada = response.data.fields.pessoa.stringValue;
 
         yield put(actions.cadastroSuccess(pessoaCadastrada));

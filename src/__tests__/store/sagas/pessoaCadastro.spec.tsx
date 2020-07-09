@@ -1,4 +1,3 @@
-import { runSaga } from 'redux-saga';
 import axios from '../../../axios';
 import { PessoaCadastroAction } from '../../../models/PessoaCadastroAction';
 import { initCadastroSaga } from '../../../store/sagas/pessoaCadastro';
@@ -7,6 +6,8 @@ import {
     cadastroSuccess,
     cadastroFail,
 } from '../../../store/actions';
+
+import { executeSaga } from '../../testUtils';
 
 const pessoaNome = 'jumentinho';
 
@@ -34,14 +35,7 @@ describe('PessoaCadastroSaga', () => {
             .spyOn(axios, 'post')
             .mockImplementation(() => Promise.resolve(responseMock));
 
-        const dispatched: any = [];
-        await runSaga(
-            {
-                dispatch: action => dispatched.push(action),
-            },
-            initCadastroSaga,
-            actionMock,
-        );
+        const dispatched = await executeSaga(initCadastroSaga, actionMock);
 
         expect(cadastraPessoa).toHaveBeenCalledTimes(1);
         expect(dispatched).toEqual([
@@ -67,14 +61,7 @@ describe('PessoaCadastroSaga', () => {
             .spyOn(axios, 'post')
             .mockImplementation(() => Promise.reject(responseMock));
 
-        const dispatched: any = [];
-        await runSaga(
-            {
-                dispatch: action => dispatched.push(action),
-            },
-            initCadastroSaga,
-            actionMock,
-        );
+        const dispatched = await executeSaga(initCadastroSaga, actionMock);
 
         expect(cadastraPessoa).toHaveBeenCalledTimes(1);
         expect(dispatched).toEqual([cadastroStart(), cadastroFail(mockError)]);
