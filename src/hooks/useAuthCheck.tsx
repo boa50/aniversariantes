@@ -2,7 +2,7 @@ import { useEffect, useCallback } from 'react';
 import { navigate } from 'gatsby';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { authCheckState } from '../store/actions';
+import { checkIdFamilia } from '../store/actions';
 import { AuthState } from '../models/AuthState';
 
 export const useAuthCheck = (location: Location) => {
@@ -10,13 +10,13 @@ export const useAuthCheck = (location: Location) => {
 
     const authLoading = useSelector((state: AuthState) => state.auth.loading);
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
-    const onAuthCheckState = useCallback(() => dispatch(authCheckState()), []);
+    const onCheckIdFamilia = useCallback(() => dispatch(checkIdFamilia()), []);
 
     useEffect(() => {
         if (!idFamilia) {
-            onAuthCheckState();
+            onCheckIdFamilia();
         }
-    }, [onAuthCheckState]);
+    }, [onCheckIdFamilia]);
 
     if (!authLoading) {
         if (!idFamilia && !location.pathname.startsWith('/login')) {
