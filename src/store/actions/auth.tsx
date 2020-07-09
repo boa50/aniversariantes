@@ -28,9 +28,9 @@ export const authFail = (error: string) => {
     };
 };
 
-export const authCheckState = () => {
+export const checkIdFamilia = () => {
     return {
-        type: actionTypes.AUTH_CHECK_STATE,
+        type: actionTypes.CHECK_ID_FAMILIA,
     };
 };
 

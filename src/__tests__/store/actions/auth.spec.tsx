@@ -46,10 +46,10 @@ describe('AuthActions', () => {
 
     test('cria a action para checkIdFamilia', () => {
         const expectedAction = {
-            type: actionsTypes.AUTH_CHECK_STATE,
+            type: actionsTypes.CHECK_ID_FAMILIA,
         };
 
-        expect(actions.authCheckState()).toEqual(expectedAction);
+        expect(actions.checkIdFamilia()).toEqual(expectedAction);
     });
 
     test('cria a action para initLogout', () => {

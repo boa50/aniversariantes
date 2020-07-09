@@ -3,7 +3,7 @@ import axios from '../../../axios';
 import { AuthAction } from '../../../models/AuthAction';
 import {
     initAuthSaga,
-    authCheckStateSaga,
+    checkIdFamiliaSaga,
     initLogoutSaga,
 } from '../../../store/sagas/auth';
 import {
@@ -125,7 +125,7 @@ describe('AuthSaga', () => {
             {
                 dispatch: action => dispatched.push(action),
             },
-            authCheckStateSaga,
+            checkIdFamiliaSaga,
         );
 
         expect(fetchFamilia).toHaveBeenCalledTimes(1);
@@ -146,7 +146,7 @@ describe('AuthSaga', () => {
             {
                 dispatch: action => dispatched.push(action),
             },
-            authCheckStateSaga,
+            checkIdFamiliaSaga,
         );
 
         expect(Storage.prototype.getItem).toHaveBeenCalledTimes(1);

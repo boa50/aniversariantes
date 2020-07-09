@@ -5,17 +5,11 @@ import * as actions from '../actions';
 
 export function* initAniversariantesSaga(action: AniversariantesAction) {
     yield put(actions.fetchAniversariantesStart());
-    const token = yield localStorage.getItem('token');
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
 
     const url = `${action.idFamilia}/aniversariantes?pageSize=200`;
 
     try {
-        const response = yield axios.get(url, config);
+        const response = yield axios.get(url);
 
         const aniversariantes = response.data.documents.map(
             (aniversariante: any) => {
