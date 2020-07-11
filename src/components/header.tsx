@@ -8,7 +8,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import CakeIcon from '@material-ui/icons/Cake';
+import LogoIcon from './ui/logoIcon';
 
 import { AuthState } from '../models/AuthState';
 import { PropertiesState } from '../models/PropertiesState';
@@ -72,7 +72,7 @@ const Header: React.FC<Props> = ({ title }) => {
                             aria-label="menu"
                             data-testid="header-logo"
                         >
-                            <CakeIcon />
+                            <LogoIcon />
                         </IconButton>
                     </Link>
                     <Typography
