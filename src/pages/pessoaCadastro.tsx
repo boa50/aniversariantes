@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
+import InputLabel from '@material-ui/core/InputLabel';
 
 import { AuthState } from '../models/AuthState';
 import { PessoaCadastroState } from '../models/PessoaCadastroState';
@@ -19,7 +20,12 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        height: '85vh',
+        [theme.breakpoints.down('sm')]: {
+            marginTop: '10%',
+        },
+        [theme.breakpoints.up('sm')]: {
+            height: '85vh',
+        },
     },
     input: {
         marginBottom: theme.spacing(3),
@@ -30,6 +36,15 @@ const useStyles = makeStyles(theme => ({
             width: '50%',
         },
     },
+    inputLabel: {
+        [theme.breakpoints.down('sm')]: {
+            width: '90%',
+        },
+        [theme.breakpoints.up('sm')]: {
+            width: '50%',
+        },
+        fontSize: '1.5rem',
+    },
 }));
 
 const PessoaCadastro: React.FC = () => {
@@ -37,7 +52,8 @@ const PessoaCadastro: React.FC = () => {
     const dispatch = useDispatch();
 
     const [alertStyle, setAlertStyle] = useState(false);
-    const [formulario, setformulario] = useState({ nome: '', nascimento: '' });
+    const [formulario, setFormulario] = useState({ nome: '', nascimento: '' });
+    const [focus, setFocus] = useState({ nome: false, nascimento: false });
 
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
     const pessoaCadastrada = useSelector(
@@ -57,8 +73,21 @@ const PessoaCadastro: React.FC = () => {
         const nome = event.target.name;
         const valor = event.target.value;
 
-        setformulario({ ...formulario, [nome]: valor });
+        setFormulario({ ...formulario, [nome]: valor });
         setAlertStyle(false);
+    };
+
+    const focusChangeHandler = (
+        event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+        const nome = event.target.name;
+        const type = event.type;
+
+        if (type === 'focus') {
+            setFocus({ ...focus, [nome]: true });
+        } else {
+            setFocus({ ...focus, [nome]: false });
+        }
     };
 
     const onSubmitHandler = (event: React.FormEvent) => {
@@ -80,19 +109,42 @@ const PessoaCadastro: React.FC = () => {
             autoComplete="off"
             onSubmit={onSubmitHandler}
         >
+            <InputLabel
+                focused={focus.nome}
+                color="secondary"
+                htmlFor="pessoa-nome"
+                shrink
+                className={classes.inputLabel}
+            >
+                Nome
+            </InputLabel>
             <TextField
                 required
                 className={classes.input}
                 autoFocus={true}
+                InputLabelProps={{
+                    shrink: true,
+                }}
                 name="nome"
                 id="pessoa-nome"
-                label="Nome"
                 variant="outlined"
                 color="secondary"
                 value={formulario.nome}
+                onFocus={focusChangeHandler}
+                onBlur={focusChangeHandler}
                 onChange={inputChangeHandler}
                 data-testid="nome-input"
             />
+
+            <InputLabel
+                focused={focus.nascimento}
+                color="secondary"
+                htmlFor="pessoa-data-nascimento"
+                shrink
+                className={classes.inputLabel}
+            >
+                Data de nascimento
+            </InputLabel>
             <TextField
                 required
                 className={classes.input}
@@ -100,10 +152,11 @@ const PessoaCadastro: React.FC = () => {
                 type="date"
                 name="nascimento"
                 id="pessoa-data-nascimento"
-                label="Data de nascimento"
                 variant="outlined"
                 color="secondary"
                 value={formulario.nascimento}
+                onFocus={focusChangeHandler}
+                onBlur={focusChangeHandler}
                 onChange={inputChangeHandler}
                 data-testid="nascimento-input"
             />
