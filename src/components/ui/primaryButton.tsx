@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
 type Props = {
@@ -14,6 +13,7 @@ const PrimaryButton: React.FC<Props> = ({ id, label }) => {
             id={id}
             variant="contained"
             color="secondary"
+            size="large"
             type="submit"
             data-testid={id + '-button'}
         >
