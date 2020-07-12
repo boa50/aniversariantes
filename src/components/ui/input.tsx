@@ -31,10 +31,7 @@ type Props = {
     autoFocus?: boolean;
     error?: boolean;
     changeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    stateManage: {
-        value: string;
-        setValue: React.Dispatch<React.SetStateAction<string>>;
-    };
+    formik: any;
 };
 
 const Input: React.FC<Props> = ({
@@ -44,17 +41,13 @@ const Input: React.FC<Props> = ({
     autoFocus = false,
     error,
     changeHandler,
-    stateManage,
+    formik,
 }) => {
     const classes = useStyles();
     const [focus, setFocus] = useState(false);
-    const [textInvalid, setTextInvalid] = useState('');
-    const [errorInvalid, setErrorInvalid] = useState(false);
 
     const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const valor = event.target.value;
-        stateManage.setValue(valor);
-        setErrorInvalid(false);
+        formik.handleChange(event);
 
         if (undefined !== changeHandler) {
             changeHandler(event);
@@ -69,14 +62,13 @@ const Input: React.FC<Props> = ({
         if (type === 'focus') {
             setFocus(true);
         } else {
+            formik.handleBlur(event);
             setFocus(false);
         }
     };
 
-    const invalidChangeHandler = () => {
-        setTextInvalid('Preencha o campo, jumento');
-        setErrorInvalid(true);
-    };
+    const errorShow =
+        (formik.touched[id] && formik.errors[id] !== undefined) || error;
 
     return (
         <Box className={classes.root}>
@@ -84,7 +76,7 @@ const Input: React.FC<Props> = ({
                 id={id + '-label'}
                 focused={focus}
                 color="secondary"
-                error={error || errorInvalid}
+                error={errorShow}
                 htmlFor={id}
                 shrink
                 className={classes.inputLabel}
@@ -92,12 +84,10 @@ const Input: React.FC<Props> = ({
                 {label}
             </InputLabel>
             <TextField
-                required
                 className={classes.input}
                 autoFocus={autoFocus && !error}
-                error={error || errorInvalid}
-                // helperText={errorInvalid ? textInvalid : ''}
-                onInvalid={invalidChangeHandler}
+                error={errorShow}
+                helperText={formik.touched[id] && formik.errors[id]}
                 InputLabelProps={{
                     shrink: true,
                 }}
@@ -106,7 +96,7 @@ const Input: React.FC<Props> = ({
                 type={type}
                 variant="outlined"
                 color="secondary"
-                value={stateManage.value}
+                value={formik.values[id]}
                 onFocus={focusChangeHandler}
                 onBlur={focusChangeHandler}
                 onChange={inputChangeHandler}

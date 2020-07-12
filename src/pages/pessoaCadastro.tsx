@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '../components/ui/input';
 import PrimaryButton from '../components/ui/primaryButton';
@@ -33,8 +36,6 @@ const PessoaCadastro: React.FC = () => {
     const dispatch = useDispatch();
 
     const [alertStyle, setAlertStyle] = useState(false);
-    const [nome, setNome] = useState('');
-    const [nascimento, setNascimento] = useState('');
 
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
     const pessoaCadastrada = useSelector(
@@ -54,40 +55,51 @@ const PessoaCadastro: React.FC = () => {
         setAlertStyle(false);
     };
 
-    const onSubmitHandler = (event: React.FormEvent) => {
-        event.preventDefault();
-        setAlertStyle(true);
-
-        const dtNascimento = new Date(nascimento + 'T03:00:00Z');
-        onInitCadastro(idFamilia, nome, dtNascimento);
-    };
-
     const errorShow = erro.length > 0 && alertStyle;
     const successShow = pessoaCadastrada.length > 0 && alertStyle;
     const mensagemSucesso =
         pessoaCadastrada + ' cadastrado(a) nos aniversariantes da família ;)';
 
+    const formik = useFormik({
+        initialValues: {
+            nome: '',
+            nascimento: '',
+        },
+        validationSchema: Yup.object({
+            nome: Yup.string().required('O nome deve ser preenchido'),
+            nascimento: Yup.string().required(
+                'A data de nascimento deve ser preenchida',
+            ),
+        }),
+        onSubmit: values => {
+            setAlertStyle(true);
+
+            const dtNascimento = new Date(values.nascimento + 'T03:00:00Z');
+            onInitCadastro(idFamilia, values.nome, dtNascimento);
+        },
+    });
+
     const conteudo = (
         <form
             className={classes.form}
             autoComplete="off"
-            onSubmit={onSubmitHandler}
             noValidate
+            onSubmit={formik.handleSubmit}
         >
             <Input
-                id="pessoa-nome"
+                id="nome"
                 label="Nome"
                 autoFocus={true}
                 changeHandler={inputChangeHandler}
-                stateManage={{ value: nome, setValue: setNome }}
+                formik={formik}
             />
 
             <Input
-                id="pessoa-data-nascimento"
+                id="nascimento"
                 label="Data de nascimento"
                 type="date"
                 changeHandler={inputChangeHandler}
-                stateManage={{ value: nascimento, setValue: setNascimento }}
+                formik={formik}
             />
 
             <PrimaryButton id="cadastrar" label="Cadastrar" />
