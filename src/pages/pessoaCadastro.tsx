@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { TextField, Button } from '@material-ui/core';
-import Box from '@material-ui/core/Box';
-import InputLabel from '@material-ui/core/InputLabel';
+import Input from '../components/ui/input';
+import PrimaryButton from '../components/ui/primaryButton';
 
 import { AuthState } from '../models/AuthState';
 import { PessoaCadastroState } from '../models/PessoaCadastroState';
@@ -27,24 +26,6 @@ const useStyles = makeStyles(theme => ({
             height: '85vh',
         },
     },
-    input: {
-        marginBottom: theme.spacing(3),
-        [theme.breakpoints.down('sm')]: {
-            width: '90%',
-        },
-        [theme.breakpoints.up('sm')]: {
-            width: '50%',
-        },
-    },
-    inputLabel: {
-        [theme.breakpoints.down('sm')]: {
-            width: '90%',
-        },
-        [theme.breakpoints.up('sm')]: {
-            width: '50%',
-        },
-        fontSize: '1.5rem',
-    },
 }));
 
 const PessoaCadastro: React.FC = () => {
@@ -52,8 +33,8 @@ const PessoaCadastro: React.FC = () => {
     const dispatch = useDispatch();
 
     const [alertStyle, setAlertStyle] = useState(false);
-    const [formulario, setFormulario] = useState({ nome: '', nascimento: '' });
-    const [focus, setFocus] = useState({ nome: false, nascimento: false });
+    const [nome, setNome] = useState('');
+    const [nascimento, setNascimento] = useState('');
 
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
     const pessoaCadastrada = useSelector(
@@ -70,32 +51,15 @@ const PessoaCadastro: React.FC = () => {
     ) => dispatch(initCadastro(idFamilia, nome, nascimento));
 
     const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const nome = event.target.name;
-        const valor = event.target.value;
-
-        setFormulario({ ...formulario, [nome]: valor });
         setAlertStyle(false);
-    };
-
-    const focusChangeHandler = (
-        event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) => {
-        const nome = event.target.name;
-        const type = event.type;
-
-        if (type === 'focus') {
-            setFocus({ ...focus, [nome]: true });
-        } else {
-            setFocus({ ...focus, [nome]: false });
-        }
     };
 
     const onSubmitHandler = (event: React.FormEvent) => {
         event.preventDefault();
         setAlertStyle(true);
 
-        const dtNascimento = new Date(formulario.nascimento + 'T03:00:00Z');
-        onInitCadastro(idFamilia, formulario.nome, dtNascimento);
+        const dtNascimento = new Date(nascimento + 'T03:00:00Z');
+        onInitCadastro(idFamilia, nome, dtNascimento);
     };
 
     const errorShow = erro.length > 0 && alertStyle;
@@ -108,68 +72,26 @@ const PessoaCadastro: React.FC = () => {
             className={classes.form}
             autoComplete="off"
             onSubmit={onSubmitHandler}
+            noValidate
         >
-            <InputLabel
-                focused={focus.nome}
-                color="secondary"
-                htmlFor="pessoa-nome"
-                shrink
-                className={classes.inputLabel}
-            >
-                Nome
-            </InputLabel>
-            <TextField
-                required
-                className={classes.input}
-                autoFocus={true}
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                name="nome"
+            <Input
                 id="pessoa-nome"
-                variant="outlined"
-                color="secondary"
-                value={formulario.nome}
-                onFocus={focusChangeHandler}
-                onBlur={focusChangeHandler}
-                onChange={inputChangeHandler}
-                data-testid="nome-input"
+                label="Nome"
+                autoFocus={true}
+                changeHandler={inputChangeHandler}
+                stateManage={{ value: nome, setValue: setNome }}
             />
 
-            <InputLabel
-                focused={focus.nascimento}
-                color="secondary"
-                htmlFor="pessoa-data-nascimento"
-                shrink
-                className={classes.inputLabel}
-            >
-                Data de nascimento
-            </InputLabel>
-            <TextField
-                required
-                className={classes.input}
-                InputLabelProps={{ shrink: true }}
-                type="date"
-                name="nascimento"
+            <Input
                 id="pessoa-data-nascimento"
-                variant="outlined"
-                color="secondary"
-                value={formulario.nascimento}
-                onFocus={focusChangeHandler}
-                onBlur={focusChangeHandler}
-                onChange={inputChangeHandler}
-                data-testid="nascimento-input"
+                label="Data de nascimento"
+                type="date"
+                changeHandler={inputChangeHandler}
+                stateManage={{ value: nascimento, setValue: setNascimento }}
             />
-            <Box>
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    type="submit"
-                    data-testid="cadastrar-button"
-                >
-                    Cadastrar
-                </Button>
-            </Box>
+
+            <PrimaryButton id="cadastrar" label="Cadastrar" />
+
             {errorShow ? <Alerta severity="error" text={erro} /> : null}
             {successShow ? (
                 <Alerta severity="success" text={mensagemSucesso} />
