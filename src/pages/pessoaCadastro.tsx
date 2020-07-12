@@ -7,6 +7,8 @@ import * as Yup from 'yup';
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '../components/ui/input';
 import PrimaryButton from '../components/ui/primaryButton';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 import { AuthState } from '../models/AuthState';
 import { PessoaCadastroState } from '../models/PessoaCadastroState';
@@ -63,52 +65,52 @@ const PessoaCadastro: React.FC = () => {
     const formik = useFormik({
         initialValues: {
             nome: '',
-            nascimento: '',
+            nascimento: new Date(new Date().getFullYear() + '-01-01T03:00:00Z'),
         },
         validationSchema: Yup.object({
             nome: Yup.string().required('O nome deve ser preenchido'),
-            nascimento: Yup.string().required(
-                'A data de nascimento deve ser preenchida',
-            ),
+            nascimento: Yup.date()
+                .required('A data de nascimento deve ser preenchida')
+                .typeError('A data informada é inválida'),
         }),
         onSubmit: values => {
             setAlertStyle(true);
-
-            const dtNascimento = new Date(values.nascimento + 'T03:00:00Z');
-            onInitCadastro(idFamilia, values.nome, dtNascimento);
+            onInitCadastro(idFamilia, values.nome, values.nascimento);
         },
     });
 
     const conteudo = (
-        <form
-            className={classes.form}
-            autoComplete="off"
-            noValidate
-            onSubmit={formik.handleSubmit}
-        >
-            <Input
-                id="nome"
-                label="Nome"
-                autoFocus={true}
-                changeHandler={inputChangeHandler}
-                formik={formik}
-            />
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <form
+                className={classes.form}
+                autoComplete="off"
+                noValidate
+                onSubmit={formik.handleSubmit}
+            >
+                <Input
+                    id="nome"
+                    label="Nome"
+                    autoFocus={true}
+                    changeHandler={inputChangeHandler}
+                    formik={formik}
+                />
 
-            <Input
-                id="nascimento"
-                label="Data de nascimento"
-                type="date"
-                changeHandler={inputChangeHandler}
-                formik={formik}
-            />
+                <Input
+                    id="nascimento"
+                    label="Data de nascimento"
+                    type="date"
+                    changeHandler={inputChangeHandler}
+                    formik={formik}
+                />
 
-            <PrimaryButton id="cadastrar" label="Cadastrar" />
+                <PrimaryButton id="cadastrar" label="Cadastrar" />
 
-            {errorShow ? <Alerta severity="error" text={erro} /> : null}
-            {successShow ? (
-                <Alerta severity="success" text={mensagemSucesso} />
-            ) : null}
-        </form>
+                {errorShow ? <Alerta severity="error" text={erro} /> : null}
+                {successShow ? (
+                    <Alerta severity="success" text={mensagemSucesso} />
+                ) : null}
+            </form>
+        </MuiPickersUtilsProvider>
     );
 
     return (

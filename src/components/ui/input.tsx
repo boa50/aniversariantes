@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
+import { DatePicker, KeyboardDatePicker } from '@material-ui/pickers';
+
+import { PropertiesState } from '../../models/PropertiesState';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -46,6 +50,10 @@ const Input: React.FC<Props> = ({
     const classes = useStyles();
     const [focus, setFocus] = useState(false);
 
+    const isMobile = useSelector(
+        (state: PropertiesState) => state.properties.isMobile,
+    );
+
     const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         formik.handleChange(event);
 
@@ -70,6 +78,48 @@ const Input: React.FC<Props> = ({
     const errorShow =
         (formik.touched[id] && formik.errors[id] !== undefined) || error;
 
+    const DateComponent = isMobile ? DatePicker : KeyboardDatePicker;
+    let inputField;
+
+    const props = {
+        id: id,
+        name: id,
+        value: formik.values[id],
+        className: classes.input,
+        error: errorShow,
+        helperText: formik.touched[id] && formik.errors[id],
+        inputProps: { 'aria-labelledby': id + '-label' },
+        onFocus: focusChangeHandler,
+        onBlur: focusChangeHandler,
+        'data-testid': id + '-input',
+    };
+
+    if (type === 'date') {
+        inputField = (
+            <DateComponent
+                format="dd/MM/yyyy"
+                inputVariant="outlined"
+                color="secondary"
+                onChange={(date: Date | null) =>
+                    formik.setFieldValue(id, date, true)
+                }
+                {...props}
+            />
+        );
+    } else if (type === 'text') {
+        inputField = (
+            <TextField
+                variant="outlined"
+                color="secondary"
+                autoFocus={autoFocus && !error}
+                InputLabelProps={{
+                    shrink: true,
+                }}
+                onChange={inputChangeHandler}
+                {...props}
+            />
+        );
+    }
     return (
         <Box className={classes.root}>
             <InputLabel
@@ -83,26 +133,8 @@ const Input: React.FC<Props> = ({
             >
                 {label}
             </InputLabel>
-            <TextField
-                className={classes.input}
-                autoFocus={autoFocus && !error}
-                error={errorShow}
-                helperText={formik.touched[id] && formik.errors[id]}
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                id={id}
-                name={id}
-                type={type}
-                variant="outlined"
-                color="secondary"
-                value={formik.values[id]}
-                onFocus={focusChangeHandler}
-                onBlur={focusChangeHandler}
-                onChange={inputChangeHandler}
-                data-testid={id + '-input'}
-                inputProps={{ 'aria-labelledby': id + '-label' }}
-            />
+
+            {inputField}
         </Box>
     );
 };
