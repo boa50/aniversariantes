@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useFormik } from 'formik';
@@ -38,6 +38,7 @@ const PessoaCadastro: React.FC = () => {
     const dispatch = useDispatch();
 
     const [alertStyle, setAlertStyle] = useState(false);
+    const [buttonDisabled, setbuttonDisabled] = useState(false);
 
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
     const pessoaCadastrada = useSelector(
@@ -75,9 +76,20 @@ const PessoaCadastro: React.FC = () => {
         }),
         onSubmit: values => {
             setAlertStyle(true);
+            setbuttonDisabled(true);
             onInitCadastro(idFamilia, values.nome, values.nascimento);
         },
     });
+
+    useEffect(() => {
+        setbuttonDisabled(false);
+    }, [formik.values.nome, formik.values.nascimento]);
+
+    useEffect(() => {
+        if (erro.length > 0) {
+            setbuttonDisabled(false);
+        }
+    }, [erro]);
 
     const conteudo = (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -103,7 +115,11 @@ const PessoaCadastro: React.FC = () => {
                     formik={formik}
                 />
 
-                <PrimaryButton id="cadastrar" label="Cadastrar" />
+                <PrimaryButton
+                    id="cadastrar"
+                    label="Cadastrar"
+                    disabled={buttonDisabled}
+                />
 
                 {errorShow ? <Alerta severity="error" text={erro} /> : null}
                 {successShow ? (

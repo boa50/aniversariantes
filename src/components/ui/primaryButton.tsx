@@ -5,9 +5,10 @@ import Button from '@material-ui/core/Button';
 type Props = {
     id: string;
     label: string;
+    disabled?: boolean;
 };
 
-const PrimaryButton: React.FC<Props> = ({ id, label }) => {
+const PrimaryButton: React.FC<Props> = ({ id, label, disabled = false }) => {
     return (
         <Button
             id={id}
@@ -16,6 +17,7 @@ const PrimaryButton: React.FC<Props> = ({ id, label }) => {
             size="large"
             type="submit"
             data-testid={id + '-button'}
+            disabled={disabled}
         >
             {label}
         </Button>
