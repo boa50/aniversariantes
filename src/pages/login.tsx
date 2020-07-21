@@ -45,7 +45,6 @@ const Login: React.FC = () => {
         setAlertStyle(false);
     };
 
-    let conteudo = <div />;
     const errorShow = erro.length > 0 && alertStyle;
 
     const formik = useFormik({
@@ -63,6 +62,9 @@ const Login: React.FC = () => {
         },
     });
 
+    const autoFocus = formik.values.idFamilia === '';
+
+    let conteudo = <div />;
     if (!idFamilia) {
         conteudo = (
             <form
@@ -74,7 +76,7 @@ const Login: React.FC = () => {
                 <Input
                     id="idFamilia"
                     label="Código da Família"
-                    autoFocus={true}
+                    autoFocus={autoFocus}
                     error={errorShow}
                     changeHandler={inputChangeHandler}
                     formik={formik}

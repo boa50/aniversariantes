@@ -5,7 +5,7 @@ import { AuthAction } from '../../models/AuthAction';
 import * as actions from '../actions';
 
 const trataErroMensagem = (error: any) => {
-    if (error.response.data.error.code === 404) {
+    if (error.response.data.error.message === 'EMAIL_NOT_FOUND') {
         return 'Código não existente!';
     } else {
         return error.response.statusText;
@@ -24,8 +24,6 @@ function* getFamiliaNome(idFamilia: string, token: string) {
 
         return familiaNome;
     } catch (error) {
-        const mensagem = trataErroMensagem(error);
-        error.response.statusText = mensagem;
         throw error;
     }
 }
@@ -55,7 +53,8 @@ export function* initAuthSaga(action: AuthAction) {
 
         yield put(actions.authSuccess(action.idFamilia, familiaNome));
     } catch (error) {
-        yield put(actions.authFail(error.response.statusText));
+        const mensagem = trataErroMensagem(error);
+        yield put(actions.authFail(mensagem));
     }
 }
 
@@ -82,6 +81,8 @@ export function* authCheckStateSaga() {
             } catch (error) {}
         }
     }
+
+    yield put(actions.authCheckStateComplete());
 }
 
 export function* initLogoutSaga() {

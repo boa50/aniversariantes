@@ -35,7 +35,10 @@ const Layout: React.FC<Props> = ({ title, headerTexto, children }) => {
     const dispatch = useDispatch();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const authLoading = useSelector((state: AuthState) => state.auth.loading);
+    const authChecked = useSelector(
+        (state: AuthState) => state.auth.authChecked,
+    );
+
     const onInitProperties = useCallback(
         (isMobile: boolean) => dispatch(initProperties(isMobile)),
         [],
@@ -52,7 +55,9 @@ const Layout: React.FC<Props> = ({ title, headerTexto, children }) => {
 
     let conteudo = <div data-testid="vazio" />;
 
-    if (!authLoading) {
+    console.log(authChecked);
+
+    if (authChecked) {
         conteudo = (
             <Box>
                 <CssBaseline />

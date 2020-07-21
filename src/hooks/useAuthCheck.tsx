@@ -21,13 +21,9 @@ export const useAuthCheck = (location: Location) => {
     if (!authLoading) {
         if (!idFamilia && !location.pathname.startsWith('/login')) {
             navigate('/login/');
-            return false;
         }
         if (idFamilia && location.pathname.startsWith('/login')) {
             navigate('/');
-            return true;
         }
     }
-
-    return;
 };

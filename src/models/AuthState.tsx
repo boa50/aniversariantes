@@ -7,4 +7,5 @@ export type AuthStateReducer = {
     idFamilia: string;
     familiaNome: string;
     error: string;
+    authChecked: boolean;
 };

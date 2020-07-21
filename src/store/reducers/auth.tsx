@@ -7,6 +7,7 @@ const initState: AuthStateReducer = {
     idFamilia: '',
     familiaNome: '',
     error: '',
+    authChecked: false,
 };
 
 const authStart = (state: AuthStateReducer) => {
@@ -36,6 +37,13 @@ const authFail = (state: AuthStateReducer, action: AuthAction) => {
     };
 };
 
+const authCheckStateComplete = (state: AuthStateReducer) => {
+    return {
+        ...state,
+        authChecked: true,
+    };
+};
+
 const logoutComplete = (state: AuthStateReducer) => {
     return {
         ...state,
@@ -54,6 +62,8 @@ const reducer = (state = initState, action: AuthAction) => {
             return authSuccess(state, action);
         case actionTypes.AUTH_FAIL:
             return authFail(state, action);
+        case actionTypes.AUTH_CHECK_STATE_COMPLETE:
+            return authCheckStateComplete(state);
         case actionTypes.LOGOUT_COMPLETE:
             return logoutComplete(state);
         default:
