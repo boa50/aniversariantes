@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
 
 import Header from './header';
 import SEO from './seo';
@@ -54,8 +55,6 @@ const Layout: React.FC<Props> = ({ title, headerTexto, children }) => {
     }
 
     let conteudo = <div data-testid="vazio" />;
-
-    console.log(authChecked);
 
     if (authChecked) {
         conteudo = (

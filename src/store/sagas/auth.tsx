@@ -6,7 +6,7 @@ import * as actions from '../actions';
 
 const trataErroMensagem = (error: any) => {
     if (error.response.data.error.message === 'EMAIL_NOT_FOUND') {
-        return 'Código não existente!';
+        return 'Código não encontrado.';
     } else {
         return error.response.statusText;
     }
