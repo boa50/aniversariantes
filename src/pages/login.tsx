@@ -15,7 +15,7 @@ import { AuthState } from '../models/AuthState';
 import { initAuth } from '../store/actions';
 
 import Layout from '../components/layout';
-import Alerta from '../components/alerta';
+import Alerta from '../components/ui/alerta';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -95,9 +95,12 @@ const Login: React.FC = () => {
                         />
 
                         <PrimaryButton id="login" label="Entrar" />
-                        {errorShow ? (
-                            <Alerta severity="error" text={erro} />
-                        ) : null}
+                        <Alerta
+                            severity="error"
+                            text={erro}
+                            open={errorShow}
+                            setOpen={setAlertStyle}
+                        />
                     </form>
                 </Grid>
             </Grid>

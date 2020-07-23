@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
-import Alerta from '../../components/alerta';
+import Alerta from '../../components/ui/alerta';
 
 describe('Alerta component', () => {
     test('verifica a renderização de maneira correta', () => {

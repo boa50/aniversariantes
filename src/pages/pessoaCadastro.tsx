@@ -16,7 +16,7 @@ import { PessoaCadastroState } from '../models/PessoaCadastroState';
 import { initCadastro } from '../store/actions';
 
 import Layout from '../components/layout';
-import Alerta from '../components/alerta';
+import Alerta from '../components/ui/alerta';
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -121,10 +121,18 @@ const PessoaCadastro: React.FC = () => {
                     disabled={buttonDisabled}
                 />
 
-                {errorShow ? <Alerta severity="error" text={erro} /> : null}
-                {successShow ? (
-                    <Alerta severity="success" text={mensagemSucesso} />
-                ) : null}
+                <Alerta
+                    severity="error"
+                    text={erro}
+                    open={errorShow}
+                    setOpen={setAlertStyle}
+                />
+                <Alerta
+                    severity="success"
+                    text={mensagemSucesso}
+                    open={successShow}
+                    setOpen={setAlertStyle}
+                />
             </form>
         </MuiPickersUtilsProvider>
     );
