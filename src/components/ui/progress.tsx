@@ -23,7 +23,7 @@ type Props = {
 const Progress: React.FC<Props> = ({ show }) => {
     const classes = useStyles();
 
-    let content = null;
+    let content = <div style={{ height: '12px' }} />;
     if (show) {
         content = (
             <LinearProgress

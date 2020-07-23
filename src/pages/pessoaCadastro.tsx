@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { makeStyles } from '@material-ui/core/styles';
 import Input from '../components/ui/input';
 import PrimaryButton from '../components/ui/primaryButton';
 import DateFnsUtils from '@date-io/date-fns';
@@ -16,31 +15,19 @@ import { PessoaCadastroState } from '../models/PessoaCadastroState';
 import { initCadastro } from '../store/actions';
 
 import Layout from '../components/layout';
+import Form from '../components/form';
 import Alerta from '../components/ui/alerta';
 
-const useStyles = makeStyles(theme => ({
-    form: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        [theme.breakpoints.down('sm')]: {
-            marginTop: '10%',
-        },
-        [theme.breakpoints.up('sm')]: {
-            height: '85vh',
-        },
-    },
-}));
-
 const PessoaCadastro: React.FC = () => {
-    const classes = useStyles();
     const dispatch = useDispatch();
 
     const [alertStyle, setAlertStyle] = useState(false);
     const [buttonDisabled, setbuttonDisabled] = useState(false);
 
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
+    const loading = useSelector(
+        (state: PessoaCadastroState) => state.pessoaCadastro.loading,
+    );
     const pessoaCadastrada = useSelector(
         (state: PessoaCadastroState) => state.pessoaCadastro.pessoa,
     );
@@ -93,12 +80,7 @@ const PessoaCadastro: React.FC = () => {
 
     const conteudo = (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <form
-                className={classes.form}
-                autoComplete="off"
-                noValidate
-                onSubmit={formik.handleSubmit}
-            >
+            <Form formik={formik} progressShow={loading}>
                 <Input
                     id="nome"
                     label="Nome"
@@ -133,7 +115,7 @@ const PessoaCadastro: React.FC = () => {
                     open={successShow}
                     setOpen={setAlertStyle}
                 />
-            </form>
+            </Form>
         </MuiPickersUtilsProvider>
     );
 

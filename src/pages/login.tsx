@@ -4,37 +4,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import Input from '../components/ui/input';
 import PrimaryButton from '../components/ui/primaryButton';
-import Progress from '../components/ui/progress';
 
 import { AuthState } from '../models/AuthState';
 
 import { initAuth } from '../store/actions';
 
 import Layout from '../components/layout';
+import Form from '../components/form';
 import Alerta from '../components/ui/alerta';
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        [theme.breakpoints.down('sm')]: {
-            marginTop: '10%',
-        },
-        [theme.breakpoints.up('sm')]: {
-            height: '85vh',
-        },
-    },
-    form: {
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: 'column',
-    },
-}));
-
 const Login: React.FC = () => {
-    const classes = useStyles();
     const dispatch = useDispatch();
 
     const [alertStyle, setAlertStyle] = useState(false);
@@ -71,39 +52,25 @@ const Login: React.FC = () => {
     let conteudo = <div />;
     if (!idFamilia) {
         conteudo = (
-            <Grid
-                className={classes.root}
-                container
-                direction="column"
-                justify="center"
-            >
-                <Grid item>
-                    <Progress show={loading} />
-                    <form
-                        autoComplete="off"
-                        noValidate
-                        onSubmit={formik.handleSubmit}
-                        className={classes.form}
-                    >
-                        <Input
-                            id="idFamilia"
-                            label="Código da Família"
-                            autoFocus={autoFocus}
-                            error={errorShow}
-                            changeHandler={inputChangeHandler}
-                            formik={formik}
-                        />
+            <Form formik={formik} progressShow={loading}>
+                <Input
+                    id="idFamilia"
+                    label="Código da Família"
+                    autoFocus={autoFocus}
+                    error={errorShow}
+                    changeHandler={inputChangeHandler}
+                    formik={formik}
+                />
 
-                        <PrimaryButton id="login" label="Entrar" />
-                        <Alerta
-                            severity="error"
-                            text={erro}
-                            open={errorShow}
-                            setOpen={setAlertStyle}
-                        />
-                    </form>
-                </Grid>
-            </Grid>
+                <PrimaryButton id="login" label="Entrar" />
+
+                <Alerta
+                    severity="error"
+                    text={erro}
+                    open={errorShow}
+                    setOpen={setAlertStyle}
+                />
+            </Form>
         );
     }
 

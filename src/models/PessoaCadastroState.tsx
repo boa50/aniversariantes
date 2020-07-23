@@ -3,6 +3,7 @@ export type PessoaCadastroState = {
 };
 
 export type PessoaCadastroStateReducer = {
+    loading: boolean;
     pessoa: string;
     error: string;
 };
