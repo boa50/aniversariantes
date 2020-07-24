@@ -106,4 +106,16 @@ describe('AuthReducer', () => {
             loading: false,
         });
     });
+
+    test('verifica o AUTH_CHECK_STATE_COMPLETE', () => {
+        const action: AuthAction = {
+            ...defaultAction,
+            type: actionTypes.AUTH_CHECK_STATE_COMPLETE,
+        };
+
+        expect(reducer(initState, action)).toEqual({
+            ...initState,
+            authChecked: true,
+        });
+    });
 });
