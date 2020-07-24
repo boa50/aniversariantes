@@ -22,7 +22,7 @@ const Alerta: React.FC<Props> = ({ severity, text, open, setOpen }) => {
                 variant="filled"
                 severity={severity}
                 onClose={handleClose}
-                data-testid="alerta"
+                data-testid={'alerta'}
             >
                 {text}
             </MuiAlert>

@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Gatsby from 'gatsby';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 
@@ -38,34 +38,43 @@ jest.mock('../../components/layout', () => {
     );
 });
 
-jest.mock('../../components/alerta', () => {
+jest.mock('../../components/ui/alerta', () => {
     return (alert: any) => {
         const testId = alert.severity + '-alert';
-        return <div data-testid={testId}></div>;
+
+        let retorno = null;
+        if (alert.open) {
+            retorno = <div data-testid={testId}></div>;
+        }
+        return retorno;
     };
 });
 
-const inputaTextoAleatorio = (
+const inputaTextoAleatorio = async (
     textField: HTMLElement,
-): { input: HTMLInputElement; value: string } => {
+): Promise<{ input: HTMLInputElement; value: string }> => {
     const value = 'jumento';
-    const input = textField.children[1].children[0] as HTMLInputElement;
+    const input = textField.children[0].children[0] as HTMLInputElement;
 
-    fireEvent.change(input, {
-        target: { value: value },
+    await waitFor(() => {
+        fireEvent.change(input, {
+            target: { value: value },
+        });
     });
 
     return { input, value };
 };
 
-const inputaDataAleatoria = (
+const inputaDataAleatoria = async (
     textField: HTMLElement,
-): { input: HTMLInputElement; value: Date } => {
+): Promise<{ input: HTMLInputElement; value: Date }> => {
     const value = new Date('2000-01-02T03:00:00Z');
-    const input = textField.children[1].children[0] as HTMLInputElement;
+    const input = textField.children[0].children[0] as HTMLInputElement;
 
-    fireEvent.change(input, {
-        target: { valueAsDate: value },
+    await waitFor(() => {
+        fireEvent.change(input, {
+            target: { valueAsDate: value },
+        });
     });
 
     return { input, value };
@@ -84,11 +93,11 @@ const initCadastroMock = () => {
         );
 };
 
-const renderiza = (state: any) => {
+const renderiza = async (state: any) => {
     const mockStore = configureStore();
     const store = mockStore(state);
 
-    return render(
+    return await render(
         <Provider store={store}>
             <PessoaCadastro />
         </Provider>,
@@ -98,11 +107,12 @@ const renderiza = (state: any) => {
 const defaultState = {
     auth: { idFamilia: '' },
     pessoaCadastro: { pessoa: '', error: '' },
+    properties: { isMobile: false },
 };
 
 describe('PessoaCadastro page', () => {
-    test('verifica a renderização inicial correta', () => {
-        const { getByTestId } = renderiza(defaultState);
+    test('verifica a renderização inicial correta', async () => {
+        const { getByTestId } = await renderiza(defaultState);
 
         const nomeInput = getByTestId('nome-input');
         const nascimentoInput = getByTestId('nascimento-input');
@@ -115,42 +125,44 @@ describe('PessoaCadastro page', () => {
         expect(cadastrarButton).toBeVisible();
     });
 
-    test('verifica a alteração do input de nome', () => {
-        const { getByTestId } = renderiza(defaultState);
+    test('verifica a alteração do input de nome', async () => {
+        const { getByTestId } = await renderiza(defaultState);
 
         const nomeInput = getByTestId('nome-input');
-        const { input, value } = inputaTextoAleatorio(nomeInput);
+        const { input, value } = await inputaTextoAleatorio(nomeInput);
 
         expect(input.value).toBe(value);
     });
 
-    test('verifica a alteração do input de nascimento', () => {
-        const { getByTestId } = renderiza(defaultState);
+    test('verifica a alteração do input de nascimento', async () => {
+        const { getByTestId } = await renderiza(defaultState);
 
         const nascimentoInput = getByTestId('nascimento-input');
-        const { input, value } = inputaDataAleatoria(nascimentoInput);
+        const { input, value } = await inputaDataAleatoria(nascimentoInput);
 
         expect(input.valueAsDate).toBe(value);
     });
 
-    test('verifica o inicio do cadastro', () => {
+    test('verifica o inicio do cadastro', async () => {
         const initCadastro = initCadastroMock();
         mocks.push(initCadastro);
 
-        const { getByTestId } = renderiza(defaultState);
+        const { getByTestId } = await renderiza(defaultState);
 
         const nomeInput = getByTestId('nome-input');
         const nascimentoInput = getByTestId('nascimento-input');
         const cadastrarButton = getByTestId('cadastrar-button');
 
-        inputaTextoAleatorio(nomeInput);
-        inputaDataAleatoria(nascimentoInput);
-        cadastrarButton.click();
+        await inputaTextoAleatorio(nomeInput);
+        await inputaDataAleatoria(nascimentoInput);
+        await waitFor(() => {
+            fireEvent.click(cadastrarButton);
+        });
 
         expect(initCadastro).toBeCalledTimes(1);
     });
 
-    test('verifica o alerta de sucesso', () => {
+    test('verifica o alerta de sucesso', async () => {
         const initCadastro = initCadastroMock();
         mocks.push(initCadastro);
 
@@ -161,15 +173,17 @@ describe('PessoaCadastro page', () => {
                 pessoa: 'pessoaMock',
             },
         };
-        const { getByTestId } = renderiza(state);
+        const { getByTestId } = await renderiza(state);
 
         const nomeInput = getByTestId('nome-input');
         const nascimentoInput = getByTestId('nascimento-input');
         const cadastrarButton = getByTestId('cadastrar-button');
 
-        inputaTextoAleatorio(nomeInput);
-        inputaDataAleatoria(nascimentoInput);
-        cadastrarButton.click();
+        await inputaTextoAleatorio(nomeInput);
+        await inputaDataAleatoria(nascimentoInput);
+        await waitFor(() => {
+            fireEvent.click(cadastrarButton);
+        });
 
         const alerta = getByTestId('success-alert');
 
@@ -177,7 +191,7 @@ describe('PessoaCadastro page', () => {
         expect(alerta).toBeVisible();
     });
 
-    test('verifica o alerta de erro', () => {
+    test('verifica o alerta de erro', async () => {
         const initCadastro = initCadastroMock();
         mocks.push(initCadastro);
 
@@ -188,15 +202,17 @@ describe('PessoaCadastro page', () => {
                 error: 'errorMock',
             },
         };
-        const { getByTestId } = renderiza(state);
+        const { getByTestId } = await renderiza(state);
 
         const nomeInput = getByTestId('nome-input');
         const nascimentoInput = getByTestId('nascimento-input');
         const cadastrarButton = getByTestId('cadastrar-button');
 
-        inputaTextoAleatorio(nomeInput);
-        inputaDataAleatoria(nascimentoInput);
-        cadastrarButton.click();
+        await inputaTextoAleatorio(nomeInput);
+        await inputaDataAleatoria(nascimentoInput);
+        await waitFor(() => {
+            fireEvent.click(cadastrarButton);
+        });
 
         const alerta = getByTestId('error-alert');
 

@@ -13,6 +13,7 @@ import {
     logoutComplete,
     initLogout,
     initAuth,
+    authCheckStateComplete,
 } from '../../../store/actions';
 
 import { executeSaga } from '../../testUtils';
@@ -44,7 +45,7 @@ const dataPassada = '1900-01-01';
 const axiosMock = (
     authSuccess = true,
     fetchSucces = true,
-    errorCode = 404,
+    errorMessage = 'EMAIL_NOT_FOUND',
     errorStatusText = '',
 ) => {
     let getToken;
@@ -52,7 +53,7 @@ const axiosMock = (
 
     const error = {
         response: {
-            data: { error: { code: errorCode } },
+            data: { error: { message: errorMessage } },
             statusText: errorStatusText,
         },
     };
@@ -132,8 +133,8 @@ describe('AuthSaga', () => {
         ]);
     });
 
-    test('verifica initAuthSaga com erro 404', async () => {
-        const errorMessage = 'Código não existente!';
+    test('verifica initAuthSaga com erro EMAIL_NOT_FOUND', async () => {
+        const errorMessage = 'Código não encontrado.';
         const { getToken, fetchFamilia } = axiosMock(true, false);
 
         const dispatched = await executeSaga(initAuthSaga, actionMock);
@@ -148,7 +149,7 @@ describe('AuthSaga', () => {
         const { getToken, fetchFamilia } = axiosMock(
             true,
             false,
-            401,
+            'Erro do jumento branco',
             errorMessage,
         );
 
@@ -173,6 +174,7 @@ describe('AuthSaga', () => {
         expect(dispatched).toEqual([
             authStart(),
             authSuccess(mockIdFamilia, mockFamiliaNome),
+            authCheckStateComplete(),
         ]);
     });
 
@@ -184,7 +186,11 @@ describe('AuthSaga', () => {
 
         expect(Storage.prototype.getItem).toHaveBeenCalledTimes(2);
         expect(expectedArr).toEqual(arr);
-        expect(dispatched).toEqual([authStart(), initLogout()]);
+        expect(dispatched).toEqual([
+            authStart(),
+            initLogout(),
+            authCheckStateComplete(),
+        ]);
     });
 
     test('verifica authCheckStateSaga sem token', async () => {
@@ -195,7 +201,11 @@ describe('AuthSaga', () => {
 
         expect(Storage.prototype.getItem).toHaveBeenCalledTimes(2);
         expect(expectedArr).toEqual(arr);
-        expect(dispatched).toEqual([authStart(), initAuth(mockIdFamilia)]);
+        expect(dispatched).toEqual([
+            authStart(),
+            initAuth(mockIdFamilia),
+            authCheckStateComplete(),
+        ]);
     });
 
     test('verifica authCheckStateSaga com token expirado', async () => {
@@ -206,7 +216,11 @@ describe('AuthSaga', () => {
 
         expect(Storage.prototype.getItem).toHaveBeenCalledTimes(3);
         expect(expectedArr).toEqual(arr);
-        expect(dispatched).toEqual([authStart(), initAuth(mockIdFamilia)]);
+        expect(dispatched).toEqual([
+            authStart(),
+            initAuth(mockIdFamilia),
+            authCheckStateComplete(),
+        ]);
     });
 
     test('verifica initLogoutSaga', async () => {

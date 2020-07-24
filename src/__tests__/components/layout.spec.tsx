@@ -30,7 +30,7 @@ const renderiza = (state: any) => {
 };
 
 const defaultState = {
-    auth: { loading: false },
+    auth: { authChecked: true },
 };
 
 describe('Layout component', () => {
@@ -48,7 +48,7 @@ describe('Layout component', () => {
 
     test('verifica a renderização não autenticada correta', () => {
         const state = {
-            auth: { loading: true },
+            auth: { authChecked: false },
         };
         const { getByTestId } = renderiza(state);
 

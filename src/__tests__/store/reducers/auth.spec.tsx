@@ -4,7 +4,8 @@ import { AuthAction } from '../../../models/AuthAction';
 import { AuthStateReducer } from '../../../models/AuthState';
 
 const initState: AuthStateReducer = {
-    loading: true,
+    authChecked: false,
+    loading: false,
     idFamilia: '',
     familiaNome: '',
     error: '',

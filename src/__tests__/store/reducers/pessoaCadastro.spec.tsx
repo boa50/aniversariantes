@@ -4,6 +4,7 @@ import { PessoaCadastroStateReducer } from '../../../models/PessoaCadastroState'
 import { PessoaCadastroAction } from '../../../models/PessoaCadastroAction';
 
 const initState: PessoaCadastroStateReducer = {
+    loading: false,
     pessoa: '',
     error: '',
 };
@@ -26,6 +27,7 @@ describe('PessoaCadastroReducer', () => {
     test('verifica o PESSOA_CADASTRO_START', () => {
         const newState: PessoaCadastroStateReducer = {
             ...initState,
+            loading: true,
             pessoa: '',
             error: '',
         };
