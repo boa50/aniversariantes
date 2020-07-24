@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { TextField, Button } from '@material-ui/core';
-import Box from '@material-ui/core/Box';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+
+import Input from '../components/ui/input';
+import PrimaryButton from '../components/ui/primaryButton';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 import { AuthState } from '../models/AuthState';
 import { PessoaCadastroState } from '../models/PessoaCadastroState';
@@ -11,35 +15,19 @@ import { PessoaCadastroState } from '../models/PessoaCadastroState';
 import { initCadastro } from '../store/actions';
 
 import Layout from '../components/layout';
-import Alerta from '../components/alerta';
-
-const useStyles = makeStyles(theme => ({
-    form: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        height: '85vh',
-    },
-    input: {
-        marginBottom: theme.spacing(3),
-        [theme.breakpoints.down('sm')]: {
-            width: '90%',
-        },
-        [theme.breakpoints.up('sm')]: {
-            width: '50%',
-        },
-    },
-}));
+import Form from '../components/form';
+import Alerta from '../components/ui/alerta';
 
 const PessoaCadastro: React.FC = () => {
-    const classes = useStyles();
     const dispatch = useDispatch();
 
     const [alertStyle, setAlertStyle] = useState(false);
-    const [formulario, setformulario] = useState({ nome: '', nascimento: '' });
+    const [buttonDisabled, setbuttonDisabled] = useState(false);
 
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
+    const loading = useSelector(
+        (state: PessoaCadastroState) => state.pessoaCadastro.loading,
+    );
     const pessoaCadastrada = useSelector(
         (state: PessoaCadastroState) => state.pessoaCadastro.pessoa,
     );
@@ -54,19 +42,7 @@ const PessoaCadastro: React.FC = () => {
     ) => dispatch(initCadastro(idFamilia, nome, nascimento));
 
     const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const nome = event.target.name;
-        const valor = event.target.value;
-
-        setformulario({ ...formulario, [nome]: valor });
         setAlertStyle(false);
-    };
-
-    const onSubmitHandler = (event: React.FormEvent) => {
-        event.preventDefault();
-        setAlertStyle(true);
-
-        const dtNascimento = new Date(formulario.nascimento + 'T03:00:00Z');
-        onInitCadastro(idFamilia, formulario.nome, dtNascimento);
     };
 
     const errorShow = erro.length > 0 && alertStyle;
@@ -74,54 +50,73 @@ const PessoaCadastro: React.FC = () => {
     const mensagemSucesso =
         pessoaCadastrada + ' cadastrado(a) nos aniversariantes da família ;)';
 
+    const formik = useFormik({
+        initialValues: {
+            nome: '',
+            nascimento: new Date(new Date().getFullYear() + '-01-01T03:00:00Z'),
+        },
+        validationSchema: Yup.object({
+            nome: Yup.string().required('O nome deve ser preenchido'),
+            nascimento: Yup.date()
+                .required('A data de nascimento deve ser preenchida')
+                .typeError('A data informada é inválida'),
+        }),
+        onSubmit: values => {
+            setAlertStyle(true);
+            setbuttonDisabled(true);
+            onInitCadastro(idFamilia, values.nome, values.nascimento);
+        },
+    });
+
+    useEffect(() => {
+        setbuttonDisabled(false);
+    }, [formik.values.nome, formik.values.nascimento]);
+
+    useEffect(() => {
+        if (erro.length > 0) {
+            setbuttonDisabled(false);
+        }
+    }, [erro]);
+
     const conteudo = (
-        <form
-            className={classes.form}
-            autoComplete="off"
-            onSubmit={onSubmitHandler}
-        >
-            <TextField
-                required
-                className={classes.input}
-                autoFocus={true}
-                name="nome"
-                id="pessoa-nome"
-                label="Nome"
-                variant="outlined"
-                color="secondary"
-                value={formulario.nome}
-                onChange={inputChangeHandler}
-                data-testid="nome-input"
-            />
-            <TextField
-                required
-                className={classes.input}
-                InputLabelProps={{ shrink: true }}
-                type="date"
-                name="nascimento"
-                id="pessoa-data-nascimento"
-                label="Data de nascimento"
-                variant="outlined"
-                color="secondary"
-                value={formulario.nascimento}
-                onChange={inputChangeHandler}
-                data-testid="nascimento-input"
-            />
-            <Box>
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    type="submit"
-                    data-testid="cadastrar-button"
-                >
-                    Cadastrar
-                </Button>
-            </Box>
-            {errorShow ? <Alerta severity="error" text={erro} /> : null}
-            {successShow ? (
-                <Alerta severity="success" text={mensagemSucesso} />
-            ) : null}
-        </form>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Form formik={formik} progressShow={loading}>
+                <Input
+                    id="nome"
+                    label="Nome"
+                    autoFocus={true}
+                    changeHandler={inputChangeHandler}
+                    formik={formik}
+                />
+
+                <Input
+                    id="nascimento"
+                    label="Data de nascimento"
+                    type="date"
+                    changeHandler={inputChangeHandler}
+                    formik={formik}
+                />
+
+                <PrimaryButton
+                    id="cadastrar"
+                    label="Cadastrar"
+                    disabled={buttonDisabled}
+                />
+
+                <Alerta
+                    severity="error"
+                    text={erro}
+                    open={errorShow}
+                    setOpen={setAlertStyle}
+                />
+                <Alerta
+                    severity="success"
+                    text={mensagemSucesso}
+                    open={successShow}
+                    setOpen={setAlertStyle}
+                />
+            </Form>
+        </MuiPickersUtilsProvider>
     );
 
     return (

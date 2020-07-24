@@ -4,7 +4,8 @@ import { AuthAction } from '../../../models/AuthAction';
 import { AuthStateReducer } from '../../../models/AuthState';
 
 const initState: AuthStateReducer = {
-    loading: true,
+    authChecked: false,
+    loading: false,
     idFamilia: '',
     familiaNome: '',
     error: '',
@@ -103,6 +104,18 @@ describe('AuthReducer', () => {
             familiaNome: '',
             error: '',
             loading: false,
+        });
+    });
+
+    test('verifica o AUTH_CHECK_STATE_COMPLETE', () => {
+        const action: AuthAction = {
+            ...defaultAction,
+            type: actionTypes.AUTH_CHECK_STATE_COMPLETE,
+        };
+
+        expect(reducer(initState, action)).toEqual({
+            ...initState,
+            authChecked: true,
         });
     });
 });

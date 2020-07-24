@@ -30,7 +30,7 @@ afterEach(() => {
 });
 
 const defaultState = {
-    auth: { loading: true, idFamilia: '' },
+    auth: { loading: false, idFamilia: '', authChecked: false },
 };
 
 const navigateMock = () => {
@@ -57,61 +57,56 @@ describe('useAuthCheck Hook', () => {
     test('verifica a situação de loading', () => {
         const store = mockStore(defaultState);
 
-        const result = renderHookResults('/', store);
+        renderHookResults('/', store);
 
         expect(navigate).toBeCalledTimes(0);
-        expect(result.current).toBeUndefined();
     });
 
     test('verifica a situação de não autenticado no /', () => {
         const state = {
             ...defaultState,
-            auth: { loading: false },
+            auth: { loading: false, authChecked: true },
         };
         const store = mockStore(state);
 
-        const result = renderHookResults('/', store);
+        renderHookResults('/', store);
 
         expect(navigate).toBeCalledTimes(1);
-        expect(result.current).toBeFalsy();
     });
 
     test('verifica a situação de não autenticado no /login', () => {
         const state = {
             ...defaultState,
-            auth: { loading: false },
+            auth: { loading: false, authChecked: true },
         };
         const store = mockStore(state);
 
-        const result = renderHookResults('/login', store);
+        renderHookResults('/login', store);
 
         expect(navigate).toBeCalledTimes(0);
-        expect(result.current).toBeUndefined();
     });
 
     test('verifica a situação de autenticado no /', () => {
         const state = {
             ...defaultState,
-            auth: { loading: false, idFamilia: 'mock' },
+            auth: { loading: false, idFamilia: 'mock', authChecked: true },
         };
         const store = mockStore(state);
 
-        const result = renderHookResults('/', store);
+        renderHookResults('/', store);
 
         expect(navigate).toBeCalledTimes(0);
-        expect(result.current).toBeUndefined();
     });
 
     test('verifica a situação de autenticado no /login', () => {
         const state = {
             ...defaultState,
-            auth: { loading: false, idFamilia: 'mock' },
+            auth: { loading: false, idFamilia: 'mock', authChecked: true },
         };
         const store = mockStore(state);
 
-        const result = renderHookResults('/login', store);
+        renderHookResults('/login', store);
 
         expect(navigate).toBeCalledTimes(1);
-        expect(result.current).toBeTruthy();
     });
 });

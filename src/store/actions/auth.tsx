@@ -34,6 +34,12 @@ export const authCheckState = () => {
     };
 };
 
+export const authCheckStateComplete = () => {
+    return {
+        type: actionTypes.AUTH_CHECK_STATE_COMPLETE,
+    };
+};
+
 export const initLogout = () => {
     return {
         type: actionTypes.INIT_LOGOUT,

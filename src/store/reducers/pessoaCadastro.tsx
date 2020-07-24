@@ -3,6 +3,7 @@ import { PessoaCadastroStateReducer } from '../../models/PessoaCadastroState';
 import { PessoaCadastroAction } from '../../models/PessoaCadastroAction';
 
 const initState: PessoaCadastroStateReducer = {
+    loading: false,
     pessoa: '',
     error: '',
 };
@@ -10,6 +11,7 @@ const initState: PessoaCadastroStateReducer = {
 const cadastroStart = (state: PessoaCadastroStateReducer) => {
     return {
         ...state,
+        loading: true,
         pessoa: '',
         error: '',
     };
@@ -21,6 +23,7 @@ const cadastroSuccess = (
 ) => {
     return {
         ...state,
+        loading: false,
         pessoa: action.pessoa,
         error: '',
     };
@@ -32,6 +35,7 @@ const cadastroFail = (
 ) => {
     return {
         ...state,
+        loading: false,
         pessoa: '',
         error: action.error,
     };

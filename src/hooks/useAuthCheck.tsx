@@ -9,6 +9,9 @@ export const useAuthCheck = (location: Location) => {
     const dispatch = useDispatch();
 
     const authLoading = useSelector((state: AuthState) => state.auth.loading);
+    const authChecked = useSelector(
+        (state: AuthState) => state.auth.authChecked,
+    );
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
     const onAuthCheckState = useCallback(() => dispatch(authCheckState()), []);
 
@@ -18,16 +21,12 @@ export const useAuthCheck = (location: Location) => {
         }
     }, [onAuthCheckState]);
 
-    if (!authLoading) {
+    if (authChecked && !authLoading) {
         if (!idFamilia && !location.pathname.startsWith('/login')) {
             navigate('/login/');
-            return false;
         }
         if (idFamilia && location.pathname.startsWith('/login')) {
             navigate('/');
-            return true;
         }
     }
-
-    return;
 };
