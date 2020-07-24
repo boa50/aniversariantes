@@ -6,6 +6,8 @@ import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import { DatePicker, KeyboardDatePicker } from '@material-ui/pickers';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import ErrorIcon from '@material-ui/icons/Error';
 
 import { PropertiesState } from '../../models/PropertiesState';
 
@@ -86,7 +88,6 @@ const Input: React.FC<Props> = ({
         name: id,
         value: formik.values[id],
         className: classes.input,
-        error: errorShow,
         helperText: formik.touched[id] && formik.errors[id],
         inputProps: { 'aria-labelledby': id + '-label' },
         onFocus: focusChangeHandler,
@@ -100,6 +101,7 @@ const Input: React.FC<Props> = ({
                 format="dd/MM/yyyy"
                 inputVariant="outlined"
                 color="secondary"
+                error={errorShow && !focus}
                 onChange={(date: Date | null) =>
                     formik.setFieldValue(id, date, true)
                 }
@@ -112,10 +114,18 @@ const Input: React.FC<Props> = ({
                 variant="outlined"
                 color="secondary"
                 autoFocus={autoFocus && !error}
+                error={errorShow}
                 InputLabelProps={{
                     shrink: true,
                 }}
                 onChange={inputChangeHandler}
+                InputProps={{
+                    endAdornment: errorShow ? (
+                        <InputAdornment position="end">
+                            <ErrorIcon color="primary" />
+                        </InputAdornment>
+                    ) : null,
+                }}
                 {...props}
             />
         );
