@@ -1,3 +1,7 @@
+require('dotenv').config({
+    path: `.env.${process.env.NODE_ENV || 'development'}`,
+});
+
 module.exports = {
     siteMetadata: {
         title: `Aniversariantes`,
@@ -37,6 +41,17 @@ module.exports = {
         `gatsby-transformer-sharp`,
         `gatsby-plugin-sharp`,
         `gatsby-plugin-sass`,
+        {
+            resolve: `gatsby-plugin-firebase`,
+            options: {
+                credentials: {
+                    apiKey: process.env.GATSBY_DB_API_KEY,
+                    appId: process.env.GATSBY_APP_ID,
+                    messagingSenderId: process.env.GATSBY_MESSAGING_SENDER_ID,
+                    projectId: process.env.GATSBY_PROJECT,
+                },
+            },
+        },
         {
             resolve: `gatsby-plugin-manifest`,
             options: {

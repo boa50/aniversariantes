@@ -17,6 +17,8 @@ import TrocaMes from '../components/trocaMes';
 import AniversariantesDia from '../components/aniversariantesDia';
 import Layout from '../components/layout';
 
+import firebase from 'gatsby-plugin-firebase';
+
 const useStyles = makeStyles(theme => ({
     mesTexto: {
         display: 'flex',
@@ -57,6 +59,22 @@ const App: React.FC = () => {
             <CircularProgress data-testid="loading-aniversariantes" />
         </Box>
     );
+
+    useEffect(() => {
+        const messaging = firebase.messaging();
+        messaging
+            .requestPermission()
+            .then(() => {
+                console.log('Notifications allowed');
+                return messaging.getToken();
+            })
+            .then((token: any) => {
+                console.log('Token Is : ' + token);
+            })
+            .catch((err: any) => {
+                console.log('No permission to send push', err);
+            });
+    }, []);
 
     if (!aniversariantesLoading) {
         conteudo = (
