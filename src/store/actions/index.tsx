@@ -22,3 +22,4 @@ export {
     cadastroSuccess,
     cadastroFail,
 } from './pessoaCadastro';
+export { subscreve } from './notificacoes';
