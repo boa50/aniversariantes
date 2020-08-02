@@ -19,16 +19,12 @@ export const useNotifications = () => {
             messaging
                 .requestPermission()
                 .then(() => {
-                    console.log('Notifications allowed');
                     return messaging.getToken();
                 })
                 .then((token: any) => {
-                    console.log('Token Is : ' + token);
                     subs(token);
                 })
-                .catch((err: any) => {
-                    console.log('No permission to send push', err);
-                });
+                .catch((err: any) => {});
         }
     }, [idFamilia]);
 };
