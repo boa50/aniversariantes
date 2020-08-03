@@ -16,6 +16,7 @@ import ListaAniversariantes from '../components/listaAniversariantes';
 import TrocaMes from '../components/trocaMes';
 import AniversariantesDia from '../components/aniversariantesDia';
 import Layout from '../components/layout';
+import { useNotifications } from '../hooks/useNotifications';
 
 const useStyles = makeStyles(theme => ({
     mesTexto: {
@@ -51,6 +52,8 @@ const App: React.FC = () => {
     useEffect(() => {
         onInitAniversariantes(idFamilia);
     }, [idFamilia, onInitAniversariantes]);
+
+    useNotifications();
 
     let conteudo = (
         <Box className={classes.circularProgress}>
