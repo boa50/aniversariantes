@@ -47,6 +47,10 @@ jest.mock('../../components/trocaMes', () => {
 jest.mock('../../components/listaAniversariantes', () => {
     return () => <div data-testid="ListaAniversariantesMock"></div>;
 });
+jest.mock('../../hooks/useNotifications', () => {
+    const useNotifications = () => null;
+    return { useNotifications };
+});
 
 const renderiza = (state: any) => {
     const mockStore = configureStore();
