@@ -24,7 +24,9 @@ export const useNotifications = () => {
                 .then((token: any) => {
                     subs(token);
                 })
-                .catch((err: any) => {});
+                .catch((err: any) => {
+                    console.error(`Erro ao gerar token: ${err}`);
+                });
         }
     }, [idFamilia]);
 };
