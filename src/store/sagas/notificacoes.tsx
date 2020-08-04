@@ -16,7 +16,7 @@ function* checaSubscricao(url: string, config: {}, tokenDestino: string) {
         }
     } catch (error) {
         console.error('Falha ao verificar subscrição.');
-        console.error('Error: ', error.response.data.error.message);
+        console.error(`Error: ${error}`);
     }
 
     return false;
@@ -49,7 +49,7 @@ export function* subscreveSaga(action: NotificacaoAction) {
             yield axios.post(`${url}/`, payload, config);
         } catch (error) {
             console.error('Falha ao cadastrar token para notificações.');
-            console.error('Error: ', error.response.data.error.message);
+            console.error(`Error: ${error}`);
         }
     }
 }
