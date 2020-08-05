@@ -50,7 +50,9 @@ const App: React.FC = () => {
     );
 
     useEffect(() => {
-        onInitAniversariantes(idFamilia);
+        if (idFamilia) {
+            onInitAniversariantes(idFamilia);
+        }
     }, [idFamilia, onInitAniversariantes]);
 
     useNotifications();
