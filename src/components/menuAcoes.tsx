@@ -27,19 +27,18 @@ const useStyles = makeStyles(theme => {
     };
 });
 
-let showShare = false;
-const HandleShareShow: React.FC<WebShareInterface> = ({ isSupported }) => {
-    if (isSupported) {
-        showShare = true;
-    }
-    return null;
-};
-
-const CheckShare = webShare()(HandleShareShow);
-
 const MenuAcoes: React.FC = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
+
+    const [showShare, setShowShare] = React.useState(false);
+    const HandleShareShow: React.FC<WebShareInterface> = ({ isSupported }) => {
+        if (isSupported) {
+            setShowShare(true);
+        }
+        return null;
+    };
+    const CheckShare = webShare()(HandleShareShow);
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -109,9 +108,6 @@ const MenuAcoes: React.FC = () => {
                     open={open}
                     onClose={handleClose}
                     data-testid="dot-menu-opened"
-                    PaperProps={
-                        showShare ? { style: { minWidth: '22ch' } } : {}
-                    }
                 >
                     {telaAniversariantes ? (
                         <MenuItem

@@ -18,13 +18,23 @@ const useStyles = makeStyles(theme => {
     };
 });
 
-const ShareButton: React.FC<WebShareInterface> = ({ share }) => {
+type Props = {
+    onClick?:
+        | ((event: React.MouseEvent<HTMLElement, MouseEvent>) => void)
+        | undefined;
+};
+
+export const Placeholder: React.FC<Props> = ({ onClick = undefined }) => {
     const classes = useStyles();
 
     return (
-        <Box className={classes.box} onClick={share}>
+        <Box className={classes.box} onClick={onClick}>
             <ShareIcon className={classes.shareIcon} /> {'Compartilhar'}
         </Box>
     );
+};
+
+const ShareButton: React.FC<WebShareInterface> = ({ share }) => {
+    return <Placeholder onClick={share} />;
 };
 export default webShare()(ShareButton);
