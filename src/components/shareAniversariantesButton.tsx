@@ -5,6 +5,8 @@ import { AuthState } from '../models/AuthState';
 import { AniversariantesState } from '../models/AniversariantesState';
 import AniversariantesUtils from '../utils/aniversariantesUtils';
 
+import { Placeholder } from '../components/shareButton';
+
 const ShareButton = React.lazy(() => {
     return import('../components/shareButton');
 });
@@ -33,7 +35,7 @@ const ShareAniversariantesButton: React.FC = () => {
     };
 
     return exibeBotao && !isSSR ? (
-        <Suspense fallback={<div />}>
+        <Suspense fallback={<Placeholder />}>
             <ShareButton
                 config={{
                     params: shareParams,
