@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useFormik } from 'formik';
+import { useLocation } from '@reach/router';
 
 import Input from '../components/ui/input';
 import DateFnsUtils from '@date-io/date-fns';
@@ -10,10 +11,14 @@ import Layout from '../components/layout';
 import Form from '../components/form';
 
 const PessoaInformacoes: React.FC = () => {
+    // Aplicada uma solução temporária para o Typescript
+    // https://github.com/reach/router/issues/414#issuecomment-683827688
+    const location = useLocation<{ nome: ''; nascimento: '' }>();
+
     const formik = useFormik({
         initialValues: {
-            nome: 'jumento branco',
-            nascimento: new Date(new Date().getFullYear() + '-01-01T03:00:00Z'),
+            nome: location.state.nome,
+            nascimento: location.state.nascimento,
         },
         onSubmit: values => {},
     });

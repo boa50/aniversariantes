@@ -1,6 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { navigate } from 'gatsby';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
@@ -21,6 +23,9 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(3),
         marginBottom: theme.spacing(3),
     },
+    tableRow: {
+        cursor: 'pointer',
+    },
 }));
 
 const ListaAniversariantes: React.FC = () => {
@@ -36,6 +41,12 @@ const ListaAniversariantes: React.FC = () => {
         </Typography>
     );
 
+    const rowClickHandler = (nome: String, nascimento: Date) => {
+        navigate('/pessoaInformacoes/', {
+            state: { nome, nascimento },
+        });
+    };
+
     const imprimeListaPreenchida = (
         aniversariantes: Aniversariante[],
     ): JSX.Element => {
@@ -45,7 +56,15 @@ const ListaAniversariantes: React.FC = () => {
 
         const linhas = aniversariantesOrdenados.map((linha, index) => {
             return (
-                <TableRow key={index} data-testid="aniversariantes-linha">
+                <TableRow
+                    hover={true}
+                    key={index}
+                    data-testid="aniversariantes-linha"
+                    onClick={() =>
+                        rowClickHandler(linha.pessoa, linha.nascimento)
+                    }
+                    className={classes.tableRow}
+                >
                     <TableCell data-testid="aniversariante-nome">
                         {linha.pessoa}
                     </TableCell>
