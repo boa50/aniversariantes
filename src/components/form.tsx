@@ -21,12 +21,32 @@ const useStyles = makeStyles(theme => ({
 }));
 
 type Props = {
-    formik: any;
+    formik?: any;
     progressShow?: boolean;
 };
 
-const Form: React.FC<Props> = ({ formik, progressShow = false, children }) => {
+const Form: React.FC<Props> = ({
+    formik = null,
+    progressShow = false,
+    children,
+}) => {
     const classes = useStyles();
+
+    let formulario;
+    if (formik !== null) {
+        formulario = (
+            <form
+                autoComplete="off"
+                noValidate
+                onSubmit={formik.handleSubmit}
+                className={classes.form}
+            >
+                {children}
+            </form>
+        );
+    } else {
+        formulario = <form className={classes.form}>{children}</form>;
+    }
 
     return (
         <Grid
@@ -37,14 +57,7 @@ const Form: React.FC<Props> = ({ formik, progressShow = false, children }) => {
         >
             <Grid item>
                 <Progress show={progressShow} />
-                <form
-                    autoComplete="off"
-                    noValidate
-                    onSubmit={formik.handleSubmit}
-                    className={classes.form}
-                >
-                    {children}
-                </form>
+                {formulario}
             </Grid>
         </Grid>
     );
