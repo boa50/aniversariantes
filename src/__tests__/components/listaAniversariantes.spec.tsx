@@ -19,6 +19,7 @@ beforeEach(() => {
 
     mockStore = configureStore();
 
+    // @ts-expect-error
     delete window.location;
 });
 
