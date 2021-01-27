@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { navigate } from 'gatsby';
+
 import { useFormik } from 'formik';
 import { useLocation } from '@reach/router';
 
@@ -14,11 +16,20 @@ const PessoaInformacoes: React.FC = () => {
     // Aplicada uma solução temporária para o Typescript
     // https://github.com/reach/router/issues/414#issuecomment-683827688
     const location = useLocation<{ nome: ''; nascimento: '' }>();
+    let nome = '';
+    let nascimento = '';
 
-    const formik = useFormik({
+    if (location.state == null) {
+        navigate('/');
+    } else {
+        nome = location.state.nome;
+        nascimento = location.state.nascimento;
+    }
+
+    let formik = useFormik({
         initialValues: {
-            nome: location.state.nome,
-            nascimento: location.state.nascimento,
+            nome: nome,
+            nascimento: nascimento,
         },
         onSubmit: values => {},
     });
