@@ -21,3 +21,7 @@ export const executeSaga = async (saga: Saga<any[]>, act: any) => {
 
     return dispatched;
 };
+
+export const getInputValue = (textField: HTMLElement) => {
+    return (textField.children[0].children[0] as HTMLInputElement).value;
+};
