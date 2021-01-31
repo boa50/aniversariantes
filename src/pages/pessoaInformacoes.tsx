@@ -19,8 +19,11 @@ const PessoaInformacoes: React.FC = () => {
     let nome = '';
     let nascimento = '';
 
+    const isSSR = typeof window === 'undefined';
     if (location.state == null) {
-        navigate('/');
+        if (!isSSR) {
+            navigate('/');
+        }
     } else {
         nome = location.state.nome;
         nascimento = location.state.nascimento;

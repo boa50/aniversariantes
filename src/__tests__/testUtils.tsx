@@ -1,4 +1,5 @@
 import { runSaga, Saga } from 'redux-saga';
+import { fireEvent, waitFor } from '@testing-library/react';
 
 export const isDisplayed = (func: Function, id: string) => {
     try {
@@ -22,6 +23,32 @@ export const executeSaga = async (saga: Saga<any[]>, act: any) => {
     return dispatched;
 };
 
+const getInput = (textField: HTMLElement) => {
+    return textField.children[0].children[0] as HTMLInputElement;
+};
+
 export const getInputValue = (textField: HTMLElement) => {
-    return (textField.children[0].children[0] as HTMLInputElement).value;
+    return getInput(textField).value;
+};
+
+export const setInputValue = async (
+    textField: HTMLElement,
+    value: any,
+): Promise<HTMLInputElement> => {
+    const input = getInput(textField);
+    let target = {};
+
+    if (value instanceof Date) {
+        target = { valueAsDate: value };
+    } else {
+        target = { value: value };
+    }
+
+    await waitFor(() => {
+        fireEvent.change(input, {
+            target: target,
+        });
+    });
+
+    return input;
 };
