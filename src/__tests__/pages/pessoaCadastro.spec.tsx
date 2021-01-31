@@ -4,7 +4,7 @@ import { render, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 
-import { isDisplayed } from '../testUtils';
+import { isDisplayed, setInputValue } from '../testUtils';
 
 import * as actions from '../../store/actions';
 
@@ -54,13 +54,7 @@ const inputaTextoAleatorio = async (
     textField: HTMLElement,
 ): Promise<{ input: HTMLInputElement; value: string }> => {
     const value = 'jumento';
-    const input = textField.children[0].children[0] as HTMLInputElement;
-
-    await waitFor(() => {
-        fireEvent.change(input, {
-            target: { value: value },
-        });
-    });
+    const input = await setInputValue(textField, value);
 
     return { input, value };
 };
@@ -69,13 +63,7 @@ const inputaDataAleatoria = async (
     textField: HTMLElement,
 ): Promise<{ input: HTMLInputElement; value: Date }> => {
     const value = new Date('2000-01-02T03:00:00Z');
-    const input = textField.children[0].children[0] as HTMLInputElement;
-
-    await waitFor(() => {
-        fireEvent.change(input, {
-            target: { valueAsDate: value },
-        });
-    });
+    const input = await setInputValue(textField, value);
 
     return { input, value };
 };

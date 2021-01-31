@@ -37,6 +37,7 @@ type Props = {
     autoFocus?: boolean;
     error?: boolean;
     changeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    readOnly?: boolean;
     formik: any;
 };
 
@@ -47,6 +48,7 @@ const Input: React.FC<Props> = ({
     autoFocus = false,
     error,
     changeHandler,
+    readOnly = false,
     formik,
 }) => {
     const classes = useStyles();
@@ -93,6 +95,7 @@ const Input: React.FC<Props> = ({
         onFocus: focusChangeHandler,
         onBlur: focusChangeHandler,
         'data-testid': id + '-input',
+        disabled: readOnly,
     };
 
     if (type === 'date') {
