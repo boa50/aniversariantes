@@ -41,6 +41,7 @@ const Form: React.FC<Props> = ({ formik, progressShow = false, children }) => {
                     autoComplete="off"
                     noValidate
                     onSubmit={formik.handleSubmit}
+                    onReset={formik.handleReset}
                     className={classes.form}
                 >
                     {children}
