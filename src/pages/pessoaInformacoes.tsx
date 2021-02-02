@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { navigate } from 'gatsby';
 
@@ -30,6 +30,9 @@ const useStyles = makeStyles(theme => ({
 
 const PessoaInformacoes: React.FC = () => {
     const classes = useStyles();
+    const btnWidth = '40%';
+
+    const [salvarShow, setSalvarShow] = useState(false);
 
     // Aplicada uma solução temporária para o Typescript
     // https://github.com/reach/router/issues/414#issuecomment-683827688
@@ -47,6 +50,28 @@ const PessoaInformacoes: React.FC = () => {
         nascimento = location.state.nascimento;
     }
 
+    const btnEditarOnClick = (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    ) => {
+        setSalvarShow(true);
+    };
+
+    const btnVoltarOnClick = (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    ) => {};
+
+    const btnSalvarOnClick = (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    ) => {
+        setSalvarShow(false);
+    };
+
+    const btnCancelarOnClick = (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    ) => {
+        setSalvarShow(false);
+    };
+
     let formik = useFormik({
         initialValues: {
             nome: nome,
@@ -58,29 +83,63 @@ const PessoaInformacoes: React.FC = () => {
     const conteudo = (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Form formik={formik}>
-                <Input id="nome" label="Nome" formik={formik} readOnly={true} />
+                <Input
+                    id="nome"
+                    label="Nome"
+                    formik={formik}
+                    readOnly={!salvarShow}
+                />
 
                 <Input
                     id="nascimento"
                     label="Data de nascimento"
                     type="date"
                     formik={formik}
-                    readOnly={true}
+                    readOnly={!salvarShow}
                 />
 
-                <Box className={classes.buttons}>
+                <Box
+                    className={classes.buttons}
+                    style={{ display: salvarShow ? 'none' : 'flex' }}
+                >
                     <Button
                         id="voltar-cancelar"
-                        label="Voltar/Cancelar"
+                        label="Voltar"
                         type="secondary"
-                        btnType="reset"
+                        btnType="button"
+                        width={btnWidth}
+                        onClick={btnVoltarOnClick}
                     />
                     <Button
                         id="editar-salvar"
-                        label="Editar/Salvar"
+                        label="Editar"
                         type="primary"
                         icon="edit"
+                        btnType="button"
+                        width={btnWidth}
+                        onClick={btnEditarOnClick}
+                    />
+                </Box>
+                <Box
+                    className={classes.buttons}
+                    style={{ display: salvarShow ? 'flex' : 'none' }}
+                >
+                    <Button
+                        id="cancelar"
+                        label="Cancelar"
+                        type="secondary"
+                        btnType="reset"
+                        width={btnWidth}
+                        onClick={btnCancelarOnClick}
+                    />
+                    <Button
+                        id="salvar"
+                        label="Salvar"
+                        type="primary"
+                        icon="save"
                         btnType="submit"
+                        width={btnWidth}
+                        onClick={btnSalvarOnClick}
                     />
                 </Box>
             </Form>

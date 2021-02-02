@@ -13,6 +13,7 @@ type Props = {
     icon?: 'save' | 'edit';
     btnType?: 'button' | 'submit' | 'reset';
     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    width?: string;
 };
 
 const Button: React.FC<Props> = ({
@@ -23,6 +24,7 @@ const Button: React.FC<Props> = ({
     icon,
     btnType = 'submit',
     onClick,
+    width = 'auto',
 }) => {
     let color: 'inherit' | 'primary' | 'secondary' | 'default' | undefined;
     if (type === 'primary') {
@@ -52,6 +54,7 @@ const Button: React.FC<Props> = ({
             disabled={disabled}
             startIcon={iconClass}
             onClick={onClick}
+            style={{ width }}
         >
             {label}
         </MaterialButton>
