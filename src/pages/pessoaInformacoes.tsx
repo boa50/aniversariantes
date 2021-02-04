@@ -33,6 +33,7 @@ const PessoaInformacoes: React.FC = () => {
     const btnWidth = '40%';
 
     const [salvarShow, setSalvarShow] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     // Aplicada uma solução temporária para o Typescript
     // https://github.com/reach/router/issues/414#issuecomment-683827688
@@ -58,11 +59,16 @@ const PessoaInformacoes: React.FC = () => {
 
     const btnVoltarOnClick = (
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    ) => {};
+    ) => {
+        if (!isSSR) {
+            navigate(-1);
+        }
+    };
 
     const btnSalvarOnClick = (
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     ) => {
+        setLoading(true);
         setSalvarShow(false);
     };
 
@@ -82,7 +88,7 @@ const PessoaInformacoes: React.FC = () => {
 
     const conteudo = (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Form formik={formik}>
+            <Form formik={formik} progressShow={loading}>
                 <Input
                     id="nome"
                     label="Nome"
