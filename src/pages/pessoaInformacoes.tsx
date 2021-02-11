@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { navigate } from 'gatsby';
 
@@ -14,6 +14,7 @@ import Box from '@material-ui/core/Box';
 
 import Layout from '../components/layout';
 import Form from '../components/form';
+import Alerta from '../components/ui/alerta';
 
 const useStyles = makeStyles(theme => ({
     buttons: {
@@ -33,7 +34,13 @@ const PessoaInformacoes: React.FC = () => {
     const btnWidth = '40%';
 
     const [salvarShow, setSalvarShow] = useState(false);
+    const [submitResetDisabled, setSubmitResetDisabled] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [alertStyle, setAlertStyle] = useState(false);
+    const [erro, setErro] = useState('');
+    const [mensagemSucesso, setMensagemSucesso] = useState('');
+    const [errorShow, setErrorShow] = useState(false);
+    const [successShow, setSuccessShow] = useState(false);
 
     // Aplicada uma solução temporária para o Typescript
     // https://github.com/reach/router/issues/414#issuecomment-683827688
@@ -50,6 +57,21 @@ const PessoaInformacoes: React.FC = () => {
         nome = location.state.nome;
         nascimento = location.state.nascimento;
     }
+
+    useEffect(() => {
+        setErrorShow(alertStyle && erro.length > 0);
+        setSuccessShow(alertStyle && mensagemSucesso.length > 0);
+    }, [alertStyle, erro, mensagemSucesso]);
+
+    useEffect(() => {
+        if (successShow) {
+            setSalvarShow(false);
+        }
+    }, [successShow]);
+
+    useEffect(() => {
+        setSubmitResetDisabled(loading);
+    }, [loading]);
 
     const btnEditarOnClick = (
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -69,7 +91,13 @@ const PessoaInformacoes: React.FC = () => {
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     ) => {
         setLoading(true);
-        setSalvarShow(false);
+
+        //TODO só para simular uma espera
+        setTimeout(() => {
+            setAlertStyle(true);
+
+            setLoading(false);
+        }, 2000);
     };
 
     const btnCancelarOnClick = (
@@ -93,7 +121,7 @@ const PessoaInformacoes: React.FC = () => {
                     id="nome"
                     label="Nome"
                     formik={formik}
-                    readOnly={!salvarShow}
+                    readOnly={!salvarShow || loading}
                 />
 
                 <Input
@@ -101,7 +129,7 @@ const PessoaInformacoes: React.FC = () => {
                     label="Data de nascimento"
                     type="date"
                     formik={formik}
-                    readOnly={!salvarShow}
+                    readOnly={!salvarShow || loading}
                 />
 
                 <Box
@@ -109,7 +137,7 @@ const PessoaInformacoes: React.FC = () => {
                     style={{ display: salvarShow ? 'none' : 'flex' }}
                 >
                     <Button
-                        id="voltar-cancelar"
+                        id="voltar"
                         label="Voltar"
                         type="secondary"
                         btnType="button"
@@ -117,7 +145,7 @@ const PessoaInformacoes: React.FC = () => {
                         onClick={btnVoltarOnClick}
                     />
                     <Button
-                        id="editar-salvar"
+                        id="editar"
                         label="Editar"
                         type="primary"
                         icon="edit"
@@ -137,6 +165,7 @@ const PessoaInformacoes: React.FC = () => {
                         btnType="reset"
                         width={btnWidth}
                         onClick={btnCancelarOnClick}
+                        disabled={submitResetDisabled}
                     />
                     <Button
                         id="salvar"
@@ -146,8 +175,22 @@ const PessoaInformacoes: React.FC = () => {
                         btnType="submit"
                         width={btnWidth}
                         onClick={btnSalvarOnClick}
+                        disabled={submitResetDisabled}
                     />
                 </Box>
+
+                <Alerta
+                    severity="error"
+                    text={erro}
+                    open={errorShow}
+                    setOpen={setAlertStyle}
+                />
+                <Alerta
+                    severity="success"
+                    text={mensagemSucesso}
+                    open={successShow}
+                    setOpen={setAlertStyle}
+                />
             </Form>
         </MuiPickersUtilsProvider>
     );
