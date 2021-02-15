@@ -48,6 +48,10 @@ const PessoaInformacoes: React.FC = () => {
     const [errorShow, setErrorShow] = useState(false);
     const [successShow, setSuccessShow] = useState(false);
 
+    const [formNome, setFormNome] = useState('');
+    const [formNascimento, setFormNascimento] = useState(new Date());
+    const [formIdPessoa, setFormIdPessoa] = useState('');
+
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
     const loading = useSelector(
         (state: PessoaAtualizaState) => state.pessoaAtualiza.loading,
@@ -73,20 +77,19 @@ const PessoaInformacoes: React.FC = () => {
         nome: string;
         nascimento: Date;
     }>();
-    let idPessoa: string = '';
-    let nome: string = '';
-    let nascimento: Date = new Date();
 
     const isSSR = typeof window === 'undefined';
-    if (location.state == null) {
-        if (!isSSR) {
-            navigate('/');
+    useEffect(() => {
+        if (location.state == null) {
+            if (!isSSR) {
+                navigate('/');
+            }
+        } else {
+            setFormIdPessoa(location.state.idPessoa);
+            setFormNome(location.state.nome);
+            setFormNascimento(location.state.nascimento);
         }
-    } else {
-        idPessoa = location.state.idPessoa;
-        nome = location.state.nome;
-        nascimento = location.state.nascimento;
-    }
+    }, []);
 
     useEffect(() => {
         setErrorShow(alertStyle && erro.length > 0);
@@ -99,6 +102,8 @@ const PessoaInformacoes: React.FC = () => {
             setMensagemSucesso(
                 `Os dados de ${pessoaAtualizada} foram atualizados.`,
             );
+            setFormNome(formik.values.nome);
+            setFormNascimento(formik.values.nascimento);
         }
     }, [successShow]);
 
@@ -127,9 +132,10 @@ const PessoaInformacoes: React.FC = () => {
     };
 
     let formik = useFormik({
+        enableReinitialize: true,
         initialValues: {
-            nome: nome,
-            nascimento: nascimento,
+            nome: formNome,
+            nascimento: formNascimento,
         },
         validationSchema: Yup.object({
             nome: Yup.string().required('O nome deve ser preenchido'),
@@ -139,7 +145,12 @@ const PessoaInformacoes: React.FC = () => {
         }),
         onSubmit: values => {
             setAlertStyle(true);
-            onInitAtualiza(idFamilia, idPessoa, values.nome, values.nascimento);
+            onInitAtualiza(
+                idFamilia,
+                formIdPessoa,
+                values.nome,
+                values.nascimento,
+            );
         },
     });
 
