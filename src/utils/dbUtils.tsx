@@ -27,8 +27,6 @@ const DbUtils = {
             case 'string':
                 fieldValue = document.fields[field].stringValue;
                 break;
-            default:
-                fieldValue = '';
         }
 
         return fieldValue;

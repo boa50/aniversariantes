@@ -64,7 +64,11 @@ const renderiza = async () => {
     const source = createMemorySource('/starting/url');
     const history = createHistory(source);
 
-    const state = { properties: { isMobile: false } };
+    const state = {
+        properties: { isMobile: false },
+        pessoaAtualiza: { loading: false, pessoa: '', error: '' },
+        auth: { idFamilia: 'algumIdFamilia' },
+    };
     const store = mockStore(state);
 
     return await render(

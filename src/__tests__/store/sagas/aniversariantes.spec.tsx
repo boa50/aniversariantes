@@ -11,6 +11,7 @@ import { executeSaga } from '../../testUtils';
 
 const aniversariantesMock = [
     {
+        idPessoa: 'algumId',
         pessoa: 'oi',
         nascimento: new Date('2000-01-02T03:00:00Z'),
     },
@@ -30,6 +31,9 @@ describe('AniversariantesSaga', () => {
             data: {
                 documents: [
                     {
+                        name:
+                            'asdas/asdasd/asdasd/' +
+                            aniversariantesMock[0].idPessoa,
                         fields: {
                             pessoa: {
                                 stringValue: aniversariantesMock[0].pessoa,
