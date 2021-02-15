@@ -5,9 +5,33 @@ import * as actions from '../actions';
 
 export function* initAtualizaSaga(action: PessoaAtualizaAction) {
     yield put(actions.atualizaStart());
+    const token = yield localStorage.getItem('token');
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
 
-    //TODO Aqui vai a lógica da atualização
+    try {
+        const idFamilia = action.idFamilia;
+        const idPessoa = action.idPessoa;
+        const url = idFamilia + '/aniversariantes/' + idPessoa;
+        const payload = {
+            fields: {
+                pessoa: {
+                    stringValue: action.pessoa,
+                },
+                nascimento: {
+                    timestampValue: action.nascimento,
+                },
+            },
+        };
 
-    yield put(actions.atualizaSuccess(action.pessoa));
-    // yield put(actions.atualizaFail('testeErro'));
+        const response = yield axios.patch(url, payload, config);
+        const pessoaAtualizada = response.data.fields.pessoa.stringValue;
+
+        yield put(actions.atualizaSuccess(pessoaAtualizada));
+    } catch (error) {
+        yield put(actions.atualizaFail(error.response.data.error.message));
+    }
 }

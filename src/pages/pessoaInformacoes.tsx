@@ -68,7 +68,12 @@ const PessoaInformacoes: React.FC = () => {
 
     // Aplicada uma solução temporária para o Typescript
     // https://github.com/reach/router/issues/414#issuecomment-683827688
-    const location = useLocation<{ nome: string; nascimento: Date }>();
+    const location = useLocation<{
+        idPessoa: string;
+        nome: string;
+        nascimento: Date;
+    }>();
+    let idPessoa: string = '';
     let nome: string = '';
     let nascimento: Date = new Date();
 
@@ -78,6 +83,7 @@ const PessoaInformacoes: React.FC = () => {
             navigate('/');
         }
     } else {
+        idPessoa = location.state.idPessoa;
         nome = location.state.nome;
         nascimento = location.state.nascimento;
     }
@@ -133,12 +139,7 @@ const PessoaInformacoes: React.FC = () => {
         }),
         onSubmit: values => {
             setAlertStyle(true);
-            onInitAtualiza(
-                idFamilia,
-                'idPessoa',
-                values.nome,
-                values.nascimento,
-            );
+            onInitAtualiza(idFamilia, idPessoa, values.nome, values.nascimento);
         },
     });
 
