@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { navigate } from 'gatsby';
 
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { useLocation } from '@reach/router';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,6 +13,11 @@ import Button from '../components/ui/button';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Box from '@material-ui/core/Box';
+
+import { AuthState } from '../models/AuthState';
+import { PessoaAtualizaState } from '../models/PessoaAtualizaState';
+
+import { initAtualiza } from '../store/actions';
 
 import Layout from '../components/layout';
 import Form from '../components/form';
@@ -31,22 +38,39 @@ const useStyles = makeStyles(theme => ({
 
 const PessoaInformacoes: React.FC = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
     const btnWidth = '40%';
 
     const [salvarShow, setSalvarShow] = useState(false);
     const [submitResetDisabled, setSubmitResetDisabled] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [alertStyle, setAlertStyle] = useState(false);
-    const [erro, setErro] = useState('');
     const [mensagemSucesso, setMensagemSucesso] = useState('');
     const [errorShow, setErrorShow] = useState(false);
     const [successShow, setSuccessShow] = useState(false);
 
+    const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
+    const loading = useSelector(
+        (state: PessoaAtualizaState) => state.pessoaAtualiza.loading,
+    );
+    const pessoaAtualizada = useSelector(
+        (state: PessoaAtualizaState) => state.pessoaAtualiza.pessoa,
+    );
+    const erro = useSelector(
+        (state: PessoaAtualizaState) => state.pessoaAtualiza.error,
+    );
+
+    const onInitAtualiza = (
+        idFamilia: string,
+        idPessoa: string,
+        nome: string,
+        nascimento: Date,
+    ) => dispatch(initAtualiza(idFamilia, idPessoa, nome, nascimento));
+
     // Aplicada uma solução temporária para o Typescript
     // https://github.com/reach/router/issues/414#issuecomment-683827688
-    const location = useLocation<{ nome: ''; nascimento: '' }>();
-    let nome = '';
-    let nascimento = '';
+    const location = useLocation<{ nome: string; nascimento: Date }>();
+    let nome: string = '';
+    let nascimento: Date = new Date();
 
     const isSSR = typeof window === 'undefined';
     if (location.state == null) {
@@ -60,12 +84,15 @@ const PessoaInformacoes: React.FC = () => {
 
     useEffect(() => {
         setErrorShow(alertStyle && erro.length > 0);
-        setSuccessShow(alertStyle && mensagemSucesso.length > 0);
-    }, [alertStyle, erro, mensagemSucesso]);
+        setSuccessShow(alertStyle && pessoaAtualizada.length > 0);
+    }, [alertStyle, erro, pessoaAtualizada]);
 
     useEffect(() => {
         if (successShow) {
             setSalvarShow(false);
+            setMensagemSucesso(
+                `Os dados de ${pessoaAtualizada} foram atualizados.`,
+            );
         }
     }, [successShow]);
 
@@ -87,19 +114,6 @@ const PessoaInformacoes: React.FC = () => {
         }
     };
 
-    const btnSalvarOnClick = (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    ) => {
-        setLoading(true);
-
-        //TODO só para simular uma espera
-        setTimeout(() => {
-            setAlertStyle(true);
-
-            setLoading(false);
-        }, 2000);
-    };
-
     const btnCancelarOnClick = (
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     ) => {
@@ -111,7 +125,21 @@ const PessoaInformacoes: React.FC = () => {
             nome: nome,
             nascimento: nascimento,
         },
-        onSubmit: values => {},
+        validationSchema: Yup.object({
+            nome: Yup.string().required('O nome deve ser preenchido'),
+            nascimento: Yup.date()
+                .required('A data de nascimento deve ser preenchida')
+                .typeError('A data informada é inválida'),
+        }),
+        onSubmit: values => {
+            setAlertStyle(true);
+            onInitAtualiza(
+                idFamilia,
+                'idPessoa',
+                values.nome,
+                values.nascimento,
+            );
+        },
     });
 
     const conteudo = (
@@ -174,7 +202,6 @@ const PessoaInformacoes: React.FC = () => {
                         icon="save"
                         btnType="submit"
                         width={btnWidth}
-                        onClick={btnSalvarOnClick}
                         disabled={submitResetDisabled}
                     />
                 </Box>

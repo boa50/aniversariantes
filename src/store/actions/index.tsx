@@ -22,4 +22,10 @@ export {
     cadastroSuccess,
     cadastroFail,
 } from './pessoaCadastro';
+export {
+    initAtualiza,
+    atualizaStart,
+    atualizaSuccess,
+    atualizaFail,
+} from './pessoaAtualiza';
 export { subscreve } from './notificacoes';
