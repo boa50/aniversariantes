@@ -29,6 +29,7 @@ const theme = createMuiTheme({
 type Props = {
     title: string;
     headerTexto?: string;
+    children: React.ReactElement;
 };
 
 const Layout: React.FC<Props> = ({ title, headerTexto, children }) => {
@@ -49,6 +50,7 @@ const Layout: React.FC<Props> = ({ title, headerTexto, children }) => {
     }, [onInitProperties, isMobile]);
 
     const isSSR = typeof window === 'undefined';
+    /* istanbul ignore next */
     if (!isSSR) {
         useAuthCheck(location);
     }

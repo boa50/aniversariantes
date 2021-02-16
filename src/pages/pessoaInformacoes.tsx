@@ -81,6 +81,7 @@ const PessoaInformacoes: React.FC = () => {
     const isSSR = typeof window === 'undefined';
     useEffect(() => {
         if (location.state == null) {
+            /* istanbul ignore next */
             if (!isSSR) {
                 navigate('/');
             }
@@ -120,6 +121,7 @@ const PessoaInformacoes: React.FC = () => {
     const btnVoltarOnClick = (
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     ) => {
+        /* istanbul ignore next */
         if (!isSSR) {
             navigate(-1);
         }
@@ -175,6 +177,7 @@ const PessoaInformacoes: React.FC = () => {
                 <Box
                     className={classes.buttons}
                     style={{ display: salvarShow ? 'none' : 'flex' }}
+                    data-testid="btns-editar"
                 >
                     <Button
                         id="voltar"
@@ -197,6 +200,7 @@ const PessoaInformacoes: React.FC = () => {
                 <Box
                     className={classes.buttons}
                     style={{ display: salvarShow ? 'flex' : 'none' }}
+                    data-testid="btns-salvar"
                 >
                     <Button
                         id="cancelar"

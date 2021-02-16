@@ -38,6 +38,7 @@ const TrocaMes: React.FC = () => {
         onSetMes(mesNovo);
     };
 
+    /* istanbul ignore next */
     useHotkeys(
         'left',
         () => {
@@ -45,6 +46,7 @@ const TrocaMes: React.FC = () => {
         },
         [mes],
     );
+    /* istanbul ignore next */
     useHotkeys(
         'right',
         () => {

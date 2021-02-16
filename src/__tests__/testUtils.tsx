@@ -1,10 +1,15 @@
 import { runSaga, Saga } from 'redux-saga';
 import { fireEvent, waitFor } from '@testing-library/react';
+import { HtmlHTMLAttributes } from 'react';
 
 export const isDisplayed = (func: Function, id: string) => {
     try {
-        func(id);
-        return true;
+        const componentStyle = func(id).style;
+        if (componentStyle._values.display == 'none') {
+            return false;
+        } else {
+            return true;
+        }
     } catch (error) {
         return false;
     }
@@ -51,4 +56,12 @@ export const setInputValue = async (
     });
 
     return input;
+};
+
+export const isInputEnabled = (inputField: HTMLElement): boolean => {
+    if (inputField.children[0].className.indexOf('Mui-disabled') < 0) {
+        return true;
+    } else {
+        return false;
+    }
 };
