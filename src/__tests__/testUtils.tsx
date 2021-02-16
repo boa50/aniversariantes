@@ -1,6 +1,5 @@
 import { runSaga, Saga } from 'redux-saga';
 import { fireEvent, waitFor } from '@testing-library/react';
-import { HtmlHTMLAttributes } from 'react';
 
 export const isDisplayed = (func: Function, id: string) => {
     try {

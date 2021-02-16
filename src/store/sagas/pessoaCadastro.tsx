@@ -15,14 +15,13 @@ export function* initCadastroSaga(action: PessoaCadastroAction) {
     try {
         const idFamilia = action.idFamilia;
         const url = idFamilia + '/aniversariantes/';
-        const nascimento = action.nascimento;
         const payload = {
             fields: {
                 pessoa: {
                     stringValue: action.pessoa,
                 },
                 nascimento: {
-                    timestampValue: nascimento,
+                    timestampValue: action.nascimento,
                 },
             },
         };
