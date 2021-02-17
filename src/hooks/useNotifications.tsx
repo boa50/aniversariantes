@@ -15,18 +15,23 @@ export const useNotifications = () => {
 
     useEffect(() => {
         if (idFamilia) {
-            const messaging = firebase.messaging();
-            messaging
-                .requestPermission()
-                .then(() => {
-                    return messaging.getToken();
-                })
-                .then((token: any) => {
-                    subs(token);
-                })
-                .catch((err: any) => {
-                    console.error(`Erro ao gerar token: ${err}`);
-                });
+            try {
+                const messaging = firebase.messaging();
+                messaging
+                    .requestPermission()
+                    .then(() => {
+                        return messaging.getToken();
+                    })
+                    .then((token: any) => {
+                        subs(token);
+                    })
+                    .catch((err: any) => {
+                        console.error(`Erro ao gerar token: ${err}`);
+                    });
+            } catch (error) {
+                console.log('Browser não suporta notificações.');
+                console.error(error);
+            }
         }
     }, [idFamilia]);
 };
