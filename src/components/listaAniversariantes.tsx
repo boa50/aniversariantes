@@ -41,9 +41,13 @@ const ListaAniversariantes: React.FC = () => {
         </Typography>
     );
 
-    const rowClickHandler = (nome: String, nascimento: Date) => {
+    const rowClickHandler = (
+        idPessoa: String,
+        nome: String,
+        nascimento: Date,
+    ) => {
         navigate('/pessoaInformacoes/', {
-            state: { nome, nascimento },
+            state: { idPessoa, nome, nascimento },
         });
     };
 
@@ -61,7 +65,11 @@ const ListaAniversariantes: React.FC = () => {
                     key={index}
                     data-testid="aniversariantes-linha"
                     onClick={() =>
-                        rowClickHandler(linha.pessoa, linha.nascimento)
+                        rowClickHandler(
+                            linha.idPessoa,
+                            linha.pessoa,
+                            linha.nascimento,
+                        )
                     }
                     className={classes.tableRow}
                 >

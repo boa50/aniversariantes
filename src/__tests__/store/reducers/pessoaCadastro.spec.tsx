@@ -37,7 +37,7 @@ describe('PessoaCadastroReducer', () => {
             type: actionTypes.PESSOA_CADASTRO_START,
         };
 
-        expect(reducer(newState, action)).toEqual({
+        expect(reducer(initState, action)).toEqual({
             ...newState,
         });
     });
@@ -57,7 +57,7 @@ describe('PessoaCadastroReducer', () => {
             pessoa: pessoaMock,
         };
 
-        expect(reducer(newState, action)).toEqual({
+        expect(reducer(initState, action)).toEqual({
             ...newState,
         });
     });
@@ -78,7 +78,7 @@ describe('PessoaCadastroReducer', () => {
             error: errorMock,
         };
 
-        expect(reducer(newState, action)).toEqual({
+        expect(reducer(initState, action)).toEqual({
             ...newState,
         });
     });

@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import Input from '../components/ui/input';
-import PrimaryButton from '../components/ui/primaryButton';
+import Button from '../components/ui/button';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
@@ -97,7 +97,7 @@ const PessoaCadastro: React.FC = () => {
                     formik={formik}
                 />
 
-                <PrimaryButton
+                <Button
                     id="cadastrar"
                     label="Cadastrar"
                     disabled={buttonDisabled}

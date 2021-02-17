@@ -15,10 +15,26 @@ jest.mock('../../utils/dateUtils', () => {
 });
 
 const aniversariantesLista = [
-    { pessoa: 'mariazinha', nascimento: new Date('2000-10-22T03:00:00Z') },
-    { pessoa: 'pedinho', nascimento: new Date('2000-10-25T03:00:00Z') },
-    { pessoa: 'joãozinho', nascimento: new Date('2000-10-22T03:00:00Z') },
-    { pessoa: 'testinho', nascimento: new Date('2000-11-26T03:00:00Z') },
+    {
+        idPessoa: 'pessoa01',
+        pessoa: 'mariazinha',
+        nascimento: new Date('2000-10-22T03:00:00Z'),
+    },
+    {
+        idPessoa: 'pessoa02',
+        pessoa: 'pedinho',
+        nascimento: new Date('2000-10-25T03:00:00Z'),
+    },
+    {
+        idPessoa: 'pessoa03',
+        pessoa: 'joãozinho',
+        nascimento: new Date('2000-10-22T03:00:00Z'),
+    },
+    {
+        idPessoa: 'pessoa04',
+        pessoa: 'testinho',
+        nascimento: new Date('2000-11-26T03:00:00Z'),
+    },
 ];
 
 describe('Aniversariantes utils', () => {

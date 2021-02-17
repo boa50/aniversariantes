@@ -2,6 +2,7 @@ import axios from '../../axios';
 import { put } from 'redux-saga/effects';
 import { AniversariantesAction } from '../../models/AniversariantesAction';
 import * as actions from '../actions';
+import DbUtils from '../../utils/dbUtils';
 
 export function* initAniversariantesSaga(action: AniversariantesAction) {
     yield put(actions.fetchAniversariantesStart());
@@ -19,13 +20,18 @@ export function* initAniversariantesSaga(action: AniversariantesAction) {
 
         const aniversariantes = response.data.documents.map(
             (aniversariante: any) => {
-                const nascimento: string =
-                    aniversariante.fields.nascimento.timestampValue;
-                const dtNascimento: Date = new Date(nascimento);
+                const idPessoa: string = DbUtils.getDocumentId(aniversariante);
+                const pessoa: string = DbUtils.getAniversarianteNome(
+                    aniversariante,
+                );
+                const nascimento: Date = DbUtils.getAniversarianteNascimento(
+                    aniversariante,
+                );
 
                 return {
-                    pessoa: aniversariante.fields.pessoa.stringValue,
-                    nascimento: dtNascimento,
+                    idPessoa: idPessoa,
+                    pessoa: pessoa,
+                    nascimento: nascimento,
                 };
             },
         );

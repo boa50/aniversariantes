@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import Input from '../components/ui/input';
-import PrimaryButton from '../components/ui/primaryButton';
+import Button from '../components/ui/button';
 
 import { AuthState } from '../models/AuthState';
 
@@ -62,7 +62,7 @@ const Login: React.FC = () => {
                     formik={formik}
                 />
 
-                <PrimaryButton id="login" label="Entrar" />
+                <Button id="login" label="Entrar" />
 
                 <Alerta
                     severity="error"

@@ -7,6 +7,7 @@ import aniversariantesReducer from './reducers/aniversariantes';
 import authReducer from './reducers/auth';
 import propertiesReducer from './reducers/properties';
 import pessoaCadastroReducer from './reducers/pessoaCadastro';
+import pessoaAtualizaReducer from './reducers/pessoaAtualiza';
 import { watch } from './sagas';
 
 declare global {
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
     auth: authReducer,
     properties: propertiesReducer,
     pessoaCadastro: pessoaCadastroReducer,
+    pessoaAtualiza: pessoaAtualizaReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

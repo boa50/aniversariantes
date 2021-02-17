@@ -1,10 +1,10 @@
 import axios from '../../axios';
 import { put } from 'redux-saga/effects';
-import { PessoaCadastroAction } from '../../models/PessoaCadastroAction';
+import { PessoaAtualizaAction } from '../../models/PessoaAtualizaAction';
 import * as actions from '../actions';
 
-export function* initCadastroSaga(action: PessoaCadastroAction) {
-    yield put(actions.cadastroStart());
+export function* initAtualizaSaga(action: PessoaAtualizaAction) {
+    yield put(actions.atualizaStart());
     const token = yield localStorage.getItem('token');
     const config = {
         headers: {
@@ -14,7 +14,8 @@ export function* initCadastroSaga(action: PessoaCadastroAction) {
 
     try {
         const idFamilia = action.idFamilia;
-        const url = idFamilia + '/aniversariantes/';
+        const idPessoa = action.idPessoa;
+        const url = idFamilia + '/aniversariantes/' + idPessoa;
         const payload = {
             fields: {
                 pessoa: {
@@ -26,11 +27,11 @@ export function* initCadastroSaga(action: PessoaCadastroAction) {
             },
         };
 
-        const response = yield axios.post(url, payload, config);
-        const pessoaCadastrada = response.data.fields.pessoa.stringValue;
+        const response = yield axios.patch(url, payload, config);
+        const pessoaAtualizada = response.data.fields.pessoa.stringValue;
 
-        yield put(actions.cadastroSuccess(pessoaCadastrada));
+        yield put(actions.atualizaSuccess(pessoaAtualizada));
     } catch (error) {
-        yield put(actions.cadastroFail(error.response.data.error.message));
+        yield put(actions.atualizaFail(error.response.data.error.message));
     }
 }
