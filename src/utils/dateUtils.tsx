@@ -49,6 +49,10 @@ const DateUtils = {
     getDia(data: Date): number {
         return data.getDate();
     },
+
+    getDataCompleta(data: Date): string {
+        return data.toLocaleDateString('en-GB');
+    },
 };
 
 export default DateUtils;

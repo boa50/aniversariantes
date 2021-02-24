@@ -55,6 +55,7 @@ const MenuAcoes: React.FC = () => {
     };
 
     const handleClose = () => {
+        /* istanbul ignore next */
         setAnchorEl(null);
     };
 

@@ -28,16 +28,21 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ListaAniversariantes: React.FC = () => {
+type Props = {
+    mensal?: boolean;
+};
+
+const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
     const classes = useStyles();
-    const aniversariantes = useSelector(
-        (state: AniversariantesState) =>
-            state.aniversariantes.aniversariantesMes,
+    const aniversariantes = useSelector((state: AniversariantesState) =>
+        mensal
+            ? state.aniversariantes.aniversariantesMes
+            : state.aniversariantes.aniversariantes,
     );
 
     const imprimeListaVazia = (): JSX.Element => (
         <Typography variant="h5" data-testid="sem-aniversariantes-mensagem">
-            Sem aniversariantes no mês
+            Sem aniversariantes {mensal ? `no mês` : `cadastrados`}
         </Typography>
     );
 
@@ -54,9 +59,9 @@ const ListaAniversariantes: React.FC = () => {
     const imprimeListaPreenchida = (
         aniversariantes: Aniversariante[],
     ): JSX.Element => {
-        const aniversariantesOrdenados = AniversariantesUtils.ordenaPorDiaNome(
-            aniversariantes,
-        );
+        const aniversariantesOrdenados = mensal
+            ? AniversariantesUtils.ordenaPorDiaNome(aniversariantes)
+            : AniversariantesUtils.ordenaPorNomeNascimento(aniversariantes);
 
         const linhas = aniversariantesOrdenados.map((linha, index) => {
             return (
@@ -76,9 +81,15 @@ const ListaAniversariantes: React.FC = () => {
                     <TableCell data-testid="aniversariante-nome">
                         {linha.pessoa}
                     </TableCell>
-                    <TableCell data-testid="aniversariante-dia">
-                        {DateUtils.getDia(linha.nascimento)}
-                    </TableCell>
+                    {mensal ? (
+                        <TableCell data-testid="aniversariante-dia">
+                            {DateUtils.getDia(linha.nascimento)}
+                        </TableCell>
+                    ) : (
+                        <TableCell data-testid="aniversariante-nascimento">
+                            {DateUtils.getDataCompleta(linha.nascimento)}
+                        </TableCell>
+                    )}
                 </TableRow>
             );
         });
@@ -95,9 +106,15 @@ const ListaAniversariantes: React.FC = () => {
                             <TableCell data-testid="aniversariantes-nome-header">
                                 Aniversariante
                             </TableCell>
-                            <TableCell data-testid="aniversariantes-dia-header">
-                                Dia
-                            </TableCell>
+                            {mensal ? (
+                                <TableCell data-testid="aniversariantes-dia-header">
+                                    Dia
+                                </TableCell>
+                            ) : (
+                                <TableCell data-testid="aniversariantes-nascimento-header">
+                                    Nascimento
+                                </TableCell>
+                            )}
                         </TableRow>
                     </TableHead>
                     <TableBody>{linhas}</TableBody>

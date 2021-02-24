@@ -4,8 +4,6 @@ import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 
-import * as actions from '../../store/actions';
-
 import App from '../../pages/index';
 
 beforeEach(() => {
@@ -17,14 +15,6 @@ beforeEach(() => {
             },
         },
     }));
-});
-
-const mocks: jest.SpyInstance[] = [];
-afterEach(() => {
-    mocks.forEach((mock: jest.SpyInstance) => {
-        mock.mockClear();
-    });
-    mocks.length = 0;
 });
 
 type LayoutProps = {
@@ -86,14 +76,6 @@ describe('Index page', () => {
             auth: { loading: false, idFamilia: 'mock' },
         };
 
-        const initAniversariantes = jest
-            .spyOn(actions, 'initAniversariantes')
-            .mockImplementation((idFamilia: string) => ({
-                type: 'check',
-                idFamilia: 'mock',
-            }));
-        mocks.push(initAniversariantes);
-
         const { getByTestId } = renderiza(state);
 
         const aniversariantesDiaMock = getByTestId('AniversariantesDiaMock');
@@ -103,18 +85,9 @@ describe('Index page', () => {
         );
         const mesNome = getByTestId('mes-nome');
 
-        expect(initAniversariantes).toBeCalledTimes(1);
         expect(mesNome.textContent).toBe(mockMesTexto);
         expect(aniversariantesDiaMock).toBeDefined();
         expect(trocaMesMock).toBeDefined();
         expect(listaAniversariantesMock).toBeDefined();
-    });
-
-    test('verifica se carrega o icone de loading', () => {
-        const { getByTestId } = renderiza(defaultState);
-
-        const loadingIcon = getByTestId('loading-aniversariantes');
-
-        expect(loadingIcon).toBeDefined();
     });
 });

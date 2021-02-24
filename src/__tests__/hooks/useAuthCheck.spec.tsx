@@ -4,6 +4,8 @@ import { renderHook } from '@testing-library/react-hooks';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 
+import * as actions from '../../store/actions';
+
 import { useAuthCheck } from '../../hooks/useAuthCheck';
 
 const mocks: jest.SpyInstance[] = [];
@@ -38,6 +40,15 @@ const navigateMock = () => {
     return jest
         .spyOn(Gatsby, 'navigate')
         .mockImplementation((to: number) => Promise.resolve());
+};
+
+const initAniversariantesMock = () => {
+    return jest
+        .spyOn(actions, 'initAniversariantes')
+        .mockImplementation((idFamilia: string) => ({
+            type: 'check',
+            idFamilia: 'mock',
+        }));
 };
 
 const renderHookResults = (path: string, store: any) => {
@@ -109,5 +120,35 @@ describe('useAuthCheck Hook', () => {
         renderHookResults('/login', store);
 
         expect(navigate).toBeCalledTimes(1);
+    });
+
+    test('verifica a chamada ao initAniversariantes', () => {
+        const initAniversariantes = initAniversariantesMock();
+        mocks.push(initAniversariantes);
+
+        const state = {
+            ...defaultState,
+            auth: { idFamilia: 'mock' },
+        };
+        const store = mockStore(state);
+
+        renderHookResults('/', store);
+
+        expect(initAniversariantes).toBeCalledTimes(1);
+    });
+
+    test('verifica a não chamada do initAniversariantes', () => {
+        const initAniversariantes = initAniversariantesMock();
+        mocks.push(initAniversariantes);
+
+        const state = {
+            ...defaultState,
+            auth: { idFamilia: '' },
+        };
+        const store = mockStore(state);
+
+        renderHookResults('/login', store);
+
+        expect(initAniversariantes).toBeCalledTimes(0);
     });
 });
