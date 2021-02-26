@@ -10,6 +10,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import MenuItem from '@material-ui/core/MenuItem';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 
 import { AuthState } from '../models/AuthState';
 import { PropertiesState } from '../models/PropertiesState';
@@ -33,6 +34,7 @@ const MenuAcoes: React.FC = () => {
 
     const [showShare, setShowShare] = React.useState(false);
     const HandleShareShow: React.FC<WebShareInterface> = ({ isSupported }) => {
+        /* istanbul ignore next */
         if (isSupported) {
             setShowShare(true);
         }
@@ -77,15 +79,31 @@ const MenuAcoes: React.FC = () => {
         />
     );
 
-    let telaAniversariantes = false;
+    const listarButton = (
+        <MenuButton
+            link="/aniversariantesLista"
+            textMobile="Listar"
+            Icon={FormatListBulletedIcon}
+        />
+    );
+
+    let telaAniversariantesMes = false;
+    let telaCadastro = false;
+    let telaLista = false;
+
     const isSSR = typeof window === 'undefined';
+    /* istanbul ignore next */
     if (!isSSR) {
-        telaAniversariantes = !location.pathname.startsWith('/pessoaCadastro');
+        telaAniversariantesMes = location.pathname.length === 1;
+        telaCadastro = location.pathname.startsWith('/pessoaCadastro');
+        telaLista = location.pathname.startsWith('/aniversariantesLista');
     }
 
     let conteudo = (
         <Box>
-            {telaAniversariantes ? cadastroButton : null}
+            {cadastroButton}
+            <span className={classes.buttonSpacing} />
+            {listarButton}
             <span className={classes.buttonSpacing} />
             {logoutButton}
         </Box>
@@ -110,17 +128,23 @@ const MenuAcoes: React.FC = () => {
                     onClose={handleClose}
                     data-testid="dot-menu-opened"
                 >
-                    {telaAniversariantes ? (
-                        <MenuItem
-                            key="cadastrar"
-                            color="inherit"
-                            aria-label="cadastrar"
-                        >
-                            {cadastroButton}
-                        </MenuItem>
-                    ) : null}
+                    <MenuItem
+                        key="cadastrar"
+                        color="inherit"
+                        aria-label="cadastrar"
+                    >
+                        {cadastroButton}
+                    </MenuItem>
 
-                    {showShare && telaAniversariantes ? (
+                    <MenuItem
+                        key="listar"
+                        color="inherit"
+                        aria-label="listar-aniversariantes"
+                    >
+                        {listarButton}
+                    </MenuItem>
+
+                    {showShare && telaAniversariantesMes ? (
                         <MenuItem
                             key="share"
                             color="inherit"
