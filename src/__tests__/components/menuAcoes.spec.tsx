@@ -79,6 +79,16 @@ const defaultState = {
     properties: { isMobile: false },
 };
 
+const defaultDisplayedButtons = [
+    'Sair-menu-button',
+    'Cadastrar-menu-button',
+    'Listar-menu-button',
+];
+
+const defaultNotDisplayedButtons = ['dot-menu'];
+
+const defaultMobileNotDisplayedButtons = ['share-button-menu'];
+
 describe('MenuAcoes component', () => {
     test('verifica a renderização sem login', async () => {
         const state = {
@@ -90,10 +100,8 @@ describe('MenuAcoes component', () => {
         const { getByTestId } = await renderiza(state);
 
         const notDisplayedButtons = [
-            'dot-menu',
-            'Sair-menu-button',
-            'Cadastrar-menu-button',
-            'Listar-menu-button',
+            ...defaultNotDisplayedButtons,
+            ...defaultDisplayedButtons,
         ];
 
         displayButtonCheck(getByTestId, [], notDisplayedButtons);
@@ -102,14 +110,11 @@ describe('MenuAcoes component', () => {
     test('verifica a renderização na página de aniversariantes do mês', async () => {
         const { getByTestId } = await renderiza(defaultState);
 
-        const displayedButtons = [
-            'Sair-menu-button',
-            'Cadastrar-menu-button',
-            'Listar-menu-button',
-        ];
-        const notDisplayedButtons = ['dot-menu'];
-
-        displayButtonCheck(getByTestId, displayedButtons, notDisplayedButtons);
+        displayButtonCheck(
+            getByTestId,
+            defaultDisplayedButtons,
+            defaultNotDisplayedButtons,
+        );
     });
 
     test('verifica a renderização do mobile na página de aniversariantes do mês', async () => {
@@ -117,9 +122,7 @@ describe('MenuAcoes component', () => {
 
         const displayedButtons = [
             'share-button-menu',
-            'Sair-menu-button',
-            'Cadastrar-menu-button',
-            'Listar-menu-button',
+            ...defaultDisplayedButtons,
         ];
 
         displayButtonCheck(getByTestId, displayedButtons, []);
@@ -129,83 +132,65 @@ describe('MenuAcoes component', () => {
         setPathname('/pessoaCadastro');
         const { getByTestId } = await renderiza(defaultState);
 
-        const displayedButtons = [
-            'Sair-menu-button',
-            'Cadastrar-menu-button',
-            'Listar-menu-button',
-        ];
-        const notDisplayedButtons = ['dot-menu'];
-
-        displayButtonCheck(getByTestId, displayedButtons, notDisplayedButtons);
+        displayButtonCheck(
+            getByTestId,
+            defaultDisplayedButtons,
+            defaultNotDisplayedButtons,
+        );
     });
 
     test('verifica a renderização do mobile na página de cadastro de aniversariantes', async () => {
         setPathname('/pessoaCadastro');
         const getByTestId = await mobileMenuOpen();
 
-        const displayedButtons = [
-            'Sair-menu-button',
-            'Cadastrar-menu-button',
-            'Listar-menu-button',
-        ];
-        const notDisplayedButtons = ['share-button-menu'];
-
-        displayButtonCheck(getByTestId, displayedButtons, notDisplayedButtons);
+        displayButtonCheck(
+            getByTestId,
+            defaultDisplayedButtons,
+            defaultMobileNotDisplayedButtons,
+        );
     });
 
     test('verifica a renderização na página de listar aniversariantes', async () => {
         setPathname('/aniversariantesLista');
         const { getByTestId } = await renderiza(defaultState);
 
-        const displayedButtons = [
-            'Sair-menu-button',
-            'Cadastrar-menu-button',
-            'Listar-menu-button',
-        ];
-        const notDisplayedButtons = ['dot-menu'];
-
-        displayButtonCheck(getByTestId, displayedButtons, notDisplayedButtons);
+        displayButtonCheck(
+            getByTestId,
+            defaultDisplayedButtons,
+            defaultNotDisplayedButtons,
+        );
     });
 
     test('verifica a renderização do mobile na página de listar aniversariantes', async () => {
         setPathname('/aniversariantesLista');
         const getByTestId = await mobileMenuOpen();
 
-        const displayedButtons = [
-            'Sair-menu-button',
-            'Cadastrar-menu-button',
-            'Listar-menu-button',
-        ];
-        const notDisplayedButtons = ['share-button-menu'];
-
-        displayButtonCheck(getByTestId, displayedButtons, notDisplayedButtons);
+        displayButtonCheck(
+            getByTestId,
+            defaultDisplayedButtons,
+            defaultMobileNotDisplayedButtons,
+        );
     });
 
     test('verifica a renderização na página de informacoes da pessoa', async () => {
         setPathname('/pessoaInformacoes');
         const { getByTestId } = await renderiza(defaultState);
 
-        const displayedButtons = [
-            'Sair-menu-button',
-            'Cadastrar-menu-button',
-            'Listar-menu-button',
-        ];
-        const notDisplayedButtons = ['dot-menu'];
-
-        displayButtonCheck(getByTestId, displayedButtons, notDisplayedButtons);
+        displayButtonCheck(
+            getByTestId,
+            defaultDisplayedButtons,
+            defaultNotDisplayedButtons,
+        );
     });
 
     test('verifica a renderização do mobile na página de aniversariantes do mês', async () => {
         setPathname('/pessoaInformacoes');
         const getByTestId = await mobileMenuOpen();
 
-        const displayedButtons = [
-            'Sair-menu-button',
-            'Cadastrar-menu-button',
-            'Listar-menu-button',
-        ];
-        const notDisplayedButtons = ['share-button-menu'];
-
-        displayButtonCheck(getByTestId, displayedButtons, notDisplayedButtons);
+        displayButtonCheck(
+            getByTestId,
+            defaultDisplayedButtons,
+            defaultMobileNotDisplayedButtons,
+        );
     });
 });

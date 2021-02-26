@@ -94,7 +94,7 @@ const MenuAcoes: React.FC = () => {
     const isSSR = typeof window === 'undefined';
     /* istanbul ignore next */
     if (!isSSR) {
-        telaAniversariantesMes = location.pathname.length === 1;
+        telaAniversariantesMes = location.pathname === '/';
         telaCadastro = location.pathname.startsWith('/pessoaCadastro');
         telaLista = location.pathname.startsWith('/aniversariantesLista');
     }
@@ -132,6 +132,7 @@ const MenuAcoes: React.FC = () => {
                         key="cadastrar"
                         color="inherit"
                         aria-label="cadastrar"
+                        selected={telaCadastro}
                     >
                         {cadastroButton}
                     </MenuItem>
@@ -140,6 +141,7 @@ const MenuAcoes: React.FC = () => {
                         key="listar"
                         color="inherit"
                         aria-label="listar-aniversariantes"
+                        selected={telaLista}
                     >
                         {listarButton}
                     </MenuItem>
