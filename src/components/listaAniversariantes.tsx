@@ -26,6 +26,12 @@ const useStyles = makeStyles(theme => ({
     tableRow: {
         cursor: 'pointer',
     },
+    columnAniversariantes: {
+        width: '70%',
+    },
+    columnData: {
+        width: '30%',
+    },
 }));
 
 type Props = {
@@ -78,15 +84,24 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
                     }
                     className={classes.tableRow}
                 >
-                    <TableCell data-testid="aniversariante-nome">
+                    <TableCell
+                        className={classes.columnAniversariantes}
+                        data-testid="aniversariante-nome"
+                    >
                         {linha.pessoa}
                     </TableCell>
                     {mensal ? (
-                        <TableCell data-testid="aniversariante-dia">
+                        <TableCell
+                            className={classes.columnData}
+                            data-testid="aniversariante-dia"
+                        >
                             {DateUtils.getDia(linha.nascimento)}
                         </TableCell>
                     ) : (
-                        <TableCell data-testid="aniversariante-nascimento">
+                        <TableCell
+                            className={classes.columnData}
+                            data-testid="aniversariante-nascimento"
+                        >
                             {DateUtils.getDataCompleta(linha.nascimento)}
                         </TableCell>
                     )}
@@ -103,15 +118,24 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell data-testid="aniversariantes-nome-header">
+                            <TableCell
+                                className={classes.columnAniversariantes}
+                                data-testid="aniversariantes-nome-header"
+                            >
                                 Aniversariante
                             </TableCell>
                             {mensal ? (
-                                <TableCell data-testid="aniversariantes-dia-header">
+                                <TableCell
+                                    className={classes.columnData}
+                                    data-testid="aniversariantes-dia-header"
+                                >
                                     Dia
                                 </TableCell>
                             ) : (
-                                <TableCell data-testid="aniversariantes-nascimento-header">
+                                <TableCell
+                                    className={classes.columnData}
+                                    data-testid="aniversariantes-nascimento-header"
+                                >
                                     Nascimento
                                 </TableCell>
                             )}
