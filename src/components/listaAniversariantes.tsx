@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { navigate } from 'gatsby';
@@ -11,12 +11,14 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 
 import { Aniversariante } from '../models/Aniversariante';
 import { AniversariantesState } from '../models/AniversariantesState';
 import AniversariantesUtils from '../utils/aniversariantesUtils';
 import DateUtils from '../utils/dateUtils';
+import ListUtils from '../utils/listUtils';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -34,6 +36,38 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+type ColumnProps = {
+    id: string;
+    dbname: string;
+    label: string;
+    mensal: boolean | undefined;
+    classe: 'columnAniversariantes' | 'columnData';
+};
+
+const columns: ColumnProps[] = [
+    {
+        id: 'aniversariantes-nome',
+        dbname: 'pessoa',
+        label: 'Aniversariante',
+        mensal: undefined,
+        classe: 'columnAniversariantes',
+    },
+    {
+        id: 'aniversariantes-dia',
+        dbname: 'nascimento',
+        label: 'Dia',
+        mensal: true,
+        classe: 'columnData',
+    },
+    {
+        id: 'aniversariantes-nascimento',
+        dbname: 'nascimento',
+        label: 'Nascimento',
+        mensal: false,
+        classe: 'columnData',
+    },
+];
+
 type Props = {
     mensal?: boolean;
 };
@@ -46,11 +80,20 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
             : state.aniversariantes.aniversariantes,
     );
 
+    const [order, setOrder] = useState('asc' as 'asc' | 'desc');
+    const [orderBy, setOrderBy] = useState('');
+
     const imprimeListaVazia = (): JSX.Element => (
         <Typography variant="h5" data-testid="sem-aniversariantes-mensagem">
             Sem aniversariantes {mensal ? `no mês` : `cadastrados`}
         </Typography>
     );
+
+    const sortHandler = (property: string) => (event: any) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
 
     const rowClickHandler = (
         idPessoa: String,
@@ -69,7 +112,15 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
             ? AniversariantesUtils.ordenaPorDiaNome(aniversariantes)
             : AniversariantesUtils.ordenaPorNomeNascimento(aniversariantes);
 
-        const linhas = aniversariantesOrdenados.map((linha, index) => {
+        const ordenacao =
+            mensal || orderBy === ''
+                ? aniversariantesOrdenados
+                : ListUtils.stableSort(
+                      aniversariantesOrdenados,
+                      ListUtils.getComparator(order, orderBy),
+                  );
+
+        const linhas = ordenacao.map((linha, index) => {
             return (
                 <TableRow
                     hover={true}
@@ -118,26 +169,39 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell
-                                className={classes.columnAniversariantes}
-                                data-testid="aniversariantes-nome-header"
-                            >
-                                Aniversariante
-                            </TableCell>
-                            {mensal ? (
-                                <TableCell
-                                    className={classes.columnData}
-                                    data-testid="aniversariantes-dia-header"
-                                >
-                                    Dia
-                                </TableCell>
-                            ) : (
-                                <TableCell
-                                    className={classes.columnData}
-                                    data-testid="aniversariantes-nascimento-header"
-                                >
-                                    Nascimento
-                                </TableCell>
+                            {columns.map(col =>
+                                col.mensal === undefined ||
+                                col.mensal === mensal ? (
+                                    <TableCell
+                                        key={col.id}
+                                        className={classes[col.classe]}
+                                        sortDirection={
+                                            orderBy === col.dbname
+                                                ? order
+                                                : false
+                                        }
+                                        data-testid={`${col.id}-header`}
+                                    >
+                                        {mensal ? (
+                                            col.label
+                                        ) : (
+                                            <TableSortLabel
+                                                active={orderBy === col.dbname}
+                                                direction={
+                                                    orderBy === col.dbname
+                                                        ? order
+                                                        : 'asc'
+                                                }
+                                                onClick={sortHandler(
+                                                    col.dbname,
+                                                )}
+                                                data-testid={`${col.id}-sortLabel`}
+                                            >
+                                                {col.label}
+                                            </TableSortLabel>
+                                        )}
+                                    </TableCell>
+                                ) : null,
                             )}
                         </TableRow>
                     </TableHead>

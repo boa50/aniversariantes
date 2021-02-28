@@ -1,10 +1,12 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { WebShareInterface } from 'react-web-share-api';
 
 import { isDisplayed } from '../testUtils';
+
+import * as Actions from '../../store/actions';
 
 import MenuAcoes from '../../components/menuAcoes';
 
@@ -105,6 +107,26 @@ describe('MenuAcoes component', () => {
         ];
 
         displayButtonCheck(getByTestId, [], notDisplayedButtons);
+    });
+
+    test('verifica a funcionalidade de logout', async () => {
+        const logoutMock = jest
+            .spyOn(Actions, 'initLogout')
+            .mockImplementation(() => {
+                return { type: '' };
+            });
+
+        const { getByTestId } = await renderiza(defaultState);
+
+        const logoutButton = getByTestId('Sair-menu-button');
+
+        await waitFor(() => {
+            fireEvent.click(logoutButton);
+        });
+
+        expect(logoutMock).toHaveBeenCalledTimes(1);
+
+        logoutMock.mockClear();
     });
 
     test('verifica a renderização na página de aniversariantes do mês', async () => {

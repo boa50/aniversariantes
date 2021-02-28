@@ -8,6 +8,10 @@ import { isDisplayed } from '../testUtils';
 
 import ListaAniversariantes from '../../components/listaAniversariantes';
 
+import { List } from 'immutable';
+import ListUtils from '../../utils/listUtils';
+import { Aniversariante } from '../../models/Aniversariante';
+
 const mocks: jest.SpyInstance[] = [];
 let navigate: jest.SpyInstance<Promise<void>, [number]>;
 let mockStore: any;
@@ -259,5 +263,39 @@ describe('ListaAniversariantes component', () => {
                         .nascimento,
             },
         });
+    });
+
+    test('verifica mudança de ordenação na lista completa', async () => {
+        const sortMock = jest
+            .spyOn(ListUtils, 'stableSort')
+            .mockImplementation(
+                (array: any, comparator: Function) =>
+                    List() as List<Aniversariante>,
+            );
+        mocks.push(sortMock);
+
+        const { getByTestId } = await renderiza(defaultState);
+
+        const aniversariantesHeader = getByTestId(
+            'aniversariantes-nome-sortLabel',
+        );
+
+        await waitFor(() => {
+            fireEvent.click(aniversariantesHeader);
+        });
+
+        expect(sortMock).toBeCalledTimes(1);
+        expect(aniversariantesHeader.children[0]).toHaveClass(
+            'MuiTableSortLabel-iconDirectionAsc',
+        );
+
+        await waitFor(() => {
+            fireEvent.click(aniversariantesHeader);
+        });
+
+        expect(sortMock).toBeCalledTimes(2);
+        expect(aniversariantesHeader.children[0]).toHaveClass(
+            'MuiTableSortLabel-iconDirectionDesc',
+        );
     });
 });
