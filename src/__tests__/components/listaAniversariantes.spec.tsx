@@ -4,7 +4,7 @@ import { render, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 
-import { isDisplayed } from '../testUtils';
+import { isDisplayed, setInputValue, getInputValue } from '../testUtils';
 
 import ListaAniversariantes from '../../components/listaAniversariantes';
 
@@ -124,6 +124,9 @@ describe('ListaAniversariantes component', () => {
         const diaHeader = getByTestId('aniversariantes-dia-header');
         const linhasQuantidade = getAllByTestId('aniversariantes-linha').length;
 
+        expect(
+            isDisplayed(getByTestId, 'aniversariantes-tabela-busca'),
+        ).toBeFalsy();
         expect(tabela.className).toMatch(/MuiTableContainer-root/);
         expect(aniversariantesHeader.textContent).toBe('Aniversariante');
         expect(diaHeader.textContent).toBe('Dia');
@@ -140,6 +143,9 @@ describe('ListaAniversariantes component', () => {
         const diaHeader = getByTestId('aniversariantes-nascimento-header');
         const linhasQuantidade = getAllByTestId('aniversariantes-linha').length;
 
+        expect(
+            isDisplayed(getByTestId, 'aniversariantes-tabela-busca'),
+        ).toBeTruthy();
         expect(tabela.className).toMatch(/MuiTableContainer-root/);
         expect(aniversariantesHeader.textContent).toBe('Aniversariante');
         expect(diaHeader.textContent).toBe('Nascimento');
@@ -297,5 +303,73 @@ describe('ListaAniversariantes component', () => {
         expect(aniversariantesHeader.children[0]).toHaveClass(
             'MuiTableSortLabel-iconDirectionDesc',
         );
+    });
+
+    test('verifica a filtragem realizada pela busca', async () => {
+        const { getByTestId, getAllByTestId } = await renderiza(defaultState);
+
+        const buscaMockNome = 'teste2';
+        const buscaInput = getByTestId('aniversariantes-tabela-busca')
+            .children[0] as HTMLInputElement;
+
+        await waitFor(() => {
+            fireEvent.change(buscaInput, {
+                target: { value: buscaMockNome },
+            });
+        });
+
+        const linhas = getAllByTestId('aniversariantes-linha');
+        const linhasQuantidade = linhas.length;
+
+        expect(buscaInput.value).toBe(buscaMockNome);
+        expect(linhasQuantidade).toBe(2);
+
+        linhas.forEach(linha => {
+            expect(linha.children[0].innerHTML).toContain(buscaMockNome);
+        });
+    });
+
+    test('verifica a filtragem com retorno vazio realizada pela busca', async () => {
+        const { getByTestId } = await renderiza(defaultState);
+
+        const buscaMockNome = 'teste2Legal';
+        const buscaInput = getByTestId('aniversariantes-tabela-busca')
+            .children[0] as HTMLInputElement;
+
+        await waitFor(() => {
+            fireEvent.change(buscaInput, {
+                target: { value: buscaMockNome },
+            });
+        });
+
+        expect(isDisplayed(getByTestId, 'aniversariantes-linha')).toBeFalsy();
+    });
+
+    test('verifica o cancelamento da filtragem da busca', async () => {
+        const { getByTestId, getAllByTestId } = await renderiza(defaultState);
+
+        const buscaMockNome = 'teste2';
+
+        const tabela = getByTestId('aniversariantes-tabela');
+        const buscaInput = getByTestId('aniversariantes-tabela-busca')
+            .children[0] as HTMLInputElement;
+
+        const buscaCancelarBotao = tabela.children[0]
+            .children[2] as HTMLButtonElement;
+
+        await waitFor(() => {
+            fireEvent.change(buscaInput, {
+                target: { value: buscaMockNome },
+            });
+        });
+
+        await waitFor(() => {
+            fireEvent.click(buscaCancelarBotao);
+        });
+
+        const linhasQuantidade = getAllByTestId('aniversariantes-linha').length;
+
+        expect(buscaInput.value).toBe('');
+        expect(linhasQuantidade).toBe(4);
     });
 });

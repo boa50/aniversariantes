@@ -13,6 +13,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
+import SearchBar from 'material-ui-search-bar';
+import { List } from 'immutable';
 
 import { Aniversariante } from '../models/Aniversariante';
 import { AniversariantesState } from '../models/AniversariantesState';
@@ -80,8 +82,12 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
             : state.aniversariantes.aniversariantes,
     );
 
-    const [order, setOrder] = useState('asc' as 'asc' | 'desc');
-    const [orderBy, setOrderBy] = useState('');
+    const [order, setOrder] = useState<'asc' | 'desc'>('asc');
+    const [orderBy, setOrderBy] = useState<string>('');
+    const [busca, setBusca] = useState<string>('');
+    const [aniversariantesFiltrados, setAniversariantesFiltrados] = useState<
+        List<Aniversariante>
+    >();
 
     const imprimeListaVazia = (): JSX.Element => (
         <Typography variant="h5" data-testid="sem-aniversariantes-mensagem">
@@ -112,11 +118,35 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
             ? AniversariantesUtils.ordenaPorDiaNome(aniversariantes)
             : AniversariantesUtils.ordenaPorNomeNascimento(aniversariantes);
 
+        if (aniversariantesFiltrados === undefined) {
+            setAniversariantesFiltrados(aniversariantesOrdenados);
+        }
+
+        const searchHandler = (buscaValor: string) => {
+            const filtrados = aniversariantesOrdenados.filter(linha => {
+                return linha.pessoa
+                    .toLowerCase()
+                    .includes(buscaValor.toLowerCase());
+            });
+            setAniversariantesFiltrados(filtrados);
+            setBusca(buscaValor);
+        };
+
+        const searchCancelHandler = () => {
+            setBusca('');
+            searchHandler('');
+        };
+
         const ordenacao =
             mensal || orderBy === ''
-                ? aniversariantesOrdenados
+                ? aniversariantesFiltrados !== undefined
+                    ? aniversariantesFiltrados
+                    : List<Aniversariante>()
                 : ListUtils.stableSort(
-                      aniversariantesOrdenados,
+                      /* istanbul ignore next */
+                      aniversariantesFiltrados !== undefined
+                          ? aniversariantesFiltrados
+                          : List<Aniversariante>(),
                       ListUtils.getComparator(order, orderBy),
                   );
 
@@ -166,6 +196,17 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
                 component={Paper}
                 data-testid="aniversariantes-tabela"
             >
+                {mensal ? null : (
+                    <SearchBar
+                        value={busca}
+                        onChange={(buscaValor: string) =>
+                            searchHandler(buscaValor)
+                        }
+                        onCancelSearch={() => searchCancelHandler()}
+                        placeholder={'Busca'}
+                        data-testid="aniversariantes-tabela-busca"
+                    />
+                )}
                 <Table>
                     <TableHead>
                         <TableRow>
