@@ -239,7 +239,11 @@ const PessoaInformacoes: React.FC = () => {
     );
 
     return (
-        <Layout title="Informações Pessoais" headerTexto="Informações Pessoais">
+        <Layout
+            title="Informações Pessoais"
+            headerTexto="Informações Pessoais"
+            scope="logged"
+        >
             {conteudo}
         </Layout>
     );

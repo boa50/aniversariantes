@@ -123,6 +123,7 @@ const PessoaCadastro: React.FC = () => {
         <Layout
             title="Cadastro de Aniversariantes"
             headerTexto="Cadastro de Aniversariantes"
+            scope="logged"
         >
             {conteudo}
         </Layout>

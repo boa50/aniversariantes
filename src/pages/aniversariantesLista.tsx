@@ -5,7 +5,11 @@ import Layout from '../components/layout';
 
 const AniversariantesLista: React.FC = () => {
     return (
-        <Layout title="Lista de Aniversariantes" scope="logged">
+        <Layout
+            title="Lista de Aniversariantes"
+            headerTexto="Lista de Aniversariantes"
+            scope="logged"
+        >
             <ListaAniversariantes />
         </Layout>
     );
