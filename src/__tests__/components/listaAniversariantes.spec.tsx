@@ -231,22 +231,31 @@ describe('ListaAniversariantes component', () => {
             'aniversariante-nascimento',
         )[3];
 
+        /* As datas foram comparadas assim por causa de um problema no locale do Netlify */
         expect(aniversariante1.textContent).toBe(
             state.aniversariantes.aniversariantes[2].pessoa,
         );
-        expect(aniversariante1Nascimento.textContent).toBe('25/10/2000');
+        expect(aniversariante1Nascimento.textContent?.split('/')).toEqual(
+            expect.arrayContaining(['25', '10', '2000']),
+        );
         expect(aniversariante2.textContent).toBe(
             state.aniversariantes.aniversariantes[1].pessoa,
         );
-        expect(aniversariante2Nascimento.textContent).toBe('25/11/2000');
+        expect(aniversariante2Nascimento.textContent?.split('/')).toEqual(
+            expect.arrayContaining(['25', '11', '2000']),
+        );
         expect(aniversariante3.textContent).toBe(
             state.aniversariantes.aniversariantes[3].pessoa,
         );
-        expect(aniversariante3Nascimento.textContent).toBe('25/11/2020');
+        expect(aniversariante3Nascimento.textContent?.split('/')).toEqual(
+            expect.arrayContaining(['25', '11', '2020']),
+        );
         expect(aniversariante4.textContent).toBe(
             state.aniversariantes.aniversariantes[0].pessoa,
         );
-        expect(aniversariante4Nascimento.textContent).toBe('24/11/2000');
+        expect(aniversariante4Nascimento.textContent?.split('/')).toEqual(
+            expect.arrayContaining(['24', '11', '2000']),
+        );
     });
 
     test('verifica mudança de página ao selecionar uma pessoa', async () => {
