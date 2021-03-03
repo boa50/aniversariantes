@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { navigate } from 'gatsby';
@@ -87,7 +87,26 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
     const [busca, setBusca] = useState<string>('');
     const [aniversariantesFiltrados, setAniversariantesFiltrados] = useState<
         List<Aniversariante>
-    >();
+    >(List<Aniversariante>());
+    const [aniversariantesOrdenados, setAniversariantesOrdenados] = useState<
+        List<Aniversariante>
+    >(List<Aniversariante>());
+
+    useEffect(() => {
+        if (mensal) {
+            setAniversariantesOrdenados(
+                AniversariantesUtils.ordenaPorDiaNome(aniversariantes),
+            );
+        } else {
+            setAniversariantesOrdenados(
+                AniversariantesUtils.ordenaPorNomeNascimento(aniversariantes),
+            );
+        }
+    }, [aniversariantes]);
+
+    useEffect(() => {
+        setAniversariantesFiltrados(aniversariantesOrdenados);
+    }, [aniversariantesOrdenados]);
 
     const imprimeListaVazia = (): JSX.Element => (
         <Typography variant="h5" data-testid="sem-aniversariantes-mensagem">
@@ -114,14 +133,6 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
     const imprimeListaPreenchida = (
         aniversariantes: Aniversariante[],
     ): JSX.Element => {
-        const aniversariantesOrdenados = mensal
-            ? AniversariantesUtils.ordenaPorDiaNome(aniversariantes)
-            : AniversariantesUtils.ordenaPorNomeNascimento(aniversariantes);
-
-        if (aniversariantesFiltrados === undefined) {
-            setAniversariantesFiltrados(aniversariantesOrdenados);
-        }
-
         const searchHandler = (buscaValor: string) => {
             const filtrados = aniversariantesOrdenados.filter(linha => {
                 return linha.pessoa
@@ -139,14 +150,9 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
 
         const ordenacao =
             mensal || orderBy === ''
-                ? aniversariantesFiltrados !== undefined
-                    ? aniversariantesFiltrados
-                    : List<Aniversariante>()
+                ? aniversariantesFiltrados
                 : ListUtils.stableSort(
-                      /* istanbul ignore next */
-                      aniversariantesFiltrados !== undefined
-                          ? aniversariantesFiltrados
-                          : List<Aniversariante>(),
+                      aniversariantesFiltrados,
                       ListUtils.getComparator(order, orderBy),
                   );
 
