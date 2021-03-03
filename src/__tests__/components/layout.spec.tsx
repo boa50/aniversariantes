@@ -3,6 +3,8 @@ import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 
+import { isDisplayed } from '../testUtils';
+
 import Layout from '../../components/layout';
 
 jest.mock('../../components/header', () => {
@@ -16,44 +18,71 @@ jest.mock('../../hooks/useAuthCheck', () => {
     return { useAuthCheck };
 });
 
-const renderiza = (state: any) => {
+const renderiza = (state: any, scope: 'logged' | 'notLogged') => {
     const mockStore = configureStore();
     const store = mockStore(state);
 
     return render(
         <Provider store={store}>
-            <Layout title="LayoutMockado">
-                <div data-testid="child" />
-            </Layout>
+            {/* Feito desse jeito só para aumentar a cobertura de testes */}
+            {scope === 'logged' ? (
+                <Layout title="LayoutMockado" scope={scope}>
+                    <div data-testid="child" />
+                </Layout>
+            ) : (
+                <Layout title="LayoutMockado">
+                    <div data-testid="child" />
+                </Layout>
+            )}
         </Provider>,
     );
 };
 
 const defaultState = {
     auth: { authChecked: true },
+    aniversariantes: { loading: false },
 };
 
 describe('Layout component', () => {
     test('verifica a renderização autenticada correta', () => {
-        const { getByTestId } = renderiza(defaultState);
+        const { getByTestId } = renderiza(defaultState, 'notLogged');
 
-        const header = getByTestId('headerMock');
-        const seo = getByTestId('seoMock');
-        const child = getByTestId('child');
-
-        expect(header).toBeDefined();
-        expect(seo).toBeDefined();
-        expect(child).toBeDefined();
+        expect(isDisplayed(getByTestId, 'headerMock')).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'seoMock')).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'child')).toBeTruthy();
     });
 
     test('verifica a renderização não autenticada correta', () => {
         const state = {
+            ...defaultState,
             auth: { authChecked: false },
         };
-        const { getByTestId } = renderiza(state);
+        const { getByTestId } = renderiza(state, 'notLogged');
 
-        const vazio = getByTestId('vazio');
+        expect(isDisplayed(getByTestId, 'vazio')).toBeTruthy();
+    });
 
-        expect(vazio).toBeDefined();
+    test('verifica a renderização autenticada de página com escopo logado e carrgando', () => {
+        const state = {
+            ...defaultState,
+            aniversariantes: { loading: true },
+        };
+        const { getByTestId } = renderiza(state, 'logged');
+
+        expect(isDisplayed(getByTestId, 'headerMock')).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'seoMock')).toBeTruthy();
+        expect(
+            isDisplayed(getByTestId, 'loading-aniversariantes'),
+        ).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'child')).toBeFalsy();
+    });
+
+    test('verifica a renderização autenticada de página com escopo logado e já carrgado', () => {
+        const { getByTestId } = renderiza(defaultState, 'logged');
+
+        expect(isDisplayed(getByTestId, 'headerMock')).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'seoMock')).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'loading-aniversariantes')).toBeFalsy();
+        expect(isDisplayed(getByTestId, 'child')).toBeTruthy();
     });
 });

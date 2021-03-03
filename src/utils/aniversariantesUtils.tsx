@@ -79,6 +79,24 @@ const AniversariantesUtils = {
             },
         );
     },
+
+    ordenaPorNomeNascimento: (
+        aniversariantes: Aniversariante[],
+    ): List<Aniversariante> => {
+        const listaAniversariantesOrdenada = List(aniversariantes);
+
+        return listaAniversariantesOrdenada.sort(
+            (a: Aniversariante, b: Aniversariante) => {
+                if (a.pessoa.localeCompare(b.pessoa) === -1) {
+                    return -1;
+                } else if (a.pessoa.localeCompare(b.pessoa) === 0) {
+                    return a.nascimento < b.nascimento ? -1 : 1;
+                } else {
+                    return 1;
+                }
+            },
+        );
+    },
 };
 
 export default AniversariantesUtils;

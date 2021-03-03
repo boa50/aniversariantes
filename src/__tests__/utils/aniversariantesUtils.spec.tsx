@@ -33,7 +33,17 @@ const aniversariantesLista = [
     {
         idPessoa: 'pessoa04',
         pessoa: 'testinho',
+        nascimento: new Date('2020-11-26T03:00:00Z'),
+    },
+    {
+        idPessoa: 'pessoa05',
+        pessoa: 'testinho',
         nascimento: new Date('2000-11-26T03:00:00Z'),
+    },
+    {
+        idPessoa: 'pessoa06',
+        pessoa: 'testinho',
+        nascimento: new Date('2010-11-26T03:00:00Z'),
     },
 ];
 
@@ -60,7 +70,7 @@ describe('Aniversariantes utils', () => {
         expect(aniversariantes[1].pessoa).toBe('mariazinha');
     });
 
-    test('retorna a lista ordenada', () => {
+    test('retorna a lista ordenada por dia e nome', () => {
         const aniversariantes = AniversariantesUtils.ordenaPorDiaNome(
             aniversariantesLista,
         ).toArray();
@@ -68,6 +78,19 @@ describe('Aniversariantes utils', () => {
         expect(aniversariantes[0].pessoa).toBe('joãozinho');
         expect(aniversariantes[1].pessoa).toBe('mariazinha');
         expect(aniversariantes[2].pessoa).toBe('pedinho');
+    });
+
+    test('retorna a lista ordenada por nome e nascimento', () => {
+        const aniversariantes = AniversariantesUtils.ordenaPorNomeNascimento(
+            aniversariantesLista,
+        ).toArray();
+
+        expect(aniversariantes[0].pessoa).toBe('joãozinho');
+        expect(aniversariantes[1].pessoa).toBe('mariazinha');
+        expect(aniversariantes[2].pessoa).toBe('pedinho');
+        expect(aniversariantes[3].idPessoa).toBe('pessoa05');
+        expect(aniversariantes[4].idPessoa).toBe('pessoa06');
+        expect(aniversariantes[5].idPessoa).toBe('pessoa04');
     });
 
     test('retorna a lista para compartilhar', () => {

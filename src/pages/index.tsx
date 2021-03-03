@@ -1,16 +1,12 @@
-import React, { useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Box from '@material-ui/core/Box';
 
 import { AniversariantesState } from '../models/AniversariantesState';
-import { AuthState } from '../models/AuthState';
 import DateUtils from '../utils/dateUtils';
-
-import { initAniversariantes } from '../store/actions';
 
 import ListaAniversariantes from '../components/listaAniversariantes';
 import TrocaMes from '../components/trocaMes';
@@ -24,63 +20,37 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center',
         marginTop: theme.spacing(2),
     },
-    circularProgress: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '85vh',
-    },
 }));
 
 const App: React.FC = () => {
     const classes = useStyles();
-    const dispatch = useDispatch();
 
     const mes = useSelector(
         (state: AniversariantesState) => state.aniversariantes.mes,
     );
-    const aniversariantesLoading = useSelector(
-        (state: AniversariantesState) => state.aniversariantes.loading,
-    );
-    const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
-
-    const onInitAniversariantes = useCallback(
-        (idFamilia: string) => dispatch(initAniversariantes(idFamilia)),
-        [],
-    );
-
-    useEffect(() => {
-        if (idFamilia) {
-            onInitAniversariantes(idFamilia);
-        }
-    }, [idFamilia, onInitAniversariantes]);
 
     useNotifications();
 
-    let conteudo = (
-        <Box className={classes.circularProgress}>
-            <CircularProgress data-testid="loading-aniversariantes" />
+    const conteudo = (
+        <Box>
+            <Typography
+                variant="h3"
+                className={classes.mesTexto}
+                data-testid="mes-nome"
+            >
+                {DateUtils.getMonthNameFromNumber(mes)}
+            </Typography>
+            <AniversariantesDia />
+            <TrocaMes />
+            <ListaAniversariantes mensal={true} />
         </Box>
     );
 
-    if (!aniversariantesLoading) {
-        conteudo = (
-            <Box>
-                <Typography
-                    variant="h3"
-                    className={classes.mesTexto}
-                    data-testid="mes-nome"
-                >
-                    {DateUtils.getMonthNameFromNumber(mes)}
-                </Typography>
-                <AniversariantesDia />
-                <TrocaMes />
-                <ListaAniversariantes />
-            </Box>
-        );
-    }
-
-    return <Layout title="Aniversariantes">{conteudo}</Layout>;
+    return (
+        <Layout title="Aniversariantes" scope="logged">
+            {conteudo}
+        </Layout>
+    );
 };
 
 export default App;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { navigate } from 'gatsby';
@@ -11,12 +11,16 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
+import SearchBar from 'material-ui-search-bar';
+import { List } from 'immutable';
 
 import { Aniversariante } from '../models/Aniversariante';
 import { AniversariantesState } from '../models/AniversariantesState';
 import AniversariantesUtils from '../utils/aniversariantesUtils';
 import DateUtils from '../utils/dateUtils';
+import ListUtils from '../utils/listUtils';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -26,20 +30,76 @@ const useStyles = makeStyles(theme => ({
     tableRow: {
         cursor: 'pointer',
     },
+    columnAniversariantes: {
+        width: '70%',
+    },
+    columnData: {
+        width: '30%',
+    },
 }));
 
-const ListaAniversariantes: React.FC = () => {
+type ColumnProps = {
+    id: string;
+    dbname: string;
+    label: string;
+    mensal: boolean | undefined;
+    classe: 'columnAniversariantes' | 'columnData';
+};
+
+const columns: ColumnProps[] = [
+    {
+        id: 'aniversariantes-nome',
+        dbname: 'pessoa',
+        label: 'Aniversariante',
+        mensal: undefined,
+        classe: 'columnAniversariantes',
+    },
+    {
+        id: 'aniversariantes-dia',
+        dbname: 'nascimento',
+        label: 'Dia',
+        mensal: true,
+        classe: 'columnData',
+    },
+    {
+        id: 'aniversariantes-nascimento',
+        dbname: 'nascimento',
+        label: 'Nascimento',
+        mensal: false,
+        classe: 'columnData',
+    },
+];
+
+type Props = {
+    mensal?: boolean;
+};
+
+const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
     const classes = useStyles();
-    const aniversariantes = useSelector(
-        (state: AniversariantesState) =>
-            state.aniversariantes.aniversariantesMes,
+    const aniversariantes = useSelector((state: AniversariantesState) =>
+        mensal
+            ? state.aniversariantes.aniversariantesMes
+            : state.aniversariantes.aniversariantes,
     );
+
+    const [order, setOrder] = useState<'asc' | 'desc'>('asc');
+    const [orderBy, setOrderBy] = useState<string>('');
+    const [busca, setBusca] = useState<string>('');
+    const [aniversariantesFiltrados, setAniversariantesFiltrados] = useState<
+        List<Aniversariante>
+    >();
 
     const imprimeListaVazia = (): JSX.Element => (
         <Typography variant="h5" data-testid="sem-aniversariantes-mensagem">
-            Sem aniversariantes no mês
+            Sem aniversariantes {mensal ? `no mês` : `cadastrados`}
         </Typography>
     );
+
+    const sortHandler = (property: string) => (event: any) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
 
     const rowClickHandler = (
         idPessoa: String,
@@ -54,11 +114,43 @@ const ListaAniversariantes: React.FC = () => {
     const imprimeListaPreenchida = (
         aniversariantes: Aniversariante[],
     ): JSX.Element => {
-        const aniversariantesOrdenados = AniversariantesUtils.ordenaPorDiaNome(
-            aniversariantes,
-        );
+        const aniversariantesOrdenados = mensal
+            ? AniversariantesUtils.ordenaPorDiaNome(aniversariantes)
+            : AniversariantesUtils.ordenaPorNomeNascimento(aniversariantes);
 
-        const linhas = aniversariantesOrdenados.map((linha, index) => {
+        if (aniversariantesFiltrados === undefined) {
+            setAniversariantesFiltrados(aniversariantesOrdenados);
+        }
+
+        const searchHandler = (buscaValor: string) => {
+            const filtrados = aniversariantesOrdenados.filter(linha => {
+                return linha.pessoa
+                    .toLowerCase()
+                    .includes(buscaValor.toLowerCase());
+            });
+            setAniversariantesFiltrados(filtrados);
+            setBusca(buscaValor);
+        };
+
+        const searchCancelHandler = () => {
+            setBusca('');
+            searchHandler('');
+        };
+
+        const ordenacao =
+            mensal || orderBy === ''
+                ? aniversariantesFiltrados !== undefined
+                    ? aniversariantesFiltrados
+                    : List<Aniversariante>()
+                : ListUtils.stableSort(
+                      /* istanbul ignore next */
+                      aniversariantesFiltrados !== undefined
+                          ? aniversariantesFiltrados
+                          : List<Aniversariante>(),
+                      ListUtils.getComparator(order, orderBy),
+                  );
+
+        const linhas = ordenacao.map((linha, index) => {
             return (
                 <TableRow
                     hover={true}
@@ -73,12 +165,27 @@ const ListaAniversariantes: React.FC = () => {
                     }
                     className={classes.tableRow}
                 >
-                    <TableCell data-testid="aniversariante-nome">
+                    <TableCell
+                        className={classes.columnAniversariantes}
+                        data-testid="aniversariante-nome"
+                    >
                         {linha.pessoa}
                     </TableCell>
-                    <TableCell data-testid="aniversariante-dia">
-                        {DateUtils.getDia(linha.nascimento)}
-                    </TableCell>
+                    {mensal ? (
+                        <TableCell
+                            className={classes.columnData}
+                            data-testid="aniversariante-dia"
+                        >
+                            {DateUtils.getDia(linha.nascimento)}
+                        </TableCell>
+                    ) : (
+                        <TableCell
+                            className={classes.columnData}
+                            data-testid="aniversariante-nascimento"
+                        >
+                            {DateUtils.getDataCompleta(linha.nascimento)}
+                        </TableCell>
+                    )}
                 </TableRow>
             );
         });
@@ -89,15 +196,54 @@ const ListaAniversariantes: React.FC = () => {
                 component={Paper}
                 data-testid="aniversariantes-tabela"
             >
+                {mensal ? null : (
+                    <SearchBar
+                        value={busca}
+                        onChange={(buscaValor: string) =>
+                            searchHandler(buscaValor)
+                        }
+                        onCancelSearch={() => searchCancelHandler()}
+                        placeholder={'Busca'}
+                        data-testid="aniversariantes-tabela-busca"
+                    />
+                )}
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell data-testid="aniversariantes-nome-header">
-                                Aniversariante
-                            </TableCell>
-                            <TableCell data-testid="aniversariantes-dia-header">
-                                Dia
-                            </TableCell>
+                            {columns.map(col =>
+                                col.mensal === undefined ||
+                                col.mensal === mensal ? (
+                                    <TableCell
+                                        key={col.id}
+                                        className={classes[col.classe]}
+                                        sortDirection={
+                                            orderBy === col.dbname
+                                                ? order
+                                                : false
+                                        }
+                                        data-testid={`${col.id}-header`}
+                                    >
+                                        {mensal ? (
+                                            col.label
+                                        ) : (
+                                            <TableSortLabel
+                                                active={orderBy === col.dbname}
+                                                direction={
+                                                    orderBy === col.dbname
+                                                        ? order
+                                                        : 'asc'
+                                                }
+                                                onClick={sortHandler(
+                                                    col.dbname,
+                                                )}
+                                                data-testid={`${col.id}-sortLabel`}
+                                            >
+                                                {col.label}
+                                            </TableSortLabel>
+                                        )}
+                                    </TableCell>
+                                ) : null,
+                            )}
                         </TableRow>
                     </TableHead>
                     <TableBody>{linhas}</TableBody>

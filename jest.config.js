@@ -31,6 +31,7 @@ module.exports = {
         '!<rootDir>/src/components/ui/*',
         '!<rootDir>/src/axios.tsx',
         '!<rootDir>/src/utils/dateUtils.tsx',
+        '!<rootDir>/src/utils/listUtils.tsx',
         '!<rootDir>/src/models/**',
         '!<rootDir>/src/pages/404.tsx',
         '!<rootDir>/src/components/shareButton.tsx',
