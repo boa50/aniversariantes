@@ -8,7 +8,6 @@ import * as Yup from 'yup';
 import { useLocation } from '@reach/router';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Input from '../components/ui/input';
 import Button from '../components/ui/button';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -21,6 +20,7 @@ import { initAtualiza } from '../store/actions';
 
 import Layout from '../components/layout';
 import Form from '../components/form';
+import AniversarianteInputs from '../components/aniversarianteInpusts';
 import Alerta from '../components/ui/alerta';
 
 const useStyles = makeStyles(theme => ({
@@ -159,17 +159,7 @@ const PessoaInformacoes: React.FC = () => {
     const conteudo = (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Form formik={formik} progressShow={loading}>
-                <Input
-                    id="nome"
-                    label="Nome"
-                    formik={formik}
-                    readOnly={!salvarShow || loading}
-                />
-
-                <Input
-                    id="nascimento"
-                    label="Data de nascimento"
-                    type="date"
+                <AniversarianteInputs
                     formik={formik}
                     readOnly={!salvarShow || loading}
                 />

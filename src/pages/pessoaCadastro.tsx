@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import Input from '../components/ui/input';
 import Button from '../components/ui/button';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -16,6 +15,7 @@ import { initCadastro } from '../store/actions';
 
 import Layout from '../components/layout';
 import Form from '../components/form';
+import AniversarianteInputs from '../components/aniversarianteInpusts';
 import Alerta from '../components/ui/alerta';
 
 const PessoaCadastro: React.FC = () => {
@@ -81,20 +81,10 @@ const PessoaCadastro: React.FC = () => {
     const conteudo = (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Form formik={formik} progressShow={loading}>
-                <Input
-                    id="nome"
-                    label="Nome"
+                <AniversarianteInputs
+                    formik={formik}
                     autoFocus={true}
                     changeHandler={inputChangeHandler}
-                    formik={formik}
-                />
-
-                <Input
-                    id="nascimento"
-                    label="Data de nascimento"
-                    type="date"
-                    changeHandler={inputChangeHandler}
-                    formik={formik}
                 />
 
                 <Button
