@@ -102,15 +102,17 @@ describe('PessoaCadastro page', () => {
     test('verifica a renderização inicial correta', async () => {
         const { getByTestId } = await renderiza(defaultState);
 
-        const nomeInput = getByTestId('nome-input');
-        const nascimentoInput = getByTestId('nascimento-input');
-        const cadastrarButton = getByTestId('cadastrar-button');
-
+        expect(isDisplayed(getByTestId, 'nome-input')).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'nascimento-input')).toBeTruthy();
+        expect(
+            isDisplayed(getByTestId, 'aniversariante-pai-autocomplete'),
+        ).toBeTruthy();
+        expect(
+            isDisplayed(getByTestId, 'aniversariante-mae-autocomplete'),
+        ).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'cadastrar-button')).toBeTruthy();
         expect(isDisplayed(getByTestId, 'error-alert')).toBeFalsy();
         expect(isDisplayed(getByTestId, 'success-alert')).toBeFalsy();
-        expect(nomeInput).toBeVisible();
-        expect(nascimentoInput).toBeVisible();
-        expect(cadastrarButton).toBeVisible();
     });
 
     test('verifica a alteração do input de nome', async () => {

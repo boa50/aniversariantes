@@ -2,6 +2,7 @@ import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '../components/ui/input';
+import Autocomplete from '../components/ui/autocomplete';
 import Box from '@material-ui/core/Box';
 
 const useStyles = makeStyles(theme => ({
@@ -42,6 +43,22 @@ const AniversarianteInputs: React.FC<Props> = ({
                 id="nascimento"
                 label="Data de nascimento"
                 type="date"
+                formik={formik}
+                readOnly={readOnly}
+                changeHandler={changeHandler}
+            />
+
+            <Autocomplete
+                id="aniversariante-pai"
+                label="Nome do pai"
+                formik={formik}
+                readOnly={readOnly}
+                changeHandler={changeHandler}
+            />
+
+            <Autocomplete
+                id="aniversariante-mae"
+                label="Nome da mãe"
                 formik={formik}
                 readOnly={readOnly}
                 changeHandler={changeHandler}

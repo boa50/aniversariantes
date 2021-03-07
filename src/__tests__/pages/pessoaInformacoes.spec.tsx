@@ -20,6 +20,7 @@ import {
 import * as actions from '../../store/actions';
 
 import PessoaInformacoes from '../../pages/pessoaInformacoes';
+import { get } from 'immutable';
 
 const mocks: jest.SpyInstance[] = [];
 let navigate: jest.SpyInstance<Promise<void>, [number]>;
@@ -250,6 +251,12 @@ describe('PessoaInformacoes page', () => {
 
         expect(isDisplayed(getByTestId, 'nome-input')).toBeTruthy();
         expect(isDisplayed(getByTestId, 'nascimento-input')).toBeTruthy();
+        expect(
+            isDisplayed(getByTestId, 'aniversariante-pai-autocomplete'),
+        ).toBeTruthy();
+        expect(
+            isDisplayed(getByTestId, 'aniversariante-mae-autocomplete'),
+        ).toBeTruthy();
 
         expect(isDisplayed(getByTestId, 'error-alert')).toBeFalsy();
         expect(isDisplayed(getByTestId, 'success-alert')).toBeFalsy();
@@ -259,6 +266,8 @@ describe('PessoaInformacoes page', () => {
 
         const nomeInput = getByTestId('nome-input');
         const nascimentoInput = getByTestId('nascimento-input');
+        const paiAutocomplete = getByTestId('aniversariante-pai-autocomplete');
+        const maeAutocomplete = getByTestId('aniversariante-mae-autocomplete');
 
         const nome = getInputValue(nomeInput);
         const nascimento = getInputValue(nascimentoInput);
@@ -267,6 +276,8 @@ describe('PessoaInformacoes page', () => {
         expect(nascimento).toBe(nascimentoMockFormatado);
         expect(isInputEnabled(nomeInput)).toBeFalsy();
         expect(isInputEnabled(nascimentoInput)).toBeFalsy();
+        expect(isInputEnabled(paiAutocomplete)).toBeFalsy();
+        expect(isInputEnabled(maeAutocomplete)).toBeFalsy();
     });
     test('verifica o funcionamento do botao voltar', async () => {
         insereLocationMock();
