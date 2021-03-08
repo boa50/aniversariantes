@@ -6,6 +6,7 @@ import {
     cadastroSuccess,
     cadastroFail,
 } from '../../../store/actions';
+import { Aniversariante } from '../../../models/Aniversariante';
 
 import { executeSaga } from '../../testUtils';
 
@@ -14,8 +15,11 @@ const pessoaNome = 'jumentinho';
 const actionMock: PessoaCadastroAction = {
     type: '',
     idFamilia: '',
-    pessoa: pessoaNome,
-    nascimento: new Date('2000-01-02T03:00:00Z'),
+    aniversariante: {
+        idPessoa: '',
+        pessoa: pessoaNome,
+        nascimento: new Date('2000-01-02T03:00:00Z'),
+    } as Aniversariante,
     error: '',
 };
 
@@ -40,7 +44,7 @@ describe('PessoaCadastroSaga', () => {
         expect(cadastraPessoa).toHaveBeenCalledTimes(1);
         expect(dispatched).toEqual([
             cadastroStart(),
-            cadastroSuccess(pessoaNome),
+            cadastroSuccess({ pessoa: pessoaNome }),
         ]);
 
         cadastraPessoa.mockClear();

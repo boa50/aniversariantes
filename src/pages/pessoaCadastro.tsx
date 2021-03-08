@@ -10,6 +10,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 import { AuthState } from '../models/AuthState';
 import { PessoaCadastroState } from '../models/PessoaCadastroState';
+import { Aniversariante } from '../models/Aniversariante';
 
 import { initCadastro } from '../store/actions';
 
@@ -37,9 +38,8 @@ const PessoaCadastro: React.FC = () => {
 
     const onInitCadastro = (
         idFamilia: string,
-        nome: string,
-        nascimento: Date,
-    ) => dispatch(initCadastro(idFamilia, nome, nascimento));
+        aniversariante: Aniversariante,
+    ) => dispatch(initCadastro(idFamilia, aniversariante));
 
     const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAlertStyle(false);
@@ -64,7 +64,14 @@ const PessoaCadastro: React.FC = () => {
         onSubmit: values => {
             setAlertStyle(true);
             setbuttonDisabled(true);
-            onInitCadastro(idFamilia, values.nome, values.nascimento);
+
+            const aniversariante: Aniversariante = {
+                idPessoa: '',
+                pessoa: values.nome,
+                nascimento: values.nascimento,
+            };
+
+            onInitCadastro(idFamilia, aniversariante);
         },
     });
 

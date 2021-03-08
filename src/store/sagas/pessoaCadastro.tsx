@@ -18,10 +18,10 @@ export function* initCadastroSaga(action: PessoaCadastroAction) {
         const payload = {
             fields: {
                 pessoa: {
-                    stringValue: action.pessoa,
+                    stringValue: action.aniversariante.pessoa,
                 },
                 nascimento: {
-                    timestampValue: action.nascimento,
+                    timestampValue: action.aniversariante.nascimento,
                 },
             },
         };
@@ -29,7 +29,7 @@ export function* initCadastroSaga(action: PessoaCadastroAction) {
         const response = yield axios.post(url, payload, config);
         const pessoaCadastrada = response.data.fields.pessoa.stringValue;
 
-        yield put(actions.cadastroSuccess(pessoaCadastrada));
+        yield put(actions.cadastroSuccess({ pessoa: pessoaCadastrada }));
     } catch (error) {
         yield put(actions.cadastroFail(error.response.data.error.message));
     }

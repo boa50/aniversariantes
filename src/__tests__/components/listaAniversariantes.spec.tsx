@@ -271,11 +271,14 @@ describe('ListaAniversariantes component', () => {
         expect(navigate).toBeCalledTimes(1);
         expect(navigate).toBeCalledWith('/pessoaInformacoes/', {
             state: {
-                nome:
-                    defaultState.aniversariantes.aniversariantesMes[id].pessoa,
-                nascimento:
-                    defaultState.aniversariantes.aniversariantesMes[id]
-                        .nascimento,
+                aniversariante: {
+                    pessoa:
+                        defaultState.aniversariantes.aniversariantesMes[id]
+                            .pessoa,
+                    nascimento:
+                        defaultState.aniversariantes.aniversariantesMes[id]
+                            .nascimento,
+                },
             },
         });
     });

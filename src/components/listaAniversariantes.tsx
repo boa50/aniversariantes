@@ -120,19 +120,13 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
         setOrderBy(property);
     };
 
-    const rowClickHandler = (
-        idPessoa: String,
-        nome: String,
-        nascimento: Date,
-    ) => {
+    const rowClickHandler = (aniversariante: Aniversariante) => {
         navigate('/pessoaInformacoes/', {
-            state: { idPessoa, nome, nascimento },
+            state: { aniversariante },
         });
     };
 
-    const imprimeListaPreenchida = (
-        aniversariantes: Aniversariante[],
-    ): JSX.Element => {
+    const imprimeListaPreenchida = (): JSX.Element => {
         const searchHandler = (buscaValor: string) => {
             const filtrados = aniversariantesOrdenados.filter(linha => {
                 return linha.pessoa
@@ -162,13 +156,7 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
                     hover={true}
                     key={index}
                     data-testid="aniversariantes-linha"
-                    onClick={() =>
-                        rowClickHandler(
-                            linha.idPessoa,
-                            linha.pessoa,
-                            linha.nascimento,
-                        )
-                    }
+                    onClick={() => rowClickHandler(linha)}
                     className={classes.tableRow}
                 >
                     <TableCell
@@ -261,7 +249,7 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
     if (aniversariantes.length === 0) {
         return imprimeListaVazia();
     } else {
-        return imprimeListaPreenchida(aniversariantes);
+        return imprimeListaPreenchida();
     }
 };
 

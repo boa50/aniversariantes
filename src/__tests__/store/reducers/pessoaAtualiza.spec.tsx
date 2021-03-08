@@ -2,6 +2,7 @@ import reducer from '../../../store/reducers/pessoaAtualiza';
 import * as actionTypes from '../../../store/actions/actionsTypes';
 import { PessoaAtualizaStateReducer } from '../../../models/PessoaAtualizaState';
 import { PessoaAtualizaAction } from '../../../models/PessoaAtualizaAction';
+import { Aniversariante } from '../../../models/Aniversariante';
 
 const initState: PessoaAtualizaStateReducer = {
     loading: false,
@@ -12,9 +13,11 @@ const initState: PessoaAtualizaStateReducer = {
 const defaultAction: PessoaAtualizaAction = {
     type: '',
     idFamilia: '',
-    idPessoa: '',
-    pessoa: '',
-    nascimento: new Date(),
+    aniversariante: {
+        idPessoa: '',
+        pessoa: '',
+        nascimento: new Date(),
+    } as Aniversariante,
     error: '',
 };
 
@@ -50,7 +53,10 @@ describe('PessoaAtualizaReducer', () => {
         const action: PessoaAtualizaAction = {
             ...defaultAction,
             type: actionTypes.PESSOA_ATUALIZA_SUCCESS,
-            pessoa: pessoaMock,
+            aniversariante: {
+                ...defaultAction.aniversariante,
+                pessoa: pessoaMock,
+            },
         };
 
         expect(reducer(initState, action)).toEqual({ ...newState });

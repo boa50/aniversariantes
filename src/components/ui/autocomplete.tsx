@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import AutocompleteField from '@material-ui/lab/Autocomplete';
+
+import { Aniversariante } from '../../models/Aniversariante';
+import { AniversariantesState } from '../../models/AniversariantesState';
+
+import DateUtils from '../../utils/dateUtils';
+import AniversariantesUtils from '../../utils/aniversariantesUtils';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -43,6 +50,16 @@ const Autocomplete: React.FC<Props> = ({
     const classes = useStyles();
     const [focus, setFocus] = useState(false);
 
+    const aniversariantes: Aniversariante[] = [];
+    AniversariantesUtils.ordenaPorNomeNascimento(
+        useSelector(
+            (state: AniversariantesState) =>
+                state.aniversariantes.aniversariantes,
+        ),
+    ).map(aniversariante => {
+        aniversariantes.push(aniversariante);
+    });
+
     const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         formik.handleChange(event);
 
@@ -71,7 +88,6 @@ const Autocomplete: React.FC<Props> = ({
         helperText: formik.touched[id] && formik.errors[id],
         onFocus: focusChangeHandler,
         onBlur: focusChangeHandler,
-        disabled: readOnly,
         variant: 'outlined' as 'outlined',
         color: 'secondary' as 'secondary' | 'primary',
         InputLabelProps: {
@@ -92,9 +108,14 @@ const Autocomplete: React.FC<Props> = ({
     return (
         <AutocompleteField
             id={id}
-            options={[{ title: 'a' }, { title: 'b' }, { title: 'c' }]}
-            getOptionLabel={option => option.title}
+            options={aniversariantes}
+            getOptionLabel={aniversariante =>
+                `${aniversariante.pessoa} - ${DateUtils.getDataCompleta(
+                    aniversariante.nascimento,
+                )}`
+            }
             className={classes.root}
+            disabled={readOnly}
             renderInput={params => (
                 <Box>
                     <InputLabel {...inputLabelProps}>{label}</InputLabel>

@@ -1,17 +1,14 @@
+import { Aniversariante } from '../../models/Aniversariante';
 import * as actionTypes from './actionsTypes';
 
 export const initAtualiza = (
     idFamilia: string,
-    idPessoa: string,
-    pessoa: string,
-    nascimento: Date,
+    aniversariante: Aniversariante,
 ) => {
     return {
         type: actionTypes.INIT_PESSOA_ATUALIZA,
         idFamilia,
-        idPessoa,
-        pessoa,
-        nascimento,
+        aniversariante,
     };
 };
 
@@ -21,10 +18,10 @@ export const atualizaStart = () => {
     };
 };
 
-export const atualizaSuccess = (pessoa: string) => {
+export const atualizaSuccess = (aniversariante: { pessoa: string }) => {
     return {
         type: actionTypes.PESSOA_ATUALIZA_SUCCESS,
-        pessoa,
+        aniversariante,
     };
 };
 

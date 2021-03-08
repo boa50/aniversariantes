@@ -1,23 +1,28 @@
 import * as actions from '../../../store/actions/pessoaCadastro';
 import * as actionsTypes from '../../../store/actions/actionsTypes';
+import { Aniversariante } from '../../../models/Aniversariante';
 
 const mockIdFamilia = 'mockIdFamilia';
 const mockPessoa = 'mockPessoa';
 const mockNascimento = new Date('2000-01-02T03:00:00Z');
 const mockError = 'mockError';
+const mockAniversariante: Aniversariante = {
+    idPessoa: '',
+    pessoa: mockPessoa,
+    nascimento: mockNascimento,
+};
 
 describe('PessoaCadastroAction', () => {
     test('cria a action para initCadastro', () => {
         const expectedAction = {
             type: actionsTypes.INIT_PESSOA_CADASTRO,
             idFamilia: mockIdFamilia,
-            pessoa: mockPessoa,
-            nascimento: mockNascimento,
+            aniversariante: mockAniversariante,
         };
 
-        expect(
-            actions.initCadastro(mockIdFamilia, mockPessoa, mockNascimento),
-        ).toEqual(expectedAction);
+        expect(actions.initCadastro(mockIdFamilia, mockAniversariante)).toEqual(
+            expectedAction,
+        );
     });
 
     test('cria a action para cadastroStart', () => {
@@ -31,10 +36,12 @@ describe('PessoaCadastroAction', () => {
     test('cria a action para cadastroSuccess', () => {
         const expectedAction = {
             type: actionsTypes.PESSOA_CADASTRO_SUCCESS,
-            pessoa: mockPessoa,
+            aniversariante: { pessoa: mockPessoa },
         };
 
-        expect(actions.cadastroSuccess(mockPessoa)).toEqual(expectedAction);
+        expect(actions.cadastroSuccess({ pessoa: mockPessoa })).toEqual(
+            expectedAction,
+        );
     });
 
     test('cria a action para cadastroFail', () => {

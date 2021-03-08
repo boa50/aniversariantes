@@ -57,8 +57,18 @@ export const setInputValue = async (
     return input;
 };
 
-export const isInputEnabled = (inputField: HTMLElement): boolean => {
-    if (inputField.children[0].className.indexOf('Mui-disabled') < 0) {
+export const isInputEnabled = (
+    inputField: HTMLElement,
+    autocomplete: boolean = false,
+): boolean => {
+    let field: any;
+    if (autocomplete) {
+        field = inputField.children[0].children[1].children[0];
+    } else {
+        field = inputField.children[0];
+    }
+
+    if (field.className.indexOf('Mui-disabled') < 0) {
         return true;
     } else {
         return false;

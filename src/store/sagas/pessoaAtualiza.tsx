@@ -14,15 +14,15 @@ export function* initAtualizaSaga(action: PessoaAtualizaAction) {
 
     try {
         const idFamilia = action.idFamilia;
-        const idPessoa = action.idPessoa;
+        const idPessoa = action.aniversariante.idPessoa;
         const url = idFamilia + '/aniversariantes/' + idPessoa;
         const payload = {
             fields: {
                 pessoa: {
-                    stringValue: action.pessoa,
+                    stringValue: action.aniversariante.pessoa,
                 },
                 nascimento: {
-                    timestampValue: action.nascimento,
+                    timestampValue: action.aniversariante.nascimento,
                 },
             },
         };
@@ -30,7 +30,7 @@ export function* initAtualizaSaga(action: PessoaAtualizaAction) {
         const response = yield axios.patch(url, payload, config);
         const pessoaAtualizada = response.data.fields.pessoa.stringValue;
 
-        yield put(actions.atualizaSuccess(pessoaAtualizada));
+        yield put(actions.atualizaSuccess({ pessoa: pessoaAtualizada }));
     } catch (error) {
         yield put(actions.atualizaFail(error.response.data.error.message));
     }

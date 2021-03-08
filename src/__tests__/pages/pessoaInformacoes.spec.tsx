@@ -20,7 +20,7 @@ import {
 import * as actions from '../../store/actions';
 
 import PessoaInformacoes from '../../pages/pessoaInformacoes';
-import { get } from 'immutable';
+import { Aniversariante } from '../../models/Aniversariante';
 
 const mocks: jest.SpyInstance[] = [];
 let navigate: jest.SpyInstance<Promise<void>, [number]>;
@@ -122,26 +122,25 @@ const initAtualizaMock = () => {
     return jest
         .spyOn(actions, 'initAtualiza')
         .mockImplementation(
-            (
-                idFamilia: string,
-                idPessoa: string,
-                pessoa: string,
-                nascimento: Date,
-            ) => ({
+            (idFamilia: string, aniversariante: Aniversariante) => ({
                 type: 'check',
                 idFamilia: idFamilia,
-                idPessoa: idPessoa,
-                pessoa: pessoa,
-                nascimento: nascimento,
+                aniversariante: {
+                    idPessoa: aniversariante.idPessoa,
+                    pessoa: aniversariante.pessoa,
+                    nascimento: aniversariante.nascimento,
+                },
             }),
         );
 };
 
 const insereLocationMock = () => {
     const locationState = {
-        idPessoa: idPessoaMock,
-        nome: nomeMock,
-        nascimento: nascimentoMock,
+        aniversariante: {
+            idPessoa: idPessoaMock,
+            pessoa: nomeMock,
+            nascimento: nascimentoMock,
+        } as Aniversariante,
     };
     const useLocation = useLocationMock(locationState);
     mocks.push(useLocation);
@@ -167,12 +166,11 @@ const processaSalvar = async (state: any, initAtualiza: jest.SpyInstance) => {
     });
 
     expect(initAtualiza).toHaveBeenCalledTimes(1);
-    expect(initAtualiza).toHaveBeenCalledWith(
-        idFamiliaMock,
-        idPessoaMock,
-        nomeMockAlterado,
-        nascimentoMockAlterado,
-    );
+    expect(initAtualiza).toHaveBeenCalledWith(idFamiliaMock, {
+        idPessoa: idPessoaMock,
+        pessoa: nomeMockAlterado,
+        nascimento: nascimentoMockAlterado,
+    });
     const nome = getInputValue(nomeInput);
     const nascimento = getInputValue(nascimentoInput);
 
@@ -215,6 +213,26 @@ const processaCancelar = async (
 const defaultState = {
     properties: { isMobile: false },
     pessoaAtualiza: { loading: false, pessoa: '', error: '' },
+    aniversariantes: {
+        aniversariantes: [
+            {
+                pessoa: 'aniversariante_teste',
+                nascimento: new Date('2000-11-24T03:00:00Z'),
+            },
+            {
+                pessoa: 'aniversariante_teste2',
+                nascimento: new Date('2000-11-25T03:00:00Z'),
+            },
+            {
+                pessoa: 'aniversariante_teste3',
+                nascimento: new Date('2000-10-25T03:00:00Z'),
+            },
+            {
+                pessoa: 'aniversariante_teste4',
+                nascimento: new Date('2020-11-25T03:00:00Z'),
+            },
+        ],
+    },
     auth: { idFamilia: idFamiliaMock },
 };
 
@@ -274,10 +292,11 @@ describe('PessoaInformacoes page', () => {
 
         expect(nome).toBe(nomeMock);
         expect(nascimento).toBe(nascimentoMockFormatado);
+
         expect(isInputEnabled(nomeInput)).toBeFalsy();
         expect(isInputEnabled(nascimentoInput)).toBeFalsy();
-        expect(isInputEnabled(paiAutocomplete)).toBeFalsy();
-        expect(isInputEnabled(maeAutocomplete)).toBeFalsy();
+        expect(isInputEnabled(paiAutocomplete, true)).toBeFalsy();
+        expect(isInputEnabled(maeAutocomplete, true)).toBeFalsy();
     });
     test('verifica o funcionamento do botao voltar', async () => {
         insereLocationMock();

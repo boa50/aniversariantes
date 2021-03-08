@@ -2,6 +2,7 @@ import reducer from '../../../store/reducers/pessoaCadastro';
 import * as actionTypes from '../../../store/actions/actionsTypes';
 import { PessoaCadastroStateReducer } from '../../../models/PessoaCadastroState';
 import { PessoaCadastroAction } from '../../../models/PessoaCadastroAction';
+import { Aniversariante } from '../../../models/Aniversariante';
 
 const initState: PessoaCadastroStateReducer = {
     loading: false,
@@ -12,8 +13,11 @@ const initState: PessoaCadastroStateReducer = {
 const defaultAction: PessoaCadastroAction = {
     type: '',
     idFamilia: '',
-    pessoa: '',
-    nascimento: new Date('2000-01-02T03:00:00Z'),
+    aniversariante: {
+        idPessoa: '',
+        pessoa: '',
+        nascimento: new Date('2000-01-02T03:00:00Z'),
+    } as Aniversariante,
     error: '',
 };
 
@@ -54,7 +58,10 @@ describe('PessoaCadastroReducer', () => {
         const action: PessoaCadastroAction = {
             ...defaultAction,
             type: actionTypes.PESSOA_CADASTRO_SUCCESS,
-            pessoa: pessoaMock,
+            aniversariante: {
+                ...defaultAction.aniversariante,
+                pessoa: pessoaMock,
+            },
         };
 
         expect(reducer(initState, action)).toEqual({
@@ -74,7 +81,10 @@ describe('PessoaCadastroReducer', () => {
         const action: PessoaCadastroAction = {
             ...defaultAction,
             type: actionTypes.PESSOA_CADASTRO_FAIL,
-            pessoa: 'jumento branco',
+            aniversariante: {
+                ...defaultAction.aniversariante,
+                pessoa: 'jumento branco',
+            },
             error: errorMock,
         };
 

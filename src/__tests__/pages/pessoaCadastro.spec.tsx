@@ -9,6 +9,7 @@ import { isDisplayed, setInputValue } from '../testUtils';
 import * as actions from '../../store/actions';
 
 import PessoaCadastro from '../../pages/pessoaCadastro';
+import { Aniversariante } from '../../models/Aniversariante';
 
 beforeEach(() => {
     const useStaticQuery = jest.spyOn(Gatsby, 'useStaticQuery');
@@ -72,11 +73,14 @@ const initCadastroMock = () => {
     return jest
         .spyOn(actions, 'initCadastro')
         .mockImplementation(
-            (idFamilia: string, pessoa: string, nascimento: Date) => ({
+            (idFamilia: string, aniversariante: Aniversariante) => ({
                 type: 'check',
                 idFamilia: 'idFamiliamock',
-                pessoa: 'pessoaMock',
-                nascimento: new Date('2000-01-02T03:00:00Z'),
+                aniversariante: {
+                    idPessoa: '',
+                    pessoa: 'pessoaMock',
+                    nascimento: new Date('2000-01-02T03:00:00Z'),
+                } as Aniversariante,
             }),
         );
 };
@@ -95,6 +99,26 @@ const renderiza = async (state: any) => {
 const defaultState = {
     auth: { idFamilia: '' },
     pessoaCadastro: { pessoa: '', error: '' },
+    aniversariantes: {
+        aniversariantes: [
+            {
+                pessoa: 'aniversariante_teste',
+                nascimento: new Date('2000-11-24T03:00:00Z'),
+            },
+            {
+                pessoa: 'aniversariante_teste2',
+                nascimento: new Date('2000-11-25T03:00:00Z'),
+            },
+            {
+                pessoa: 'aniversariante_teste3',
+                nascimento: new Date('2000-10-25T03:00:00Z'),
+            },
+            {
+                pessoa: 'aniversariante_teste4',
+                nascimento: new Date('2020-11-25T03:00:00Z'),
+            },
+        ],
+    },
     properties: { isMobile: false },
 };
 

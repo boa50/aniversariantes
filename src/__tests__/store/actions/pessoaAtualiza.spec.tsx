@@ -1,5 +1,6 @@
 import * as actions from '../../../store/actions/pessoaAtualiza';
 import * as actionTypes from '../../../store/actions/actionsTypes';
+import { Aniversariante } from '../../../models/Aniversariante';
 
 const mockIdFamilia = 'AlgumIdFamiliaExtenso';
 const mockIdPessoa = 'IdDePessoaBemMockado';
@@ -12,18 +13,19 @@ describe('PessoaAtualizaAction', () => {
         const expectedAction = {
             type: actionTypes.INIT_PESSOA_ATUALIZA,
             idFamilia: mockIdFamilia,
-            idPessoa: mockIdPessoa,
-            pessoa: mockPessoa,
-            nascimento: mockNascimento,
+            aniversariante: {
+                idPessoa: mockIdPessoa,
+                pessoa: mockPessoa,
+                nascimento: mockNascimento,
+            } as Aniversariante,
         };
 
         expect(
-            actions.initAtualiza(
-                mockIdFamilia,
-                mockIdPessoa,
-                mockPessoa,
-                mockNascimento,
-            ),
+            actions.initAtualiza(mockIdFamilia, {
+                idPessoa: mockIdPessoa,
+                pessoa: mockPessoa,
+                nascimento: mockNascimento,
+            }),
         ).toEqual(expectedAction);
     });
     test('cria a action para atualizaStart', () => {
@@ -36,10 +38,14 @@ describe('PessoaAtualizaAction', () => {
     test('cria a action para atualizaSuccess', () => {
         const expectedAction = {
             type: actionTypes.PESSOA_ATUALIZA_SUCCESS,
-            pessoa: mockPessoa,
+            aniversariante: {
+                pessoa: mockPessoa,
+            },
         };
 
-        expect(actions.atualizaSuccess(mockPessoa)).toEqual(expectedAction);
+        expect(actions.atualizaSuccess({ pessoa: mockPessoa })).toEqual(
+            expectedAction,
+        );
     });
     test('cria a action para atualizaFail', () => {
         const expectedAction = {

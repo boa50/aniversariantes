@@ -22,6 +22,7 @@ import Layout from '../components/layout';
 import Form from '../components/form';
 import AniversarianteInputs from '../components/aniversarianteInpusts';
 import Alerta from '../components/ui/alerta';
+import { Aniversariante } from '../models/Aniversariante';
 
 const useStyles = makeStyles(theme => ({
     buttons: {
@@ -65,30 +66,29 @@ const PessoaInformacoes: React.FC = () => {
 
     const onInitAtualiza = (
         idFamilia: string,
-        idPessoa: string,
-        nome: string,
-        nascimento: Date,
-    ) => dispatch(initAtualiza(idFamilia, idPessoa, nome, nascimento));
+        aniversariante: Aniversariante,
+    ) => dispatch(initAtualiza(idFamilia, aniversariante));
 
     // Aplicada uma solução temporária para o Typescript
     // https://github.com/reach/router/issues/414#issuecomment-683827688
     const location = useLocation<{
-        idPessoa: string;
-        nome: string;
-        nascimento: Date;
+        aniversariante: Aniversariante;
     }>();
 
     const isSSR = typeof window === 'undefined';
     useEffect(() => {
-        if (location.state == null) {
+        if (
+            location.state == null ||
+            location.state.aniversariante == undefined
+        ) {
             /* istanbul ignore next */
             if (!isSSR) {
                 navigate('/');
             }
         } else {
-            setFormIdPessoa(location.state.idPessoa);
-            setFormNome(location.state.nome);
-            setFormNascimento(location.state.nascimento);
+            setFormIdPessoa(location.state.aniversariante.idPessoa);
+            setFormNome(location.state.aniversariante.pessoa);
+            setFormNascimento(location.state.aniversariante.nascimento);
         }
     }, []);
 
@@ -147,12 +147,14 @@ const PessoaInformacoes: React.FC = () => {
         }),
         onSubmit: values => {
             setAlertStyle(true);
-            onInitAtualiza(
-                idFamilia,
-                formIdPessoa,
-                values.nome,
-                values.nascimento,
-            );
+
+            const aniversariante: Aniversariante = {
+                idPessoa: formIdPessoa,
+                pessoa: values.nome,
+                nascimento: values.nascimento,
+            };
+
+            onInitAtualiza(idFamilia, aniversariante);
         },
     });
 
