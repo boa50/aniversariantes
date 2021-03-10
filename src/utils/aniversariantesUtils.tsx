@@ -59,6 +59,15 @@ const AniversariantesUtils = {
         return titulo + corpo;
     },
 
+    getAniversariantePorId: (
+        aniversariantes: Aniversariante[],
+        idPessoa: string,
+    ): Aniversariante => {
+        return aniversariantes.filter(aniversariante => {
+            return aniversariante.idPessoa === idPessoa;
+        })[0];
+    },
+
     ordenaPorDiaNome: (
         aniversariantes: Aniversariante[],
     ): List<Aniversariante> => {

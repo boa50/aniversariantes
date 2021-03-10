@@ -15,6 +15,8 @@ import Box from '@material-ui/core/Box';
 
 import { AuthState } from '../models/AuthState';
 import { PessoaAtualizaState } from '../models/PessoaAtualizaState';
+import { Aniversariante } from '../models/Aniversariante';
+import { AniversariantesState } from '../models/AniversariantesState';
 
 import { initAtualiza } from '../store/actions';
 
@@ -22,7 +24,8 @@ import Layout from '../components/layout';
 import Form from '../components/form';
 import AniversarianteInputs from '../components/aniversarianteInpusts';
 import Alerta from '../components/ui/alerta';
-import { Aniversariante } from '../models/Aniversariante';
+
+import AniversariantesUtils from '../utils/aniversariantesUtils';
 
 const useStyles = makeStyles(theme => ({
     buttons: {
@@ -51,6 +54,20 @@ const PessoaInformacoes: React.FC = () => {
 
     const [formNome, setFormNome] = useState('');
     const [formNascimento, setFormNascimento] = useState(new Date());
+    const [formPai, setFormPai] = useState<Aniversariante>({
+        idPessoa: '',
+        pessoa: '',
+        nascimento: new Date('2000-11-25T03:00:00Z'),
+        idPai: '',
+        idMae: '',
+    });
+    const [formMae, setFormMae] = useState<Aniversariante>({
+        idPessoa: '',
+        pessoa: '',
+        nascimento: new Date('2000-11-25T03:00:00Z'),
+        idPai: '',
+        idMae: '',
+    });
     const [formIdPessoa, setFormIdPessoa] = useState('');
 
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
@@ -62,6 +79,9 @@ const PessoaInformacoes: React.FC = () => {
     );
     const erro = useSelector(
         (state: PessoaAtualizaState) => state.pessoaAtualiza.error,
+    );
+    const aniversariantes = useSelector(
+        (state: AniversariantesState) => state.aniversariantes.aniversariantes,
     );
 
     const onInitAtualiza = (
@@ -86,9 +106,21 @@ const PessoaInformacoes: React.FC = () => {
                 navigate('/');
             }
         } else {
-            setFormIdPessoa(location.state.aniversariante.idPessoa);
-            setFormNome(location.state.aniversariante.pessoa);
-            setFormNascimento(location.state.aniversariante.nascimento);
+            const aniversariante = location.state.aniversariante;
+            const pai = AniversariantesUtils.getAniversariantePorId(
+                aniversariantes,
+                aniversariante.idPai,
+            );
+            const mae = AniversariantesUtils.getAniversariantePorId(
+                aniversariantes,
+                aniversariante.idMae,
+            );
+
+            setFormIdPessoa(aniversariante.idPessoa);
+            setFormNome(aniversariante.pessoa);
+            setFormNascimento(aniversariante.nascimento);
+            setFormPai(pai);
+            setFormMae(mae);
         }
     }, []);
 
@@ -138,6 +170,8 @@ const PessoaInformacoes: React.FC = () => {
         initialValues: {
             nome: formNome,
             nascimento: formNascimento,
+            'aniversariante-pai': formPai,
+            'aniversariante-mae': formMae,
         },
         validationSchema: Yup.object({
             nome: Yup.string().required('O nome deve ser preenchido'),
@@ -152,6 +186,8 @@ const PessoaInformacoes: React.FC = () => {
                 idPessoa: formIdPessoa,
                 pessoa: values.nome,
                 nascimento: values.nascimento,
+                idPai: values['aniversariante-pai'].idPessoa,
+                idMae: values['aniversariante-mae'].idPessoa,
             };
 
             onInitAtualiza(idFamilia, aniversariante);

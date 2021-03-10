@@ -2,6 +2,7 @@ import axios from '../../axios';
 import { put } from 'redux-saga/effects';
 import { PessoaAtualizaAction } from '../../models/PessoaAtualizaAction';
 import * as actions from '../actions';
+import DbUtils from '../../utils/dbUtils';
 
 export function* initAtualizaSaga(action: PessoaAtualizaAction) {
     yield put(actions.atualizaStart());
@@ -16,6 +17,17 @@ export function* initAtualizaSaga(action: PessoaAtualizaAction) {
         const idFamilia = action.idFamilia;
         const idPessoa = action.aniversariante.idPessoa;
         const url = idFamilia + '/aniversariantes/' + idPessoa;
+        const paiReference = DbUtils.mountReferenceField(
+            axios.defaults.baseURL,
+            idFamilia,
+            action.aniversariante.idPai,
+        );
+        const maeReference = DbUtils.mountReferenceField(
+            axios.defaults.baseURL,
+            idFamilia,
+            action.aniversariante.idMae,
+        );
+
         const payload = {
             fields: {
                 pessoa: {
@@ -23,6 +35,12 @@ export function* initAtualizaSaga(action: PessoaAtualizaAction) {
                 },
                 nascimento: {
                     timestampValue: action.aniversariante.nascimento,
+                },
+                pai: {
+                    referenceValue: paiReference,
+                },
+                mae: {
+                    referenceValue: maeReference,
                 },
             },
         };
