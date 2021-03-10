@@ -117,8 +117,14 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
             aniversariantes.map((aniversariante: Aniversariante) => {
                 paisPreenchidos.push({
                     ...aniversariante,
-                    paiNome: 'abobrinho',
-                    maeNome: 'abobrinha',
+                    paiNome: AniversariantesUtils.getAniversariantePorId(
+                        aniversariantes,
+                        aniversariante.idPai,
+                    ).pessoa,
+                    maeNome: AniversariantesUtils.getAniversariantePorId(
+                        aniversariantes,
+                        aniversariante.idMae,
+                    ).pessoa,
                 });
             });
 
@@ -153,7 +159,7 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
     const imprimeListaPreenchida = (): JSX.Element => {
         const searchHandler = (buscaValor: string) => {
             const filtrados = aniversariantesOrdenados.filter(linha => {
-                return linha.pessoa
+                return (linha.pessoa + linha.paiNome + linha.maeNome)
                     .toLowerCase()
                     .includes(buscaValor.toLowerCase());
             });

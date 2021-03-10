@@ -54,20 +54,12 @@ const PessoaInformacoes: React.FC = () => {
 
     const [formNome, setFormNome] = useState('');
     const [formNascimento, setFormNascimento] = useState(new Date());
-    const [formPai, setFormPai] = useState<Aniversariante>({
-        idPessoa: '',
-        pessoa: '',
-        nascimento: new Date('2000-11-25T03:00:00Z'),
-        idPai: '',
-        idMae: '',
-    });
-    const [formMae, setFormMae] = useState<Aniversariante>({
-        idPessoa: '',
-        pessoa: '',
-        nascimento: new Date('2000-11-25T03:00:00Z'),
-        idPai: '',
-        idMae: '',
-    });
+    const [formPai, setFormPai] = useState<Aniversariante>(
+        AniversariantesUtils.getAniversariantePorId([], ''),
+    );
+    const [formMae, setFormMae] = useState<Aniversariante>(
+        AniversariantesUtils.getAniversariantePorId([], ''),
+    );
     const [formIdPessoa, setFormIdPessoa] = useState('');
 
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);

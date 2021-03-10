@@ -63,6 +63,15 @@ const AniversariantesUtils = {
         aniversariantes: Aniversariante[],
         idPessoa: string,
     ): Aniversariante => {
+        if (idPessoa === '') {
+            return {
+                idPessoa: '',
+                pessoa: '',
+                nascimento: new Date('2000-11-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
+            };
+        }
         return aniversariantes.filter(aniversariante => {
             return aniversariante.idPessoa === idPessoa;
         })[0];

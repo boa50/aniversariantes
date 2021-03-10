@@ -19,6 +19,8 @@ import Form from '../components/form';
 import AniversarianteInputs from '../components/aniversarianteInpusts';
 import Alerta from '../components/ui/alerta';
 
+import AniversariantesUtils from '../utils/aniversariantesUtils';
+
 const PessoaCadastro: React.FC = () => {
     const dispatch = useDispatch();
 
@@ -54,20 +56,14 @@ const PessoaCadastro: React.FC = () => {
         initialValues: {
             nome: '',
             nascimento: new Date(new Date().getFullYear() + '-01-01T03:00:00Z'),
-            'aniversariante-pai': {
-                idPessoa: '',
-                pessoa: '',
-                nascimento: new Date('2000-11-25T03:00:00Z'),
-                idPai: '',
-                idMae: '',
-            } as Aniversariante,
-            'aniversariante-mae': {
-                idPessoa: '',
-                pessoa: '',
-                nascimento: new Date('2000-11-25T03:00:00Z'),
-                idPai: '',
-                idMae: '',
-            } as Aniversariante,
+            'aniversariante-pai': AniversariantesUtils.getAniversariantePorId(
+                [],
+                '',
+            ),
+            'aniversariante-mae': AniversariantesUtils.getAniversariantePorId(
+                [],
+                '',
+            ),
         },
         validationSchema: Yup.object({
             nome: Yup.string().required('O nome deve ser preenchido'),
