@@ -54,6 +54,20 @@ const PessoaCadastro: React.FC = () => {
         initialValues: {
             nome: '',
             nascimento: new Date(new Date().getFullYear() + '-01-01T03:00:00Z'),
+            'aniversariante-pai': {
+                idPessoa: '',
+                pessoa: '',
+                nascimento: new Date('2000-11-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
+            } as Aniversariante,
+            'aniversariante-mae': {
+                idPessoa: '',
+                pessoa: '',
+                nascimento: new Date('2000-11-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
+            } as Aniversariante,
         },
         validationSchema: Yup.object({
             nome: Yup.string().required('O nome deve ser preenchido'),
@@ -69,6 +83,8 @@ const PessoaCadastro: React.FC = () => {
                 idPessoa: '',
                 pessoa: values.nome,
                 nascimento: values.nascimento,
+                idPai: values['aniversariante-pai'].idPessoa,
+                idMae: values['aniversariante-mae'].idPessoa,
             };
 
             onInitCadastro(idFamilia, aniversariante);

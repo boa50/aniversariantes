@@ -29,11 +29,15 @@ export function* initAniversariantesSaga(action: AniversariantesAction) {
                 const nascimento: Date = DbUtils.getAniversarianteNascimento(
                     aniversariante,
                 );
+                const idPai: string = DbUtils.getIdPais(aniversariante, 'pai');
+                const idMae: string = DbUtils.getIdPais(aniversariante, 'mae');
 
                 return {
                     idPessoa: idPessoa,
                     pessoa: pessoa,
                     nascimento: nascimento,
+                    idPai: idPai,
+                    idMae: idMae,
                 };
             },
         );

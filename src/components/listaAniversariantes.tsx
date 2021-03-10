@@ -55,6 +55,20 @@ const columns: ColumnProps[] = [
         classe: 'columnAniversariantes',
     },
     {
+        id: 'aniversariantes-pai',
+        dbname: 'paiNome',
+        label: 'Pai',
+        mensal: false,
+        classe: 'columnData',
+    },
+    {
+        id: 'aniversariantes-mae',
+        dbname: 'maeNome',
+        label: 'Mãe',
+        mensal: false,
+        classe: 'columnData',
+    },
+    {
         id: 'aniversariantes-dia',
         dbname: 'nascimento',
         label: 'Dia',
@@ -98,8 +112,18 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
                 AniversariantesUtils.ordenaPorDiaNome(aniversariantes),
             );
         } else {
+            const paisPreenchidos: Aniversariante[] = [];
+
+            aniversariantes.map((aniversariante: Aniversariante) => {
+                paisPreenchidos.push({
+                    ...aniversariante,
+                    paiNome: 'abobrinho',
+                    maeNome: 'abobrinha',
+                });
+            });
+
             setAniversariantesOrdenados(
-                AniversariantesUtils.ordenaPorNomeNascimento(aniversariantes),
+                AniversariantesUtils.ordenaPorNomeNascimento(paisPreenchidos),
             );
         }
     }, [aniversariantes]);
@@ -165,6 +189,22 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
                     >
                         {linha.pessoa}
                     </TableCell>
+                    {!mensal ? (
+                        <TableCell
+                            className={classes.columnData}
+                            data-testid="aniversariante-pai"
+                        >
+                            {linha.paiNome}
+                        </TableCell>
+                    ) : null}
+                    {!mensal ? (
+                        <TableCell
+                            className={classes.columnData}
+                            data-testid="aniversariante-mae"
+                        >
+                            {linha.maeNome}
+                        </TableCell>
+                    ) : null}
                     {mensal ? (
                         <TableCell
                             className={classes.columnData}

@@ -5,7 +5,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
-import AutocompleteField from '@material-ui/lab/Autocomplete';
+import AutocompleteField, {
+    AutocompleteChangeReason,
+    AutocompleteChangeDetails,
+} from '@material-ui/lab/Autocomplete';
 
 import { Aniversariante } from '../../models/Aniversariante';
 import { AniversariantesState } from '../../models/AniversariantesState';
@@ -35,7 +38,7 @@ const useStyles = makeStyles(theme => ({
 type Props = {
     id: string;
     label?: string;
-    changeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    changeHandler?: (event: any) => void;
     readOnly?: boolean;
     formik: any;
 };
@@ -51,6 +54,15 @@ const Autocomplete: React.FC<Props> = ({
     const [focus, setFocus] = useState(false);
 
     const aniversariantes: Aniversariante[] = [];
+
+    aniversariantes.push({
+        idPessoa: '',
+        pessoa: '',
+        nascimento: new Date('2000-11-25T03:00:00Z'),
+        idPai: '',
+        idMae: '',
+    });
+
     AniversariantesUtils.ordenaPorNomeNascimento(
         useSelector(
             (state: AniversariantesState) =>
@@ -60,8 +72,13 @@ const Autocomplete: React.FC<Props> = ({
         aniversariantes.push(aniversariante);
     });
 
-    const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        formik.handleChange(event);
+    const autocompleteChangeHandler = (
+        event: React.ChangeEvent<{}>,
+        value: any,
+        reason: AutocompleteChangeReason,
+        details?: AutocompleteChangeDetails<any> | undefined,
+    ) => {
+        formik.setFieldValue(id, value);
 
         if (undefined !== changeHandler) {
             changeHandler(event);
@@ -83,7 +100,6 @@ const Autocomplete: React.FC<Props> = ({
 
     const textFieldProps = {
         name: id,
-        value: formik.values[id],
         className: classes.input,
         helperText: formik.touched[id] && formik.errors[id],
         onFocus: focusChangeHandler,
@@ -93,7 +109,6 @@ const Autocomplete: React.FC<Props> = ({
         InputLabelProps: {
             shrink: true,
         },
-        onChange: inputChangeHandler,
     };
 
     const inputLabelProps = {
@@ -108,13 +123,27 @@ const Autocomplete: React.FC<Props> = ({
     return (
         <AutocompleteField
             id={id}
+            value={formik.values[id]}
             options={aniversariantes}
-            getOptionLabel={aniversariante =>
-                `${aniversariante.pessoa} - ${DateUtils.getDataCompleta(
-                    aniversariante.nascimento,
-                )}`
-            }
+            getOptionLabel={aniversariante => {
+                if (aniversariante.idPessoa === '') {
+                    return '';
+                } else {
+                    return `${
+                        aniversariante.pessoa
+                    } - ${DateUtils.getDataCompleta(
+                        aniversariante.nascimento,
+                    )}`;
+                }
+            }}
+            getOptionSelected={(
+                option: Aniversariante,
+                value: Aniversariante,
+            ) => {
+                return option.idPessoa === value.idPessoa;
+            }}
             className={classes.root}
+            onChange={autocompleteChangeHandler}
             disabled={readOnly}
             renderInput={params => (
                 <Box>
