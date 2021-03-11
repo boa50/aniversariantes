@@ -16,33 +16,7 @@ export function* initCadastroSaga(action: PessoaCadastroAction) {
     try {
         const idFamilia = action.idFamilia;
         const url = idFamilia + '/aniversariantes/';
-        const paiReference = DbUtils.mountReferenceField(
-            axios.defaults.baseURL,
-            idFamilia,
-            action.aniversariante.idPai,
-        );
-        const maeReference = DbUtils.mountReferenceField(
-            axios.defaults.baseURL,
-            idFamilia,
-            action.aniversariante.idMae,
-        );
-
-        const payload = {
-            fields: {
-                pessoa: {
-                    stringValue: action.aniversariante.pessoa,
-                },
-                nascimento: {
-                    timestampValue: action.aniversariante.nascimento,
-                },
-                pai: {
-                    referenceValue: paiReference,
-                },
-                mae: {
-                    referenceValue: maeReference,
-                },
-            },
-        };
+        const payload = DbUtils.mountPayload(axios.defaults.baseURL, action);
 
         const response = yield axios.post(url, payload, config);
         const pessoaCadastrada = response.data.fields.pessoa.stringValue;
