@@ -61,32 +61,50 @@ const defaultState = {
     aniversariantes: {
         aniversariantes: [
             {
+                idPessoa: '1',
                 pessoa: 'aniversariante_teste',
                 nascimento: new Date('2000-11-24T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
             {
+                idPessoa: '2',
                 pessoa: 'aniversariante_teste2',
                 nascimento: new Date('2000-11-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
             {
+                idPessoa: '3',
                 pessoa: 'aniversariante_teste3',
                 nascimento: new Date('2000-10-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
             {
+                idPessoa: '4',
                 pessoa: 'aniversariante_teste2',
                 nascimento: new Date('2020-11-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
-        ],
+        ] as Aniversariante[],
         aniversariantesMes: [
             {
+                idPessoa: '1',
                 pessoa: 'aniversariante_teste',
                 nascimento: new Date('2000-11-24T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
             {
+                idPessoa: '2',
                 pessoa: 'aniversariante_teste2',
                 nascimento: new Date('2000-11-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
-        ],
+        ] as Aniversariante[],
     },
 };
 
@@ -160,14 +178,20 @@ describe('ListaAniversariantes component', () => {
             aniversariantes: {
                 aniversariantesMes: [
                     {
+                        idPessoa: '1',
                         pessoa: 'aniversariante_teste',
                         nascimento: new Date('2000-11-' + dia1 + 'T03:00:00Z'),
+                        idPai: '',
+                        idMae: '',
                     },
                     {
+                        idPessoa: '2',
                         pessoa: 'aniversariante_teste2',
                         nascimento: new Date('2000-11-' + dia2 + 'T03:00:00Z'),
+                        idPai: '',
+                        idMae: '',
                     },
-                ],
+                ] as Aniversariante[],
             },
         };
 
@@ -193,22 +217,34 @@ describe('ListaAniversariantes component', () => {
             aniversariantes: {
                 aniversariantes: [
                     {
+                        idPessoa: '3',
                         pessoa: 'aniversariante_teste3',
                         nascimento: new Date('2000-11-24T03:00:00Z'),
+                        idPai: '',
+                        idMae: '',
                     },
                     {
+                        idPessoa: '2',
                         pessoa: 'aniversariante_teste2',
                         nascimento: new Date('2000-11-25T03:00:00Z'),
+                        idPai: '',
+                        idMae: '',
                     },
                     {
+                        idPessoa: '1',
                         pessoa: 'aniversariante_teste',
                         nascimento: new Date('2000-10-25T03:00:00Z'),
+                        idPai: '',
+                        idMae: '',
                     },
                     {
+                        idPessoa: '22',
                         pessoa: 'aniversariante_teste2',
                         nascimento: new Date('2020-11-25T03:00:00Z'),
+                        idPai: '',
+                        idMae: '',
                     },
-                ],
+                ] as Aniversariante[],
             },
         };
 
@@ -272,13 +308,24 @@ describe('ListaAniversariantes component', () => {
         expect(navigate).toBeCalledWith('/pessoaInformacoes/', {
             state: {
                 aniversariante: {
+                    idPessoa:
+                        defaultState.aniversariantes.aniversariantesMes[id]
+                            .idPessoa,
                     pessoa:
                         defaultState.aniversariantes.aniversariantesMes[id]
                             .pessoa,
                     nascimento:
                         defaultState.aniversariantes.aniversariantesMes[id]
                             .nascimento,
-                },
+                    idPai:
+                        defaultState.aniversariantes.aniversariantesMes[id]
+                            .idPai,
+                    idMae:
+                        defaultState.aniversariantes.aniversariantesMes[id]
+                            .idMae,
+                    paiNome: '',
+                    maeNome: '',
+                } as Aniversariante,
             },
         });
     });

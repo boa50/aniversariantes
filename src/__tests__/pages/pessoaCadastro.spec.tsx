@@ -4,7 +4,7 @@ import { render, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 
-import { isDisplayed, setInputValue } from '../testUtils';
+import { isDisplayed, setInputValue, setComboValue } from '../testUtils';
 
 import * as actions from '../../store/actions';
 
@@ -102,22 +102,34 @@ const defaultState = {
     aniversariantes: {
         aniversariantes: [
             {
+                idPessoa: '1',
                 pessoa: 'aniversariante_teste',
                 nascimento: new Date('2000-11-24T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
             {
+                idPessoa: '2',
                 pessoa: 'aniversariante_teste2',
                 nascimento: new Date('2000-11-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
             {
+                idPessoa: '3',
                 pessoa: 'aniversariante_teste3',
                 nascimento: new Date('2000-10-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
             {
+                idPessoa: '4',
                 pessoa: 'aniversariante_teste4',
                 nascimento: new Date('2020-11-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
-        ],
+        ] as Aniversariante[],
     },
     properties: { isMobile: false },
 };
@@ -155,6 +167,34 @@ describe('PessoaCadastro page', () => {
         const { input, value } = await inputaDataAleatoria(nascimentoInput);
 
         expect(input.valueAsDate).toBe(value);
+    });
+
+    test('verifica a alteração do autocomplete de pai', async () => {
+        const { getByTestId, getByText } = await renderiza(defaultState);
+
+        const paiAutocomplete = getByTestId('aniversariante-pai-autocomplete');
+
+        const input = await setComboValue(
+            paiAutocomplete,
+            'aniversariante_teste2 - 25/11/2000',
+            getByText,
+        );
+
+        expect(input.value).toBe('aniversariante_teste2 - 25/11/2000');
+    });
+
+    test('verifica a alteração do autocomplete de mãe', async () => {
+        const { getByTestId, getByText } = await renderiza(defaultState);
+
+        const maeAutocomplete = getByTestId('aniversariante-mae-autocomplete');
+
+        const input = await setComboValue(
+            maeAutocomplete,
+            'aniversariante_teste2 - 25/11/2000',
+            getByText,
+        );
+
+        expect(input.value).toBe('aniversariante_teste2 - 25/11/2000');
     });
 
     test('verifica o inicio do cadastro', async () => {

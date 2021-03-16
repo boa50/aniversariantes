@@ -57,6 +57,35 @@ export const setInputValue = async (
     return input;
 };
 
+export const setComboValue = async (
+    comboField: HTMLElement,
+    value: string,
+    getByText: Function,
+): Promise<HTMLInputElement> => {
+    (global as any).document.createRange = () => ({
+        setStart: () => {},
+        setEnd: () => {},
+        commonAncestorContainer: {
+            nodeName: 'BODY',
+            ownerDocument: document,
+        },
+    });
+
+    const selectField = comboField.children[0].children[1] as HTMLElement;
+
+    await waitFor(() => {
+        fireEvent.keyDown(selectField, {
+            key: 'ArrowDown',
+        });
+    });
+    await waitFor(() => getByText(value));
+    await waitFor(() => {
+        fireEvent.click(getByText(value));
+    });
+
+    return getInput(selectField);
+};
+
 export const isInputEnabled = (
     inputField: HTMLElement,
     autocomplete: boolean = false,

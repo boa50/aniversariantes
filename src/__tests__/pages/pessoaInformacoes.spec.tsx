@@ -15,6 +15,7 @@ import {
     getInputValue,
     setInputValue,
     isInputEnabled,
+    setComboValue,
 } from '../testUtils';
 
 import * as actions from '../../store/actions';
@@ -44,6 +45,14 @@ const nascimentoMockFormatadoAlterado =
     (nascimentoMockAlterado.getMonth() + 1) +
     '/' +
     nascimentoMockAlterado.getFullYear();
+const aniversariantePaiAlterado = {
+    id: '2',
+    label: 'aniversariante_teste2 - 25/11/2000',
+};
+const aniversarianteMaeAlterado = {
+    id: '3',
+    label: 'aniversariante_teste3 - 25/10/2000',
+};
 
 beforeEach(() => {
     navigate = navigateMock();
@@ -129,6 +138,8 @@ const initAtualizaMock = () => {
                     idPessoa: aniversariante.idPessoa,
                     pessoa: aniversariante.pessoa,
                     nascimento: aniversariante.nascimento,
+                    idPai: aniversariante.idPai,
+                    idMae: aniversariante.idMae,
                 },
             }),
         );
@@ -140,6 +151,8 @@ const insereLocationMock = () => {
             idPessoa: idPessoaMock,
             pessoa: nomeMock,
             nascimento: nascimentoMock,
+            idPai: '',
+            idMae: '',
         } as Aniversariante,
     };
     const useLocation = useLocationMock(locationState);
@@ -148,9 +161,11 @@ const insereLocationMock = () => {
 
 const processaSalvar = async (state: any, initAtualiza: jest.SpyInstance) => {
     insereLocationMock();
-    const { getByTestId } = await renderiza(state);
+    const { getByTestId, getByText } = await renderiza(state);
     const nomeInput = getByTestId('nome-input');
     const nascimentoInput = getByTestId('nascimento-input');
+    const paiAutocomplete = getByTestId('aniversariante-pai-autocomplete');
+    const maeAutocomplete = getByTestId('aniversariante-mae-autocomplete');
 
     const editarButton = getByTestId('editar-button');
     await waitFor(() => {
@@ -159,6 +174,16 @@ const processaSalvar = async (state: any, initAtualiza: jest.SpyInstance) => {
 
     await inputaTextoAleatorio(nomeInput);
     await inputaDataAleatoria(nascimentoInput);
+    const paiInput = await setComboValue(
+        paiAutocomplete,
+        aniversariantePaiAlterado.label,
+        getByText,
+    );
+    const maeInput = await setComboValue(
+        maeAutocomplete,
+        aniversarianteMaeAlterado.label,
+        getByText,
+    );
 
     const salvarButton = getByTestId('salvar-button');
     await waitFor(() => {
@@ -170,20 +195,37 @@ const processaSalvar = async (state: any, initAtualiza: jest.SpyInstance) => {
         idPessoa: idPessoaMock,
         pessoa: nomeMockAlterado,
         nascimento: nascimentoMockAlterado,
-    });
+        idPai: aniversariantePaiAlterado.id,
+        idMae: aniversarianteMaeAlterado.id,
+    } as Aniversariante);
+
     const nome = getInputValue(nomeInput);
     const nascimento = getInputValue(nascimentoInput);
+    const pai = paiInput.value;
+    const mae = maeInput.value;
 
     expect(nome).toBe(nomeMockAlterado);
     expect(nascimento).toBe(nascimentoMockFormatadoAlterado);
+    expect(pai).toBe(aniversariantePaiAlterado.label);
+    expect(mae).toBe(aniversarianteMaeAlterado.label);
 
-    return { getByTestId, nomeInput, nascimentoInput };
+    return {
+        getByTestId,
+        getByText,
+        nomeInput,
+        nascimentoInput,
+        paiAutocomplete,
+        maeAutocomplete,
+    };
 };
 
 const processaCancelar = async (
     getByTestId: any,
+    getByText: any,
     nomeInput: HTMLElement,
     nascimentoInput: HTMLElement,
+    paiAutocomplete: HTMLElement,
+    maeAutocomplete: HTMLElement,
 ) => {
     const editarButton = getByTestId('editar-button');
     await waitFor(() => {
@@ -192,6 +234,16 @@ const processaCancelar = async (
 
     await inputaTextoAleatorio(nomeInput, 'nome muito doido');
     await inputaDataAleatoria(nascimentoInput, '20/08/1950');
+    const paiInput = await setComboValue(
+        paiAutocomplete,
+        aniversariantePaiAlterado.label,
+        getByText,
+    );
+    const maeInput = await setComboValue(
+        maeAutocomplete,
+        aniversarianteMaeAlterado.label,
+        getByText,
+    );
 
     const cancelarButton = getByTestId('cancelar-button');
     await waitFor(() => {
@@ -203,11 +255,15 @@ const processaCancelar = async (
 
     expect(isInputEnabled(nomeInput)).toBeFalsy();
     expect(isInputEnabled(nascimentoInput)).toBeFalsy();
+    expect(isInputEnabled(paiAutocomplete, true)).toBeFalsy();
+    expect(isInputEnabled(maeAutocomplete, true)).toBeFalsy();
 
     const nome = getInputValue(nomeInput);
     const nascimento = getInputValue(nascimentoInput);
+    const pai = paiInput.value;
+    const mae = maeInput.value;
 
-    return { nome, nascimento };
+    return { nome, nascimento, pai, mae };
 };
 
 const defaultState = {
@@ -216,20 +272,32 @@ const defaultState = {
     aniversariantes: {
         aniversariantes: [
             {
+                idPessoa: '1',
                 pessoa: 'aniversariante_teste',
                 nascimento: new Date('2000-11-24T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
             {
+                idPessoa: '2',
                 pessoa: 'aniversariante_teste2',
                 nascimento: new Date('2000-11-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
             {
+                idPessoa: '3',
                 pessoa: 'aniversariante_teste3',
                 nascimento: new Date('2000-10-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
             {
+                idPessoa: '4',
                 pessoa: 'aniversariante_teste4',
                 nascimento: new Date('2020-11-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
         ],
     },
@@ -323,28 +391,39 @@ describe('PessoaInformacoes page', () => {
 
         const nomeInput = getByTestId('nome-input');
         const nascimentoInput = getByTestId('nascimento-input');
+        const paiAutocomplete = getByTestId('aniversariante-pai-autocomplete');
+        const maeAutocomplete = getByTestId('aniversariante-mae-autocomplete');
 
         expect(isDisplayed(getByTestId, 'btns-salvar')).toBeTruthy();
         expect(isDisplayed(getByTestId, 'btns-editar')).toBeFalsy();
 
         expect(isInputEnabled(nomeInput)).toBeTruthy();
         expect(isInputEnabled(nascimentoInput)).toBeTruthy();
+        expect(isInputEnabled(paiAutocomplete, true)).toBeTruthy();
+        expect(isInputEnabled(maeAutocomplete, true)).toBeTruthy();
     });
     test('verifica o funcionamento do botao cancelar', async () => {
         insereLocationMock();
-        const { getByTestId } = await renderiza();
+        const { getByTestId, getByText } = await renderiza();
 
         const nomeInput = getByTestId('nome-input');
         const nascimentoInput = getByTestId('nascimento-input');
+        const paiAutocomplete = getByTestId('aniversariante-pai-autocomplete');
+        const maeAutocomplete = getByTestId('aniversariante-mae-autocomplete');
 
-        const { nome, nascimento } = await processaCancelar(
+        const { nome, nascimento, pai, mae } = await processaCancelar(
             getByTestId,
+            getByText,
             nomeInput,
             nascimentoInput,
+            paiAutocomplete,
+            maeAutocomplete,
         );
 
         expect(nome).toBe(nomeMock);
         expect(nascimento).toBe(nascimentoMockFormatado);
+        expect(pai).toBe('');
+        expect(mae).toBe('');
     });
     test('verifica o funcionamento do botao salvar com sucesso', async () => {
         const initAtualiza = initAtualizaMock();
@@ -362,6 +441,8 @@ describe('PessoaInformacoes page', () => {
             getByTestId,
             nomeInput,
             nascimentoInput,
+            paiAutocomplete,
+            maeAutocomplete,
         } = await processaSalvar(state, initAtualiza);
 
         expect(isDisplayed(getByTestId, 'btns-salvar')).toBeFalsy();
@@ -369,6 +450,8 @@ describe('PessoaInformacoes page', () => {
 
         expect(isInputEnabled(nomeInput)).toBeFalsy();
         expect(isInputEnabled(nascimentoInput)).toBeFalsy();
+        expect(isInputEnabled(paiAutocomplete, true)).toBeFalsy();
+        expect(isInputEnabled(maeAutocomplete, true)).toBeFalsy();
 
         const alerta = getByTestId('success-alert');
         expect(alerta).toBeVisible();
@@ -389,6 +472,8 @@ describe('PessoaInformacoes page', () => {
             getByTestId,
             nomeInput,
             nascimentoInput,
+            paiAutocomplete,
+            maeAutocomplete,
         } = await processaSalvar(state, initAtualiza);
 
         expect(isDisplayed(getByTestId, 'btns-salvar')).toBeTruthy();
@@ -396,6 +481,8 @@ describe('PessoaInformacoes page', () => {
 
         expect(isInputEnabled(nomeInput)).toBeTruthy();
         expect(isInputEnabled(nascimentoInput)).toBeTruthy();
+        expect(isInputEnabled(paiAutocomplete, true)).toBeTruthy();
+        expect(isInputEnabled(maeAutocomplete, true)).toBeTruthy();
 
         const alerta = getByTestId('error-alert');
         expect(alerta).toBeVisible();
@@ -414,17 +501,25 @@ describe('PessoaInformacoes page', () => {
 
         const {
             getByTestId,
+            getByText,
             nomeInput,
             nascimentoInput,
+            paiAutocomplete,
+            maeAutocomplete,
         } = await processaSalvar(state, initAtualiza);
 
-        const { nome, nascimento } = await processaCancelar(
+        const { nome, nascimento, pai, mae } = await processaCancelar(
             getByTestId,
+            getByText,
             nomeInput,
             nascimentoInput,
+            paiAutocomplete,
+            maeAutocomplete,
         );
 
         expect(nome).toBe(nomeMockAlterado);
         expect(nascimento).toBe(nascimentoMockFormatadoAlterado);
+        expect(pai).toBe(aniversariantePaiAlterado.label);
+        expect(mae).toBe(aniversarianteMaeAlterado.label);
     });
 });

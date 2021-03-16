@@ -129,6 +129,8 @@ const PessoaInformacoes: React.FC = () => {
             );
             setFormNome(formik.values.nome);
             setFormNascimento(formik.values.nascimento);
+            setFormPai(formik.values['aniversariante-pai']);
+            setFormMae(formik.values['aniversariante-mae']);
         }
     }, [successShow]);
 
