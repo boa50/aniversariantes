@@ -14,10 +14,17 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 import SearchBar from 'material-ui-search-bar';
+import IconButton from '@material-ui/core/IconButton';
+import Box from '@material-ui/core/Box';
+import Collapse from '@material-ui/core/Collapse';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { List } from 'immutable';
 
 import { Aniversariante } from '../models/Aniversariante';
 import { AniversariantesState } from '../models/AniversariantesState';
+import { PropertiesState } from '../models/PropertiesState';
+
 import AniversariantesUtils from '../utils/aniversariantesUtils';
 import DateUtils from '../utils/dateUtils';
 import ListUtils from '../utils/listUtils';
@@ -30,11 +37,22 @@ const useStyles = makeStyles(theme => ({
     tableRow: {
         cursor: 'pointer',
     },
+    columnIcon: {
+        width: '10%',
+        padding: '8px',
+        paddingRight: '0',
+    },
     columnAniversariantes: {
         width: '70%',
     },
+    columnPessoa: {
+        width: '30%',
+    },
     columnData: {
         width: '30%',
+    },
+    collapsedTitle: {
+        fontWeight: 500,
     },
 }));
 
@@ -43,7 +61,8 @@ type ColumnProps = {
     dbname: string;
     label: string;
     mensal: boolean | undefined;
-    classe: 'columnAniversariantes' | 'columnData';
+    mobile: boolean | undefined;
+    classe: 'columnAniversariantes' | 'columnData' | 'columnPessoa';
 };
 
 const columns: ColumnProps[] = [
@@ -51,28 +70,40 @@ const columns: ColumnProps[] = [
         id: 'aniversariantes-nome',
         dbname: 'pessoa',
         label: 'Aniversariante',
-        mensal: undefined,
+        mensal: true,
+        mobile: undefined,
         classe: 'columnAniversariantes',
+    },
+    {
+        id: 'aniversariantes-nome',
+        dbname: 'pessoa',
+        label: 'Aniversariante',
+        mensal: false,
+        mobile: undefined,
+        classe: 'columnPessoa',
     },
     {
         id: 'aniversariantes-pai',
         dbname: 'paiNome',
         label: 'Pai',
         mensal: false,
-        classe: 'columnData',
+        mobile: false,
+        classe: 'columnPessoa',
     },
     {
         id: 'aniversariantes-mae',
         dbname: 'maeNome',
         label: 'Mãe',
         mensal: false,
-        classe: 'columnData',
+        mobile: false,
+        classe: 'columnPessoa',
     },
     {
         id: 'aniversariantes-dia',
         dbname: 'nascimento',
         label: 'Dia',
         mensal: true,
+        mobile: undefined,
         classe: 'columnData',
     },
     {
@@ -80,6 +111,7 @@ const columns: ColumnProps[] = [
         dbname: 'nascimento',
         label: 'Nascimento',
         mensal: false,
+        mobile: undefined,
         classe: 'columnData',
     },
 ];
@@ -88,8 +120,138 @@ type Props = {
     mensal?: boolean;
 };
 
+const Linha = (props: {
+    linha: Aniversariante;
+    classes: any;
+    mensal: boolean;
+    isMobile: boolean;
+    rowClickHandler: Function;
+}) => {
+    const [open, setOpen] = useState(false);
+    const { linha, classes, mensal, isMobile, rowClickHandler } = props;
+
+    return (
+        <React.Fragment>
+            <TableRow
+                hover={true}
+                data-testid="aniversariantes-linha"
+                className={classes.tableRow}
+            >
+                {!mensal && isMobile ? (
+                    <TableCell className={classes.columnIcon}>
+                        <IconButton
+                            aria-label="expand row"
+                            data-testid="aniversariantes-linha-expand"
+                            size="small"
+                            onClick={() => setOpen(!open)}
+                        >
+                            {open ? (
+                                <KeyboardArrowUpIcon data-testid="aniversariantes-linha-expand-up" />
+                            ) : (
+                                <KeyboardArrowDownIcon data-testid="aniversariantes-linha-expand-down" />
+                            )}
+                        </IconButton>
+                    </TableCell>
+                ) : null}
+                <TableCell
+                    className={
+                        mensal
+                            ? classes.columnAniversariantes
+                            : classes.columnPessoa
+                    }
+                    data-testid="aniversariante-nome"
+                    onClick={() => rowClickHandler(linha)}
+                >
+                    {linha.pessoa}
+                </TableCell>
+                {!mensal && !isMobile ? (
+                    <React.Fragment>
+                        <TableCell
+                            className={classes.columnPessoa}
+                            data-testid="aniversariante-pai"
+                            onClick={() => rowClickHandler(linha)}
+                        >
+                            {linha.paiNome}
+                        </TableCell>
+                        <TableCell
+                            className={classes.columnPessoa}
+                            data-testid="aniversariante-mae"
+                            onClick={() => rowClickHandler(linha)}
+                        >
+                            {linha.maeNome}
+                        </TableCell>
+                    </React.Fragment>
+                ) : null}
+                {mensal ? (
+                    <TableCell
+                        className={classes.columnData}
+                        data-testid="aniversariante-dia"
+                        onClick={() => rowClickHandler(linha)}
+                    >
+                        {DateUtils.getDia(linha.nascimento)}
+                    </TableCell>
+                ) : (
+                    <TableCell
+                        className={classes.columnData}
+                        data-testid="aniversariante-nascimento"
+                        onClick={() => rowClickHandler(linha)}
+                    >
+                        {DateUtils.getDataCompleta(linha.nascimento)}
+                    </TableCell>
+                )}
+            </TableRow>
+            {!mensal && isMobile ? (
+                <TableRow data-testid="aniversariantes-linha-hidden">
+                    <TableCell
+                        style={{ paddingBottom: 0, paddingTop: 0 }}
+                        colSpan={3}
+                    >
+                        <Collapse in={open} timeout="auto" unmountOnExit>
+                            <Box margin={1}>
+                                <Box margin={1}>
+                                    <Typography
+                                        variant="body2"
+                                        component="span"
+                                        className={classes.collapsedTitle}
+                                    >
+                                        Pai:
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        component="span"
+                                    >
+                                        {' ' + linha.paiNome}
+                                    </Typography>
+                                </Box>
+                                <Box margin={1}>
+                                    <Typography
+                                        variant="body2"
+                                        component="span"
+                                        className={classes.collapsedTitle}
+                                    >
+                                        Mãe:
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        component="span"
+                                    >
+                                        {' ' + linha.maeNome}
+                                    </Typography>
+                                </Box>
+                            </Box>
+                        </Collapse>
+                    </TableCell>
+                </TableRow>
+            ) : null}
+        </React.Fragment>
+    );
+};
+
 const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
     const classes = useStyles();
+    const isMobile = useSelector(
+        (state: PropertiesState) => state.properties.isMobile,
+    );
     const aniversariantes = useSelector((state: AniversariantesState) =>
         mensal
             ? state.aniversariantes.aniversariantesMes
@@ -107,27 +269,27 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
     >(List<Aniversariante>());
 
     useEffect(() => {
+        const paisPreenchidos: Aniversariante[] = [];
+
+        aniversariantes.map((aniversariante: Aniversariante) => {
+            paisPreenchidos.push({
+                ...aniversariante,
+                paiNome: AniversariantesUtils.getAniversariantePorId(
+                    aniversariantes,
+                    aniversariante.idPai,
+                ).pessoa,
+                maeNome: AniversariantesUtils.getAniversariantePorId(
+                    aniversariantes,
+                    aniversariante.idMae,
+                ).pessoa,
+            });
+        });
+
         if (mensal) {
             setAniversariantesOrdenados(
-                AniversariantesUtils.ordenaPorDiaNome(aniversariantes),
+                AniversariantesUtils.ordenaPorDiaNome(paisPreenchidos),
             );
         } else {
-            const paisPreenchidos: Aniversariante[] = [];
-
-            aniversariantes.map((aniversariante: Aniversariante) => {
-                paisPreenchidos.push({
-                    ...aniversariante,
-                    paiNome: AniversariantesUtils.getAniversariantePorId(
-                        aniversariantes,
-                        aniversariante.idPai,
-                    ).pessoa,
-                    maeNome: AniversariantesUtils.getAniversariantePorId(
-                        aniversariantes,
-                        aniversariante.idMae,
-                    ).pessoa,
-                });
-            });
-
             setAniversariantesOrdenados(
                 AniversariantesUtils.ordenaPorNomeNascimento(paisPreenchidos),
             );
@@ -180,55 +342,16 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
                       ListUtils.getComparator(order, orderBy),
                   );
 
-        const linhas = ordenacao.map((linha, index) => {
-            return (
-                <TableRow
-                    hover={true}
-                    key={index}
-                    data-testid="aniversariantes-linha"
-                    onClick={() => rowClickHandler(linha)}
-                    className={classes.tableRow}
-                >
-                    <TableCell
-                        className={classes.columnAniversariantes}
-                        data-testid="aniversariante-nome"
-                    >
-                        {linha.pessoa}
-                    </TableCell>
-                    {!mensal ? (
-                        <TableCell
-                            className={classes.columnData}
-                            data-testid="aniversariante-pai"
-                        >
-                            {linha.paiNome}
-                        </TableCell>
-                    ) : null}
-                    {!mensal ? (
-                        <TableCell
-                            className={classes.columnData}
-                            data-testid="aniversariante-mae"
-                        >
-                            {linha.maeNome}
-                        </TableCell>
-                    ) : null}
-                    {mensal ? (
-                        <TableCell
-                            className={classes.columnData}
-                            data-testid="aniversariante-dia"
-                        >
-                            {DateUtils.getDia(linha.nascimento)}
-                        </TableCell>
-                    ) : (
-                        <TableCell
-                            className={classes.columnData}
-                            data-testid="aniversariante-nascimento"
-                        >
-                            {DateUtils.getDataCompleta(linha.nascimento)}
-                        </TableCell>
-                    )}
-                </TableRow>
-            );
-        });
+        const linhas = ordenacao.map((linha, index) => (
+            <Linha
+                key={index}
+                linha={linha}
+                classes={classes}
+                mensal={mensal}
+                isMobile={isMobile}
+                rowClickHandler={rowClickHandler}
+            />
+        ));
 
         return (
             <TableContainer
@@ -250,9 +373,14 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
                 <Table>
                     <TableHead>
                         <TableRow>
+                            {!mensal && isMobile ? (
+                                <TableCell className={classes.columnIcon} />
+                            ) : null}
                             {columns.map(col =>
-                                col.mensal === undefined ||
-                                col.mensal === mensal ? (
+                                (col.mobile === undefined ||
+                                    col.mobile === isMobile) &&
+                                (col.mensal === undefined ||
+                                    col.mensal === mensal) ? (
                                     <TableCell
                                         key={col.id}
                                         className={classes[col.classe]}

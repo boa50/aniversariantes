@@ -1,9 +1,17 @@
 import { runSaga, Saga } from 'redux-saga';
 import { fireEvent, waitFor } from '@testing-library/react';
 
-export const isDisplayed = (func: Function, id: string) => {
+export const isDisplayed = (
+    func: Function,
+    id: string,
+    index: number | undefined = undefined,
+) => {
     try {
-        const componentStyle = func(id).style;
+        let componentStyle = func(id).style;
+        if (index !== undefined) {
+            componentStyle = func(id)[index].style;
+        }
+
         if (componentStyle._values.display == 'none') {
             return false;
         } else {
