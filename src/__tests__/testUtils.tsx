@@ -86,9 +86,16 @@ export const setComboValue = async (
             key: 'ArrowDown',
         });
     });
-    await waitFor(() => getByText(value));
+
+    await waitFor(() =>
+        getByText((content: string, element: any) => content.startsWith(value)),
+    );
     await waitFor(() => {
-        fireEvent.click(getByText(value));
+        fireEvent.click(
+            getByText((content: string, element: any) =>
+                content.startsWith(value),
+            ),
+        );
     });
 
     return getInput(selectField);

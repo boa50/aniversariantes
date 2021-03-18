@@ -131,4 +131,18 @@ describe('Aniversariantes utils', () => {
         expect(aniversariante.idPai).toBe('pessoa03');
         expect(aniversariante.idMae).toBe('pessoa01');
     });
+
+    test('retorna o aniversariante vazio pelo id inexistente', () => {
+        const aniversariante = AniversariantesUtils.getAniversariantePorId(
+            aniversariantesLista,
+            'algumIdQueNaoExiste',
+        );
+
+        expect(aniversariante.pessoa).toBe('');
+        expect(aniversariante.nascimento).toStrictEqual(
+            new Date('2000-11-25T03:00:00Z'),
+        );
+        expect(aniversariante.idPai).toBe('');
+        expect(aniversariante.idMae).toBe('');
+    });
 });

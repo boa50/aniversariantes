@@ -176,11 +176,11 @@ describe('PessoaCadastro page', () => {
 
         const input = await setComboValue(
             paiAutocomplete,
-            'aniversariante_teste2 - 25/11/2000',
+            'aniversariante_teste2 - ',
             getByText,
         );
 
-        expect(input.value).toBe('aniversariante_teste2 - 25/11/2000');
+        expect(input.value).toMatch(/aniversariante_teste2 - /);
     });
 
     test('verifica a alteração do autocomplete de mãe', async () => {
@@ -190,11 +190,11 @@ describe('PessoaCadastro page', () => {
 
         const input = await setComboValue(
             maeAutocomplete,
-            'aniversariante_teste2 - 25/11/2000',
+            'aniversariante_teste2 - ',
             getByText,
         );
 
-        expect(input.value).toBe('aniversariante_teste2 - 25/11/2000');
+        expect(input.value).toMatch(/aniversariante_teste2 - /);
     });
 
     test('verifica o inicio do cadastro', async () => {

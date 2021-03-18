@@ -45,13 +45,14 @@ const nascimentoMockFormatadoAlterado =
     (nascimentoMockAlterado.getMonth() + 1) +
     '/' +
     nascimentoMockAlterado.getFullYear();
+
 const aniversariantePaiAlterado = {
     id: '2',
-    label: 'aniversariante_teste2 - 25/11/2000',
+    label: 'aniversariante_teste2 - ',
 };
 const aniversarianteMaeAlterado = {
     id: '3',
-    label: 'aniversariante_teste3 - 25/10/2000',
+    label: 'aniversariante_teste3 - ',
 };
 
 beforeEach(() => {
@@ -206,8 +207,8 @@ const processaSalvar = async (state: any, initAtualiza: jest.SpyInstance) => {
 
     expect(nome).toBe(nomeMockAlterado);
     expect(nascimento).toBe(nascimentoMockFormatadoAlterado);
-    expect(pai).toBe(aniversariantePaiAlterado.label);
-    expect(mae).toBe(aniversarianteMaeAlterado.label);
+    expect(pai).toMatch(aniversariantePaiAlterado.label);
+    expect(mae).toMatch(aniversarianteMaeAlterado.label);
 
     return {
         getByTestId,
@@ -519,7 +520,7 @@ describe('PessoaInformacoes page', () => {
 
         expect(nome).toBe(nomeMockAlterado);
         expect(nascimento).toBe(nascimentoMockFormatadoAlterado);
-        expect(pai).toBe(aniversariantePaiAlterado.label);
-        expect(mae).toBe(aniversarianteMaeAlterado.label);
+        expect(pai).toMatch(aniversariantePaiAlterado.label);
+        expect(mae).toMatch(aniversarianteMaeAlterado.label);
     });
 });
