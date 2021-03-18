@@ -63,18 +63,27 @@ const AniversariantesUtils = {
         aniversariantes: Aniversariante[],
         idPessoa: string,
     ): Aniversariante => {
+        const vazio = {
+            idPessoa: '',
+            pessoa: '',
+            nascimento: new Date('2000-11-25T03:00:00Z'),
+            idPai: '',
+            idMae: '',
+        } as Aniversariante;
+
         if (idPessoa === '') {
-            return {
-                idPessoa: '',
-                pessoa: '',
-                nascimento: new Date('2000-11-25T03:00:00Z'),
-                idPai: '',
-                idMae: '',
-            };
+            return vazio;
         }
-        return aniversariantes.filter(aniversariante => {
-            return aniversariante.idPessoa === idPessoa;
-        })[0];
+
+        const pessoa = aniversariantes.find(
+            pessoa => pessoa.idPessoa === idPessoa,
+        );
+
+        if (pessoa !== undefined) {
+            return pessoa;
+        } else {
+            return vazio;
+        }
     },
 
     ordenaPorDiaNome: (

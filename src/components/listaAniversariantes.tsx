@@ -272,16 +272,19 @@ const ListaAniversariantes: React.FC<Props> = ({ mensal = false }) => {
         const paisPreenchidos: Aniversariante[] = [];
 
         aniversariantes.map((aniversariante: Aniversariante) => {
+            const pai = AniversariantesUtils.getAniversariantePorId(
+                aniversariantes,
+                aniversariante.idPai,
+            ).pessoa;
+            const mae = AniversariantesUtils.getAniversariantePorId(
+                aniversariantes,
+                aniversariante.idMae,
+            ).pessoa;
+
             paisPreenchidos.push({
                 ...aniversariante,
-                paiNome: AniversariantesUtils.getAniversariantePorId(
-                    aniversariantes,
-                    aniversariante.idPai,
-                ).pessoa,
-                maeNome: AniversariantesUtils.getAniversariantePorId(
-                    aniversariantes,
-                    aniversariante.idMae,
-                ).pessoa,
+                paiNome: pai,
+                maeNome: mae,
             });
         });
 
