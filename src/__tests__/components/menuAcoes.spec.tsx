@@ -85,6 +85,7 @@ const defaultDisplayedButtons = [
     'Sair-menu-button',
     'Cadastrar-menu-button',
     'Listar-menu-button',
+    'Família-menu-button',
 ];
 
 const defaultNotDisplayedButtons = ['dot-menu'];

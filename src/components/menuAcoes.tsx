@@ -11,6 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
+import NaturePeopleIcon from '@material-ui/icons/NaturePeople';
 
 import { AuthState } from '../models/AuthState';
 import { PropertiesState } from '../models/PropertiesState';
@@ -87,9 +88,18 @@ const MenuAcoes: React.FC = () => {
         />
     );
 
+    const arvoreButton = (
+        <MenuButton
+            link="/arvoreGenealogica"
+            textMobile="Família"
+            Icon={NaturePeopleIcon}
+        />
+    );
+
     let telaAniversariantesMes = false;
     let telaCadastro = false;
     let telaLista = false;
+    let telaArvore = false;
 
     const isSSR = typeof window === 'undefined';
     /* istanbul ignore next */
@@ -97,6 +107,7 @@ const MenuAcoes: React.FC = () => {
         telaAniversariantesMes = location.pathname === '/';
         telaCadastro = location.pathname.startsWith('/pessoaCadastro');
         telaLista = location.pathname.startsWith('/aniversariantesLista');
+        telaArvore = location.pathname.startsWith('/arvoreGenealogica');
     }
 
     let conteudo = (
@@ -104,6 +115,8 @@ const MenuAcoes: React.FC = () => {
             {cadastroButton}
             <span className={classes.buttonSpacing} />
             {listarButton}
+            <span className={classes.buttonSpacing} />
+            {arvoreButton}
             <span className={classes.buttonSpacing} />
             {logoutButton}
         </Box>
@@ -144,6 +157,15 @@ const MenuAcoes: React.FC = () => {
                         selected={telaLista}
                     >
                         {listarButton}
+                    </MenuItem>
+
+                    <MenuItem
+                        key="arvore"
+                        color="inherit"
+                        aria-label="arvore-aniversariantes"
+                        selected={telaArvore}
+                    >
+                        {arvoreButton}
                     </MenuItem>
 
                     {showShare && telaAniversariantesMes ? (
