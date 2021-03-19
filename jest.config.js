@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+    testTimeout: 10000,
     setupFilesAfterEnv: [
         path.resolve(__dirname, './jest-configs/setup-test-env.js'),
     ],
