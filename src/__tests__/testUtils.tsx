@@ -87,15 +87,9 @@ export const setComboValue = async (
         });
     });
 
-    await waitFor(() =>
-        getByText((content: string, element: any) => content.startsWith(value)),
-    );
+    await waitFor(() => getByText(new RegExp(value)));
     await waitFor(() => {
-        fireEvent.click(
-            getByText((content: string, element: any) =>
-                content.startsWith(value),
-            ),
-        );
+        fireEvent.click(getByText(new RegExp(value)));
     });
 
     return getInput(selectField);
