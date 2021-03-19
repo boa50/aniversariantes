@@ -1,7 +1,8 @@
+import { Aniversariante } from './Aniversariante';
+
 export type PessoaCadastroAction = {
     type: string;
     idFamilia: string;
-    pessoa: string;
-    nascimento: Date;
+    aniversariante: Aniversariante;
     error: string;
 };

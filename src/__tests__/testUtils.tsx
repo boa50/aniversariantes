@@ -1,9 +1,17 @@
 import { runSaga, Saga } from 'redux-saga';
 import { fireEvent, waitFor } from '@testing-library/react';
 
-export const isDisplayed = (func: Function, id: string) => {
+export const isDisplayed = (
+    func: Function,
+    id: string,
+    index: number | undefined = undefined,
+) => {
     try {
-        const componentStyle = func(id).style;
+        let componentStyle = func(id).style;
+        if (index !== undefined) {
+            componentStyle = func(id)[index].style;
+        }
+
         if (componentStyle._values.display == 'none') {
             return false;
         } else {
@@ -57,8 +65,48 @@ export const setInputValue = async (
     return input;
 };
 
-export const isInputEnabled = (inputField: HTMLElement): boolean => {
-    if (inputField.children[0].className.indexOf('Mui-disabled') < 0) {
+export const setComboValue = async (
+    comboField: HTMLElement,
+    value: string,
+    getByText: Function,
+): Promise<HTMLInputElement> => {
+    (global as any).document.createRange = () => ({
+        setStart: () => {},
+        setEnd: () => {},
+        commonAncestorContainer: {
+            nodeName: 'BODY',
+            ownerDocument: document,
+        },
+    });
+
+    const selectField = comboField.children[0].children[1] as HTMLElement;
+
+    await waitFor(() => {
+        fireEvent.keyDown(selectField, {
+            key: 'ArrowDown',
+        });
+    });
+
+    await waitFor(() => getByText(new RegExp(value)));
+    await waitFor(() => {
+        fireEvent.click(getByText(new RegExp(value)));
+    });
+
+    return getInput(selectField);
+};
+
+export const isInputEnabled = (
+    inputField: HTMLElement,
+    autocomplete: boolean = false,
+): boolean => {
+    let field: any;
+    if (autocomplete) {
+        field = inputField.children[0].children[1].children[0];
+    } else {
+        field = inputField.children[0];
+    }
+
+    if (field.className.indexOf('Mui-disabled') < 0) {
         return true;
     } else {
         return false;

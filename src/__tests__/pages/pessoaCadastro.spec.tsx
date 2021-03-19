@@ -4,11 +4,12 @@ import { render, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 
-import { isDisplayed, setInputValue } from '../testUtils';
+import { isDisplayed, setInputValue, setComboValue } from '../testUtils';
 
 import * as actions from '../../store/actions';
 
 import PessoaCadastro from '../../pages/pessoaCadastro';
+import { Aniversariante } from '../../models/Aniversariante';
 
 beforeEach(() => {
     const useStaticQuery = jest.spyOn(Gatsby, 'useStaticQuery');
@@ -72,11 +73,14 @@ const initCadastroMock = () => {
     return jest
         .spyOn(actions, 'initCadastro')
         .mockImplementation(
-            (idFamilia: string, pessoa: string, nascimento: Date) => ({
+            (idFamilia: string, aniversariante: Aniversariante) => ({
                 type: 'check',
                 idFamilia: 'idFamiliamock',
-                pessoa: 'pessoaMock',
-                nascimento: new Date('2000-01-02T03:00:00Z'),
+                aniversariante: {
+                    idPessoa: '',
+                    pessoa: 'pessoaMock',
+                    nascimento: new Date('2000-01-02T03:00:00Z'),
+                } as Aniversariante,
             }),
         );
 };
@@ -95,6 +99,38 @@ const renderiza = async (state: any) => {
 const defaultState = {
     auth: { idFamilia: '' },
     pessoaCadastro: { pessoa: '', error: '' },
+    aniversariantes: {
+        aniversariantes: [
+            {
+                idPessoa: '1',
+                pessoa: 'aniversariante_teste',
+                nascimento: new Date('2000-11-24T03:00:00Z'),
+                idPai: '',
+                idMae: '',
+            },
+            {
+                idPessoa: '2',
+                pessoa: 'aniversariante_teste2',
+                nascimento: new Date('2000-11-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
+            },
+            {
+                idPessoa: '3',
+                pessoa: 'aniversariante_teste3',
+                nascimento: new Date('2000-10-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
+            },
+            {
+                idPessoa: '4',
+                pessoa: 'aniversariante_teste4',
+                nascimento: new Date('2020-11-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
+            },
+        ] as Aniversariante[],
+    },
     properties: { isMobile: false },
 };
 
@@ -102,15 +138,17 @@ describe('PessoaCadastro page', () => {
     test('verifica a renderização inicial correta', async () => {
         const { getByTestId } = await renderiza(defaultState);
 
-        const nomeInput = getByTestId('nome-input');
-        const nascimentoInput = getByTestId('nascimento-input');
-        const cadastrarButton = getByTestId('cadastrar-button');
-
+        expect(isDisplayed(getByTestId, 'nome-input')).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'nascimento-input')).toBeTruthy();
+        expect(
+            isDisplayed(getByTestId, 'aniversariante-pai-autocomplete'),
+        ).toBeTruthy();
+        expect(
+            isDisplayed(getByTestId, 'aniversariante-mae-autocomplete'),
+        ).toBeTruthy();
+        expect(isDisplayed(getByTestId, 'cadastrar-button')).toBeTruthy();
         expect(isDisplayed(getByTestId, 'error-alert')).toBeFalsy();
         expect(isDisplayed(getByTestId, 'success-alert')).toBeFalsy();
-        expect(nomeInput).toBeVisible();
-        expect(nascimentoInput).toBeVisible();
-        expect(cadastrarButton).toBeVisible();
     });
 
     test('verifica a alteração do input de nome', async () => {
@@ -129,6 +167,34 @@ describe('PessoaCadastro page', () => {
         const { input, value } = await inputaDataAleatoria(nascimentoInput);
 
         expect(input.valueAsDate).toBe(value);
+    });
+
+    test('verifica a alteração do autocomplete de pai', async () => {
+        const { getByTestId, getByText } = await renderiza(defaultState);
+
+        const paiAutocomplete = getByTestId('aniversariante-pai-autocomplete');
+
+        const input = await setComboValue(
+            paiAutocomplete,
+            'aniversariante_teste2 - ',
+            getByText,
+        );
+
+        expect(input.value).toMatch(/aniversariante_teste2 - /);
+    });
+
+    test('verifica a alteração do autocomplete de mãe', async () => {
+        const { getByTestId, getByText } = await renderiza(defaultState);
+
+        const maeAutocomplete = getByTestId('aniversariante-mae-autocomplete');
+
+        const input = await setComboValue(
+            maeAutocomplete,
+            'aniversariante_teste2 - ',
+            getByText,
+        );
+
+        expect(input.value).toMatch(/aniversariante_teste2 - /);
     });
 
     test('verifica o inicio do cadastro', async () => {

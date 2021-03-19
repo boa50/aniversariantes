@@ -61,38 +61,60 @@ const defaultState = {
     aniversariantes: {
         aniversariantes: [
             {
+                idPessoa: '1',
                 pessoa: 'aniversariante_teste',
                 nascimento: new Date('2000-11-24T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
             {
+                idPessoa: '2',
                 pessoa: 'aniversariante_teste2',
                 nascimento: new Date('2000-11-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
             {
+                idPessoa: '3',
                 pessoa: 'aniversariante_teste3',
                 nascimento: new Date('2000-10-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
             {
+                idPessoa: '4',
                 pessoa: 'aniversariante_teste2',
                 nascimento: new Date('2020-11-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
-        ],
+        ] as Aniversariante[],
         aniversariantesMes: [
             {
+                idPessoa: '1',
                 pessoa: 'aniversariante_teste',
                 nascimento: new Date('2000-11-24T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
             {
+                idPessoa: '2',
                 pessoa: 'aniversariante_teste2',
                 nascimento: new Date('2000-11-25T03:00:00Z'),
+                idPai: '',
+                idMae: '',
             },
-        ],
+        ] as Aniversariante[],
     },
+    properties: { isMobile: false },
 };
 
 describe('ListaAniversariantes component', () => {
     test('verifica se a renderização de uma lista mensal vazia', async () => {
-        const state = { aniversariantes: { aniversariantesMes: [] } };
+        const state = {
+            aniversariantes: { aniversariantesMes: [] },
+            properties: { isMobile: false },
+        };
         const { getByTestId } = await renderiza(state, true);
 
         const mensagem = getByTestId('sem-aniversariantes-mensagem');
@@ -102,7 +124,10 @@ describe('ListaAniversariantes component', () => {
     });
 
     test('verifica se a renderização de uma lista completa vazia', async () => {
-        const state = { aniversariantes: { aniversariantes: [] } };
+        const state = {
+            aniversariantes: { aniversariantes: [] },
+            properties: { isMobile: false },
+        };
         const { getByTestId } = await renderiza(state);
 
         const mensagem = getByTestId('sem-aniversariantes-mensagem');
@@ -160,15 +185,22 @@ describe('ListaAniversariantes component', () => {
             aniversariantes: {
                 aniversariantesMes: [
                     {
+                        idPessoa: '1',
                         pessoa: 'aniversariante_teste',
                         nascimento: new Date('2000-11-' + dia1 + 'T03:00:00Z'),
+                        idPai: '',
+                        idMae: '',
                     },
                     {
+                        idPessoa: '2',
                         pessoa: 'aniversariante_teste2',
                         nascimento: new Date('2000-11-' + dia2 + 'T03:00:00Z'),
+                        idPai: '',
+                        idMae: '',
                     },
-                ],
+                ] as Aniversariante[],
             },
+            properties: { isMobile: false },
         };
 
         const { getAllByTestId } = await renderiza(state, true);
@@ -193,23 +225,36 @@ describe('ListaAniversariantes component', () => {
             aniversariantes: {
                 aniversariantes: [
                     {
+                        idPessoa: '3',
                         pessoa: 'aniversariante_teste3',
                         nascimento: new Date('2000-11-24T03:00:00Z'),
+                        idPai: '',
+                        idMae: '',
                     },
                     {
+                        idPessoa: '2',
                         pessoa: 'aniversariante_teste2',
                         nascimento: new Date('2000-11-25T03:00:00Z'),
+                        idPai: '',
+                        idMae: '',
                     },
                     {
+                        idPessoa: '1',
                         pessoa: 'aniversariante_teste',
                         nascimento: new Date('2000-10-25T03:00:00Z'),
+                        idPai: '',
+                        idMae: '',
                     },
                     {
+                        idPessoa: '22',
                         pessoa: 'aniversariante_teste2',
                         nascimento: new Date('2020-11-25T03:00:00Z'),
+                        idPai: '',
+                        idMae: '',
                     },
-                ],
+                ] as Aniversariante[],
             },
+            properties: { isMobile: false },
         };
 
         const { getAllByTestId } = await renderiza(state);
@@ -263,19 +308,85 @@ describe('ListaAniversariantes component', () => {
         const id = 0;
 
         const aniversariante = getAllByTestId('aniversariante-nome')[id];
+        const pai = getAllByTestId('aniversariante-pai')[id];
+        const mae = getAllByTestId('aniversariante-mae')[id];
+        const nascimento = getAllByTestId('aniversariante-nascimento')[id];
 
         await waitFor(() => {
             fireEvent.click(aniversariante);
         });
-
         expect(navigate).toBeCalledTimes(1);
+
+        await waitFor(() => {
+            fireEvent.click(pai);
+            fireEvent.click(mae);
+            fireEvent.click(nascimento);
+        });
+        expect(navigate).toBeCalledTimes(4);
+
         expect(navigate).toBeCalledWith('/pessoaInformacoes/', {
             state: {
-                nome:
-                    defaultState.aniversariantes.aniversariantesMes[id].pessoa,
-                nascimento:
-                    defaultState.aniversariantes.aniversariantesMes[id]
-                        .nascimento,
+                aniversariante: {
+                    idPessoa:
+                        defaultState.aniversariantes.aniversariantesMes[id]
+                            .idPessoa,
+                    pessoa:
+                        defaultState.aniversariantes.aniversariantesMes[id]
+                            .pessoa,
+                    nascimento:
+                        defaultState.aniversariantes.aniversariantesMes[id]
+                            .nascimento,
+                    idPai:
+                        defaultState.aniversariantes.aniversariantesMes[id]
+                            .idPai,
+                    idMae:
+                        defaultState.aniversariantes.aniversariantesMes[id]
+                            .idMae,
+                    paiNome: '',
+                    maeNome: '',
+                } as Aniversariante,
+            },
+        });
+    });
+
+    test('verifica mudança de página ao selecionar uma pessoa na lista mensal', async () => {
+        const { getAllByTestId } = await renderiza(defaultState, true);
+        const id = 0;
+
+        const aniversariante = getAllByTestId('aniversariante-nome')[id];
+        const nascimento = getAllByTestId('aniversariante-dia')[id];
+
+        await waitFor(() => {
+            fireEvent.click(aniversariante);
+        });
+        expect(navigate).toBeCalledTimes(1);
+
+        await waitFor(() => {
+            fireEvent.click(nascimento);
+        });
+        expect(navigate).toBeCalledTimes(2);
+
+        expect(navigate).toBeCalledWith('/pessoaInformacoes/', {
+            state: {
+                aniversariante: {
+                    idPessoa:
+                        defaultState.aniversariantes.aniversariantesMes[id]
+                            .idPessoa,
+                    pessoa:
+                        defaultState.aniversariantes.aniversariantesMes[id]
+                            .pessoa,
+                    nascimento:
+                        defaultState.aniversariantes.aniversariantesMes[id]
+                            .nascimento,
+                    idPai:
+                        defaultState.aniversariantes.aniversariantesMes[id]
+                            .idPai,
+                    idMae:
+                        defaultState.aniversariantes.aniversariantesMes[id]
+                            .idMae,
+                    paiNome: '',
+                    maeNome: '',
+                } as Aniversariante,
             },
         });
     });
@@ -380,5 +491,56 @@ describe('ListaAniversariantes component', () => {
 
         expect(buscaInput.value).toBe('');
         expect(linhasQuantidade).toBe(4);
+    });
+
+    test('verifica o comportamento de expansão na lista completa no mobile', async () => {
+        const state = {
+            ...defaultState,
+            properties: { isMobile: true },
+        };
+        const { getAllByTestId, getByTestId } = await renderiza(state);
+        const id = state.aniversariantes.aniversariantes.length - 1;
+
+        const iconeBotao = getAllByTestId('aniversariantes-linha-expand')[id];
+
+        const initState = () => {
+            expect(
+                isDisplayed(
+                    getAllByTestId,
+                    'aniversariantes-linha-expand-down',
+                    id,
+                ),
+            ).toBeTruthy();
+            expect(
+                isDisplayed(getByTestId, 'aniversariantes-linha-expand-up'),
+            ).toBeFalsy();
+        };
+
+        expect(
+            isDisplayed(getAllByTestId, 'aniversariantes-linha-hidden', id),
+        ).toBeTruthy();
+
+        initState();
+
+        await waitFor(() => {
+            fireEvent.click(iconeBotao);
+        });
+
+        expect(
+            isDisplayed(
+                getAllByTestId,
+                'aniversariantes-linha-expand-down',
+                id,
+            ),
+        ).toBeFalsy();
+        expect(
+            isDisplayed(getByTestId, 'aniversariantes-linha-expand-up'),
+        ).toBeTruthy();
+
+        await waitFor(() => {
+            fireEvent.click(iconeBotao);
+        });
+
+        initState();
     });
 });

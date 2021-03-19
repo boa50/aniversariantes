@@ -9,11 +9,21 @@ import {
 
 import { executeSaga } from '../../testUtils';
 
+const mocks: jest.SpyInstance[] = [];
+afterEach(() => {
+    mocks.forEach((mock: jest.SpyInstance) => {
+        mock.mockClear();
+    });
+    mocks.length = 0;
+});
+
 const aniversariantesMock = [
     {
         idPessoa: 'algumId',
         pessoa: 'oi',
         nascimento: new Date('2000-01-02T03:00:00Z'),
+        idPai: '',
+        idMae: '',
     },
 ];
 
@@ -50,6 +60,7 @@ describe('AniversariantesSaga', () => {
         const fetchAniversariantes = jest
             .spyOn(axios, 'get')
             .mockImplementation(() => Promise.resolve(responseMock));
+        mocks.push(fetchAniversariantes);
 
         const dispatched = await executeSaga(
             initAniversariantesSaga,
@@ -61,8 +72,6 @@ describe('AniversariantesSaga', () => {
             fetchAniversariantesStart(),
             fetchAniversariantesSuccess(aniversariantesMock),
         ]);
-
-        fetchAniversariantes.mockClear();
     });
 
     test('verifica se deu erro na chamada da api', async () => {
@@ -70,6 +79,7 @@ describe('AniversariantesSaga', () => {
         const fetchAniversariantes = jest
             .spyOn(axios, 'get')
             .mockImplementation(() => Promise.reject(mockError));
+        mocks.push(fetchAniversariantes);
 
         const dispatched = await executeSaga(
             initAniversariantesSaga,
@@ -81,7 +91,5 @@ describe('AniversariantesSaga', () => {
             fetchAniversariantesStart(),
             fetchAniversariantesFail(mockError),
         ]);
-
-        fetchAniversariantes.mockClear();
     });
 });

@@ -1,15 +1,14 @@
+import { Aniversariante } from '../../models/Aniversariante';
 import * as actionTypes from './actionsTypes';
 
 export const initCadastro = (
     idFamilia: string,
-    pessoa: string,
-    nascimento: Date,
+    aniversariante: Aniversariante,
 ) => {
     return {
         type: actionTypes.INIT_PESSOA_CADASTRO,
         idFamilia,
-        pessoa,
-        nascimento,
+        aniversariante,
     };
 };
 
@@ -19,10 +18,10 @@ export const cadastroStart = () => {
     };
 };
 
-export const cadastroSuccess = (pessoa: string) => {
+export const cadastroSuccess = (aniversariante: { pessoa: string }) => {
     return {
         type: actionTypes.PESSOA_CADASTRO_SUCCESS,
-        pessoa,
+        aniversariante,
     };
 };
 

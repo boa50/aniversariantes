@@ -2,7 +2,7 @@
   "name": "aniversariantes",
   "private": true,
   "description": "Uma aplicação para armazenar os dados de aniversariantes da família.",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "author": "boa50 <bruno.albuquerque50@gmail.com>",
   "dependencies": {
     "@date-io/date-fns": "^1.3.13",

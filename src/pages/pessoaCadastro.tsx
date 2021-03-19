@@ -4,19 +4,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import Input from '../components/ui/input';
 import Button from '../components/ui/button';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 import { AuthState } from '../models/AuthState';
 import { PessoaCadastroState } from '../models/PessoaCadastroState';
+import { Aniversariante } from '../models/Aniversariante';
 
 import { initCadastro } from '../store/actions';
 
 import Layout from '../components/layout';
 import Form from '../components/form';
+import AniversarianteInputs from '../components/aniversarianteInpusts';
 import Alerta from '../components/ui/alerta';
+
+import AniversariantesUtils from '../utils/aniversariantesUtils';
 
 const PessoaCadastro: React.FC = () => {
     const dispatch = useDispatch();
@@ -37,9 +40,8 @@ const PessoaCadastro: React.FC = () => {
 
     const onInitCadastro = (
         idFamilia: string,
-        nome: string,
-        nascimento: Date,
-    ) => dispatch(initCadastro(idFamilia, nome, nascimento));
+        aniversariante: Aniversariante,
+    ) => dispatch(initCadastro(idFamilia, aniversariante));
 
     const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAlertStyle(false);
@@ -54,6 +56,14 @@ const PessoaCadastro: React.FC = () => {
         initialValues: {
             nome: '',
             nascimento: new Date(new Date().getFullYear() + '-01-01T03:00:00Z'),
+            'aniversariante-pai': AniversariantesUtils.getAniversariantePorId(
+                [],
+                '',
+            ),
+            'aniversariante-mae': AniversariantesUtils.getAniversariantePorId(
+                [],
+                '',
+            ),
         },
         validationSchema: Yup.object({
             nome: Yup.string().required('O nome deve ser preenchido'),
@@ -64,7 +74,16 @@ const PessoaCadastro: React.FC = () => {
         onSubmit: values => {
             setAlertStyle(true);
             setbuttonDisabled(true);
-            onInitCadastro(idFamilia, values.nome, values.nascimento);
+
+            const aniversariante: Aniversariante = {
+                idPessoa: '',
+                pessoa: values.nome,
+                nascimento: values.nascimento,
+                idPai: values['aniversariante-pai'].idPessoa,
+                idMae: values['aniversariante-mae'].idPessoa,
+            };
+
+            onInitCadastro(idFamilia, aniversariante);
         },
     });
 
@@ -81,20 +100,10 @@ const PessoaCadastro: React.FC = () => {
     const conteudo = (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Form formik={formik} progressShow={loading}>
-                <Input
-                    id="nome"
-                    label="Nome"
+                <AniversarianteInputs
+                    formik={formik}
                     autoFocus={true}
                     changeHandler={inputChangeHandler}
-                    formik={formik}
-                />
-
-                <Input
-                    id="nascimento"
-                    label="Data de nascimento"
-                    type="date"
-                    changeHandler={inputChangeHandler}
-                    formik={formik}
                 />
 
                 <Button

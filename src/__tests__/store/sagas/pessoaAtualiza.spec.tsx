@@ -6,6 +6,7 @@ import {
     atualizaSuccess,
     atualizaFail,
 } from '../../../store/actions';
+import { Aniversariante } from '../../../models/Aniversariante';
 
 import { executeSaga } from '../../testUtils';
 
@@ -14,9 +15,11 @@ const pessoaNomeMock = 'Algum Nome Mockado';
 const actionMock: PessoaAtualizaAction = {
     type: '',
     idFamilia: '',
-    idPessoa: '',
-    pessoa: pessoaNomeMock,
-    nascimento: new Date(),
+    aniversariante: {
+        idPessoa: '',
+        pessoa: pessoaNomeMock,
+        nascimento: new Date(),
+    } as Aniversariante,
     error: '',
 };
 
@@ -41,7 +44,7 @@ describe('PessoaAtualizaSaga', () => {
         expect(atualizaPessoa).toHaveBeenCalledTimes(1);
         expect(dispatched).toEqual([
             atualizaStart(),
-            atualizaSuccess(pessoaNomeMock),
+            atualizaSuccess({ pessoa: pessoaNomeMock }),
         ]);
 
         atualizaPessoa.mockClear();

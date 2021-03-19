@@ -8,7 +8,6 @@ import * as Yup from 'yup';
 import { useLocation } from '@reach/router';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Input from '../components/ui/input';
 import Button from '../components/ui/button';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -16,12 +15,17 @@ import Box from '@material-ui/core/Box';
 
 import { AuthState } from '../models/AuthState';
 import { PessoaAtualizaState } from '../models/PessoaAtualizaState';
+import { Aniversariante } from '../models/Aniversariante';
+import { AniversariantesState } from '../models/AniversariantesState';
 
 import { initAtualiza } from '../store/actions';
 
 import Layout from '../components/layout';
 import Form from '../components/form';
+import AniversarianteInputs from '../components/aniversarianteInpusts';
 import Alerta from '../components/ui/alerta';
+
+import AniversariantesUtils from '../utils/aniversariantesUtils';
 
 const useStyles = makeStyles(theme => ({
     buttons: {
@@ -50,6 +54,12 @@ const PessoaInformacoes: React.FC = () => {
 
     const [formNome, setFormNome] = useState('');
     const [formNascimento, setFormNascimento] = useState(new Date());
+    const [formPai, setFormPai] = useState<Aniversariante>(
+        AniversariantesUtils.getAniversariantePorId([], ''),
+    );
+    const [formMae, setFormMae] = useState<Aniversariante>(
+        AniversariantesUtils.getAniversariantePorId([], ''),
+    );
     const [formIdPessoa, setFormIdPessoa] = useState('');
 
     const idFamilia = useSelector((state: AuthState) => state.auth.idFamilia);
@@ -62,33 +72,47 @@ const PessoaInformacoes: React.FC = () => {
     const erro = useSelector(
         (state: PessoaAtualizaState) => state.pessoaAtualiza.error,
     );
+    const aniversariantes = useSelector(
+        (state: AniversariantesState) => state.aniversariantes.aniversariantes,
+    );
 
     const onInitAtualiza = (
         idFamilia: string,
-        idPessoa: string,
-        nome: string,
-        nascimento: Date,
-    ) => dispatch(initAtualiza(idFamilia, idPessoa, nome, nascimento));
+        aniversariante: Aniversariante,
+    ) => dispatch(initAtualiza(idFamilia, aniversariante));
 
     // Aplicada uma solução temporária para o Typescript
     // https://github.com/reach/router/issues/414#issuecomment-683827688
     const location = useLocation<{
-        idPessoa: string;
-        nome: string;
-        nascimento: Date;
+        aniversariante: Aniversariante;
     }>();
 
     const isSSR = typeof window === 'undefined';
     useEffect(() => {
-        if (location.state == null) {
+        if (
+            location.state == null ||
+            location.state.aniversariante == undefined
+        ) {
             /* istanbul ignore next */
             if (!isSSR) {
                 navigate('/');
             }
         } else {
-            setFormIdPessoa(location.state.idPessoa);
-            setFormNome(location.state.nome);
-            setFormNascimento(location.state.nascimento);
+            const aniversariante = location.state.aniversariante;
+            const pai = AniversariantesUtils.getAniversariantePorId(
+                aniversariantes,
+                aniversariante.idPai,
+            );
+            const mae = AniversariantesUtils.getAniversariantePorId(
+                aniversariantes,
+                aniversariante.idMae,
+            );
+
+            setFormIdPessoa(aniversariante.idPessoa);
+            setFormNome(aniversariante.pessoa);
+            setFormNascimento(aniversariante.nascimento);
+            setFormPai(pai);
+            setFormMae(mae);
         }
     }, []);
 
@@ -105,6 +129,8 @@ const PessoaInformacoes: React.FC = () => {
             );
             setFormNome(formik.values.nome);
             setFormNascimento(formik.values.nascimento);
+            setFormPai(formik.values['aniversariante-pai']);
+            setFormMae(formik.values['aniversariante-mae']);
         }
     }, [successShow]);
 
@@ -138,6 +164,8 @@ const PessoaInformacoes: React.FC = () => {
         initialValues: {
             nome: formNome,
             nascimento: formNascimento,
+            'aniversariante-pai': formPai,
+            'aniversariante-mae': formMae,
         },
         validationSchema: Yup.object({
             nome: Yup.string().required('O nome deve ser preenchido'),
@@ -147,29 +175,23 @@ const PessoaInformacoes: React.FC = () => {
         }),
         onSubmit: values => {
             setAlertStyle(true);
-            onInitAtualiza(
-                idFamilia,
-                formIdPessoa,
-                values.nome,
-                values.nascimento,
-            );
+
+            const aniversariante: Aniversariante = {
+                idPessoa: formIdPessoa,
+                pessoa: values.nome,
+                nascimento: values.nascimento,
+                idPai: values['aniversariante-pai'].idPessoa,
+                idMae: values['aniversariante-mae'].idPessoa,
+            };
+
+            onInitAtualiza(idFamilia, aniversariante);
         },
     });
 
     const conteudo = (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Form formik={formik} progressShow={loading}>
-                <Input
-                    id="nome"
-                    label="Nome"
-                    formik={formik}
-                    readOnly={!salvarShow || loading}
-                />
-
-                <Input
-                    id="nascimento"
-                    label="Data de nascimento"
-                    type="date"
+                <AniversarianteInputs
                     formik={formik}
                     readOnly={!salvarShow || loading}
                 />

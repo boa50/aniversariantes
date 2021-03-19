@@ -24,7 +24,7 @@ const atualizaSuccess = (
     return {
         ...state,
         loading: false,
-        pessoa: action.pessoa,
+        pessoa: action.aniversariante.pessoa,
         error: '',
     };
 };
